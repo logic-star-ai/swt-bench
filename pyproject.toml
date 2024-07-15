@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=69.2.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "SWT-Bench"
+version = "0.0.1"
+authors = [
+    {name="Mark Mueller", email="mark@logicstar.ai"}
+]
+requires-python = ">=3.9"
+license = { "text" = "MIT" }
+dependencies = [
+    "requests",
+    'datasets',
+    'docker',
+    "unidiff",
+    'python-dotenv',
+    'tqdm',
+]
+
+[project.optional-dependencies]
+testing = ["pytest", "pytest-cov", "pytest-xdist", "GitPython"]
