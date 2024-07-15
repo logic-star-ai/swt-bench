@@ -338,16 +338,15 @@ def apply_custom_patches(custom_patches: List[CustomPatch], testbed:str, patch_t
                 print(f"Syntax error in patch: {file_name}")
                 return False
             if patch.patch_type == "rewrite":
-                if patch.patch_type == "rewrite":
-                    patch_ast = patch_ast.body[0]
-                    if not (isinstance(patch_ast, ast.FunctionDef) or isinstance(patch_ast, ast.ClassDef)):
-                        print(f"Invalid patch: {file_name}")
-                        return False
-                    transformer = ReplaceFunctionTransformer(patch_ast, 0)
-                    transformer.visit(file_ast)
-                    if not transformer.any_change_applied:
-                        print(f"No change applied: {file_name}")
-                        return False
+                patch_ast = patch_ast.body[0]
+                if not (isinstance(patch_ast, ast.FunctionDef) or isinstance(patch_ast, ast.ClassDef)):
+                    print(f"Invalid patch: {file_name}")
+                    return False
+                transformer = ReplaceFunctionTransformer(patch_ast, 0)
+                transformer.visit(file_ast)
+                if not transformer.any_change_applied:
+                    print(f"No change applied: {file_name}")
+                    return False
             elif patch.patch_type == "insert":
                 file_ast.body.extend(patch_ast.body)
                 pathlib.Path(file_name).parent.mkdir(parents=True, exist_ok=True)
