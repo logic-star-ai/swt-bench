@@ -1,3 +1,6 @@
+"""
+Convert an SWE-Bench style dataset to SWT-Bench
+"""
 import pathlib
 from typing import Literal
 
@@ -178,13 +181,21 @@ PROMPT_MAP = {
 }
 
 def main(
-    dataset_path: str = "datasets_bm25/SWE-bench__style-3__fs-bm25__mcc-27000-cl100k/",
+    dataset_path: str,
+    output_path: str,
     mode: Literal["base", "plus"] = "plus",
+    filter_cases: str = pathlib.Path(__file__.__path__).parent / "filter_cases.txt",
     tmp_repo_dir: str ="/tmp/swe_bench_repos",
-    output_path: str = "./datasets/swt_bench_lite_aug1_bm25_27k_cl100k_selfmade",
 ):
     # Load the dataset
     dataset = load_dataset(dataset_path)
+
+    # load the filter cases
+    if filter_cases:
+        with open(filter_cases, "r") as f:
+            filtered_instances = {x.strip() for x in f.readlines()}
+    else:
+        filtered_instances = set()
 
     pathlib.Path(tmp_repo_dir).mkdir(parents=True, exist_ok=True)
 
@@ -194,6 +205,8 @@ def main(
     for split in dataset:
         new_examples = []
         for i, example in enumerate(dataset[split]):
+            if example["instance_id"] in filtered_instances:
+                continue
             orig_text = example["text"].splitlines()
             new_text = orig_text
             new_text[0] = "The following text contains a user issue (in <issue/> brackets) posted at a repository. Further, you are provided with file contents of several files in the repository that contain relevant code (in <code> brackets). It may be necessary to use code from third party dependencies or files not contained in the attached documents however. Your task is to identify the issue and implement a test case that verifies a proposed solution to this issue. More details at the end of this text."

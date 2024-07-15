@@ -54,9 +54,29 @@ The final evaluation results will be stored in the `evaluation_results` director
 
 
 ## ⬇️ Downloads
-| Datasets | Models |
-| - | - |
+| Datasets | 
+| - |
+| TBD |
 
+## 🏗 Building SWT-Bench and Zero-Shot inference
+
+To recreate the SWT-Bench dataset or create one with your own flavoring
+and to run the zero-shot approaches from the paper on this dataset, follow these steps.
+In order to avoid duplication, we re-use some of the SWE-Bench tooling.
+First, create an SWE-Bench style dataset, i.e. by using the [SWE-Bench dataset collection scripts](https://github.com/princeton-nlp/SWE-bench/tree/main/swebench/collect).
+If you want to add BM-25 retrieved documents, you can use the [SWE-Bench BM-25 retrieval script `bm25_retrieval.py`](https://github.com/princeton-nlp/SWE-bench/tree/main/swebench/inference/make_datasets) - make sure to set [`include_tests` to `True`](https://github.com/princeton-nlp/SWE-bench/blob/d99c1c45880375bdca90b2ffd2627576c886a1b2/swebench/inference/make_datasets/bm25_retrieval.py#L188C42-L188C55) to ensure that test files are included in the results.
+
+Finally, run [dataset/swt_bench.py](dataset/swt_bench.py) to convert the SWE-Bench style dataset into an SWT-Bench dataset.
+For example, with your SWE-Bench dataset in `datasets/swe_bench`, run the following commands.
+
+```bash
+python3 dataset/swt_bench.py --dataset_path datasets/swe_bench --output_path dataset/swt_bench_zsb --mode base
+python3 dataset/swt_bench.py --dataset_path datasets/swe_bench --output_path dataset/swt_bench_zsp --mode plus
+```
+
+These commands will create the datasets for the approaches Zero-Shot Base and Zero-Shot Plus from the paper.
+You can then use the [SWE-Bench inference tooling](https://github.com/princeton-nlp/SWE-bench/tree/main/swebench/inference) to generate
+the model inference files.
 
 ## 💫 Contributions
 We would love to hear from the broader NLP, Machine Learning, and Software Engineering research communities, and we welcome any contributions, pull requests, or issues!
