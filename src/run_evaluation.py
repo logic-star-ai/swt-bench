@@ -175,8 +175,9 @@ def run_instance(
         pred (dict): Prediction w/ model_name_or_path, model_patch, instance_id
         rm_image (bool): Whether to remove the image after running
         force_rebuild (bool): Whether to force rebuild the image
-        client (docker.DockerClient): Docker client
+        compute_coverage (bool): Whether to compute coverage
         run_id (str): Run ID
+        patch_types (List[str]): Patch types to extract
         timeout (int): Timeout for running tests
     """
 
@@ -272,6 +273,7 @@ def run_instances(
         run_id: str,
         patch_types: List[str],
         timeout: int,
+        client: docker.DockerClient,
     ):
     """
     Run all instances for the given predictions in parallel.
@@ -285,8 +287,8 @@ def run_instances(
         max_workers (int): Maximum number of workers
         run_id (str): Run ID
         timeout (int): Timeout for running tests
+        client (docker.DockerClient): Docker client
     """
-    client = docker.from_env()
     test_specs = list(map(make_test_spec, instances))
 
     # print number of existing instance images
@@ -303,7 +305,7 @@ def run_instances(
     with tqdm(total=len(instances), smoothing=0) as pbar:
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             # Create a future for running each instance
-            futures = {
+            futures = [
                 executor.submit(
                     run_instance,
                     test_spec,
@@ -319,21 +321,31 @@ def run_instances(
                     run_id,
                     patch_types,
                     timeout,
-                ): None
+                )
                 for test_spec in test_specs
-            }
+            ]
             # Wait for each future to complete
-            for future in as_completed(futures):
-                pbar.update(1)
-                try:
-                    # Update progress bar, check if instance ran successfully
-                    future.result()
-                except EvaluationError as e:
-                    print(f"EvaluationError {e.instance_id}: {e}")
-                    continue
-                except Exception as e:
-                    traceback.print_exc()
-                    continue
+            try:
+                for future in as_completed(futures, timeout=timeout):
+                    # Update progress bar
+                    pbar.update(1)
+                    # check if instance ran successfully
+                    e = future.exception(timeout=timeout)
+                    if e is None:
+                        continue
+                    try:
+                        if isinstance(e, EvaluationError):
+                            print(f"EvaluationError {e.instance_id}: {e}")
+                        elif isinstance(e, Exception):
+                            print("ExecutionError")
+                            traceback.print_exc()
+                        elif isinstance(e, TimeoutError):
+                            print(f"TimeoutError: {e}")
+                    except Exception as e:
+                        print(f"Error trying to format error: {e}")
+                        traceback.print_exc()
+            except TimeoutError as e:
+                print(f"TimeoutError: {e}")
     print("All instances run.")
 
 

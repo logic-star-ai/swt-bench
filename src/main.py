@@ -62,7 +62,7 @@ def run(
     else:
         # build environment images + run instances
         # build_env_images(client, dataset, force_rebuild, max_workers)
-        run_instances(predicted_tests, dataset, compute_coverage, cache_level, clean, force_rebuild, max_workers, run_id, patch_types, timeout)
+        run_instances(predicted_tests, dataset, compute_coverage, cache_level, clean, force_rebuild, max_workers, run_id, patch_types, timeout, client)
 
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
