@@ -42,7 +42,7 @@ from src.log_parsers import (
 )
 
 from src.main import (
-    main as run_evaluation,
+    run,
 )
 
 from src.utils import (

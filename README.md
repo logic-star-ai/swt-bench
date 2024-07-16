@@ -13,13 +13,13 @@ Finally, to build SWT-bench, follow these steps:
 git clone git@github.com:eth-sri/swt-bench.git
 cd swt-bench
 python -m venv .venv
-soruce .venv/bin/activate
+source .venv/bin/activate
 pip install -e .
 ```
 
 Test your installation by running:
 ```bash
-python -m src.run_evaluation \
+python -m src.main \
     --predictions_path gold \
     --max_workers 1 \
     --instance_ids sympy__sympy-20590 \
@@ -38,7 +38,7 @@ python -m src.run_evaluation \
 
 Evaluate model predictions on SWT-bench Lite using the evaluation harness with the following command:
 ```bash
-python -m src.run_evaluation \
+python -m src.main \
     --dataset_name princeton-nlp/SWE-bench_Lite \
     --predictions_path <path_to_predictions> \
     --max_workers <num_workers> \

@@ -14,7 +14,7 @@ from src.dataset import get_dataset_from_preds, get_gold_predictions
 from src.utils import str2bool
 from run_evaluation import run_instances, make_run_report
 
-def main(
+def run(
         dataset_name: str,
         split: str,
         instance_ids: list,
@@ -103,4 +103,4 @@ if __name__ == "__main__":
     parser.add_argument("--run_id", type=str, required=True, help="Run ID - identifies the run")
     args = parser.parse_args()
 
-    main(**vars(args))
+    run(**vars(args))
