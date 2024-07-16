@@ -337,8 +337,6 @@ def run_instances(
     print("All instances run.")
 
 
-
-
 def make_run_report(
         predictions: dict,
         dataset: list,
@@ -429,6 +427,8 @@ def make_run_report(
         "resolved_instances": len(resolved_ids),
         "unresolved_instances": len(unresolved_ids),
         "error_instances": len(error_ids),
+        "Mean coverage": coverage,
+        "Mean coverage delta": coverage_delta,
         "unstopped_instances": len(unstopped_containers),
         "completed_ids": list(sorted(completed_ids)),
         "resolved_ids": list(sorted(resolved_ids)),
