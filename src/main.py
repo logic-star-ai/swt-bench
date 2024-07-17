@@ -3,8 +3,9 @@ import json
 import resource
 
 from argparse import ArgumentParser
-from typing import List, Tuple, Optional, Dict
+from typing import List, Tuple, Optional, Dict, Literal
 
+from docker_build import BuildMode
 from src.docker_utils import (
     list_images,
     clean_images,
@@ -28,6 +29,7 @@ def run(
         run_id: str,
         patch_types: List[str],
         timeout: int,
+        build_mode: BuildMode = "api",
     ):
     """
     Run evaluation harness for the given dataset and predictions.
@@ -62,7 +64,7 @@ def run(
     else:
         # build environment images + run instances
         # build_env_images(client, dataset, force_rebuild, max_workers)
-        run_instances(predicted_tests, dataset, compute_coverage, cache_level, clean, force_rebuild, max_workers, run_id, patch_types, timeout, client)
+        run_instances(predicted_tests, dataset, compute_coverage, cache_level, clean, force_rebuild, max_workers, run_id, patch_types, timeout, client, build_mode)
 
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
@@ -80,6 +82,9 @@ if __name__ == "__main__":
     parser.add_argument("--patch_types", nargs="+", choices=["fuzzy", "custom", "vanilla"], default=["vanilla"], type=str, help="Type of patch to be extracted")
     parser.add_argument(
         "--compute_coverage", type=str2bool, default=True, help="Compute coverage"
+    )
+    parser.add_argument(
+        "--build_mode", choices=["cli", "api"], default="api", help="Run docker build via the REST API or the CLI. Try CLI if facing UID/GID errors."
     )
 
     parser.add_argument(

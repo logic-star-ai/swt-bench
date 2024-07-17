@@ -21,6 +21,7 @@ curl \
 locales \
 locales-all \
 tzdata \
+xxd \
 && rm -rf /var/lib/apt/lists/*
 
 # Download and install conda

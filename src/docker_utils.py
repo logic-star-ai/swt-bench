@@ -1,4 +1,8 @@
+import pathlib
+import subprocess
 import tempfile
+from io import BytesIO
+from typing import Literal
 
 import docker
 import os
@@ -12,6 +16,20 @@ from docker.models.containers import Container
 
 
 HEREDOC_DELIMITER = "EOF_1399519320"  # different from dataset HEREDOC_DELIMITERs!
+
+def checked_exec_run(container: Container, cmd: str, **kwargs):
+    """
+    Run a command in a container and check for errors.
+
+    Args:
+        container (Container): Container to run the command in.
+        cmd (str): Command to run.
+        kwargs: Additional arguments to pass to exec_run
+    """
+    result = container.exec_run(cmd, **kwargs)
+    if result.exit_code != 0:
+        raise RuntimeError(f"Command '{cmd}' failed with exit code {result.exit_code}: {result.output}")
+    return result
 
 
 def copy_to_container(container: Container, src: Path, dst: Path):
@@ -29,36 +47,25 @@ def copy_to_container(container: Container, src: Path, dst: Path):
             f"Destination path parent directory cannot be empty!, dst: {dst}"
         )
 
-    with tempfile.TemporaryDirectory(dir=os.path.dirname(src)) as tempdir:
-        # temporary tar file
-        tar_path = os.path.join(tempdir, Path(os.path.basename(src)).with_suffix(".tar"))
-        with tarfile.open(tar_path, "w") as tar:
-            tar.add(src, arcname=src.name)
-
-        # get bytes for put_archive cmd
-        with open(tar_path, "rb") as tar_file:
-            data = tar_file.read()
+    with open(src, "rb") as f:
+        data = f.read()
 
     # Make directory if necessary
-    container.exec_run(f"mkdir -p {dst.parent}")
+    checked_exec_run(container, f"mkdir -p {dst.parent}")
 
     # Send tar file to container and extract
-    container.put_archive(os.path.dirname(dst), data)
-    container.exec_run(f"tar -xf {dst}.tar -C {dst.parent}")
+    write_to_container(container, data.hex(), pathlib.Path(f"{dst}.hex"))
+    checked_exec_run(container, f"xxd -r -ps {dst}.hex {dst}")
 
-    # clean up in locally and in container
-    # if os.path.exists(tar_path):
-    #     tar_path.unlink()
-    container.exec_run(f"rm {dst}.tar")
 
 
 def write_to_container(container: Container, data: str, dst: Path):
     """
-    Write a string to a file in a docker container
+    Write a single line string to a file in a docker container
     """
     # echo with heredoc to file
-    command = f"cat <<'{HEREDOC_DELIMITER}' > {dst}\n{data}\n{HEREDOC_DELIMITER}"
-    container.exec_run(command)
+    command = f"/bin/bash -c \"echo '{data}' | tee {dst}\""
+    return checked_exec_run(container, command)
 
 
 def remove_image(client, image_id, logger=None):

@@ -1,11 +1,13 @@
 import logging
 import re
+import subprocess
 import traceback
+from typing import Literal
+
 import docker
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-import threading
 import os
 from docker.models.containers import Container
 
@@ -49,7 +51,57 @@ class BuildImageError(Exception):
             f"Check ({self.log_path}) for more information."
         )
 
+BuildMode = Literal["cli", "api"]
 
+def docker_build_cli(
+    build_dir: Path,
+    image_name: str,
+    platform: str,
+    nocache: bool = False
+):
+    response = subprocess.Popen(
+        ["docker", "build", "--tag", image_name, ".", "--platform", platform] + (["--no-cache"] if nocache else []),
+        encoding="utf-8",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        cwd=build_dir,
+    )
+    for line in response.stdout:
+        yield line.strip()
+    response.wait()
+    if response.returncode != 0:
+        raise RuntimeError("Failed to build image")
+
+def docker_build_api(
+        build_dir: Path,
+        image_name: str,
+        platform: str,
+        client: docker.DockerClient,
+        nocache: bool = False,
+):
+    response = client.api.build(
+        path=str(build_dir),
+        tag=image_name,
+        rm=True,
+        forcerm=True,
+        decode=True,
+        platform=platform,
+        nocache=nocache,
+    )
+
+    # Log the build process continuously
+    buildlog = ""
+    for chunk in response:
+        if "stream" in chunk:
+            # Remove ANSI escape sequences from the log
+            chunk_stream = ansi_escape.sub("", chunk["stream"])
+            yield chunk_stream.strip()
+            buildlog += chunk_stream
+        elif "errorDetail" in chunk:
+            # Decode error message, raise BuildError
+            raise docker.errors.BuildError(
+                ansi_escape.sub("", chunk["errorDetail"]["message"]), buildlog
+            )
 
 
 def build_image(
@@ -59,7 +111,8 @@ def build_image(
         platform: str,
         client: docker.DockerClient,
         build_dir: Path,
-        nocache: bool = False
+        nocache: bool = False,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds a docker image with the given name, setup scripts, dockerfile, and platform.
@@ -100,35 +153,25 @@ def build_image(
             f.write(dockerfile)
 
         # Build the image
-        logger.info(
-            f"Building docker image {image_name} in {build_dir} with platform {platform}"
-        )
-        response = client.api.build(
-            path=str(build_dir),
-            tag=image_name,
-            rm=True,
-            forcerm=True,
-            decode=True,
-            platform=platform,
-            nocache=nocache,
-        )
+        if build_mode == "cli":
+            response = docker_build_cli(
+                build_dir,
+                image_name,
+                platform,
+                nocache,
+            )
+        else:
+            response = docker_build_api(
+                build_dir,
+                image_name,
+                platform,
+                client,
+                nocache
+            )
 
         # Log the build process continuously
-        buildlog = ""
-        for chunk in response:
-            if "stream" in chunk:
-                # Remove ANSI escape sequences from the log
-                chunk_stream = ansi_escape.sub("", chunk["stream"])
-                logger.info(chunk_stream.strip())
-                buildlog += chunk_stream
-            elif "errorDetail" in chunk:
-                # Decode error message, raise BuildError
-                logger.error(
-                    f"Error: {ansi_escape.sub('', chunk['errorDetail']['message'])}"
-                )
-                raise docker.errors.BuildError(
-                    chunk["errorDetail"]["message"], buildlog
-                )
+        for line in response:
+            logger.info(line)
         logger.info("Image built successfully!")
     except docker.errors.BuildError as e:
         logger.error(f"docker.errors.BuildError during {image_name}: {e}")
@@ -143,7 +186,8 @@ def build_image(
 def build_base_images(
         client: docker.DockerClient,
         dataset: list,
-        force_rebuild: bool = False
+        force_rebuild: bool = False,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds the base images required for the dataset if they do not already exist.
@@ -184,13 +228,15 @@ def build_base_images(
             platform=platform,
             client=client,
             build_dir=BASE_IMAGE_BUILD_DIR / image_name.replace(":", "__"),
+            build_mode=build_mode,
         )
     print("Base images built successfully.")
 
 
 def build_base_image_from_exec_spec(
         exec_spec: ExecSpec,
-        force_rebuild: bool = False
+        force_rebuild: bool = False,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds the base image required for the exec_spec if it does not already exist.
@@ -228,6 +274,7 @@ def build_base_image_from_exec_spec(
             platform=platform,
             client=client,
             build_dir=BASE_IMAGE_BUILD_DIR / image_name.replace(":", "__"),
+            build_mode=build_mode,
         )
 
         print(f"Base image {image_name} built successfully.")
@@ -235,7 +282,8 @@ def build_base_image_from_exec_spec(
 
 def build_env_image_from_exec_spec(
         exec_spec: ExecSpec,
-        force_rebuild: bool = False
+        force_rebuild: bool = False,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds the env image required for the exec_spec if it does not already exist.
@@ -251,7 +299,7 @@ def build_env_image_from_exec_spec(
     if force_rebuild:
         remove_image(client, image_name, "quiet")
 
-    build_base_image_from_exec_spec(exec_spec, force_rebuild)
+    build_base_image_from_exec_spec(exec_spec, force_rebuild, build_mode=build_mode)
 
     try:
         base_image = client.images.get(exec_spec.base_image_key)
@@ -288,6 +336,7 @@ def build_env_image_from_exec_spec(
             platform=platform,
             client=client,
             build_dir=BASE_IMAGE_BUILD_DIR / image_name.replace(":", "__"),
+            build_mode=build_mode,
         )
 
         print(f"Env image {image_name} built successfully.")
@@ -352,7 +401,8 @@ def build_env_images(
         client: docker.DockerClient,
         dataset: list,
         force_rebuild: bool = False,
-        max_workers: int = 4
+        max_workers: int = 4,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds the environment images required for the dataset if they do not already exist.
@@ -368,7 +418,7 @@ def build_env_images(
         env_image_keys = {x.env_image_key for x in get_exec_specs_from_dataset()}
         for key in env_image_keys:
             remove_image(client, key, "quiet")
-    build_base_images(client, dataset, force_rebuild)
+    build_base_images(client, dataset, force_rebuild, build_mode)
     configs_to_build = get_env_configs_to_build(client, dataset)
     if len(configs_to_build) == 0:
         print("No environment images need to be built.")
@@ -427,7 +477,8 @@ def build_instance_images(
         client: docker.DockerClient,
         dataset: list,
         force_rebuild: bool = False,
-        max_workers: int = 4
+        max_workers: int = 4,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds the instance images required for the dataset if they do not already exist.
@@ -443,7 +494,7 @@ def build_instance_images(
     if force_rebuild:
         for spec in test_specs:
             remove_image(client, spec.instance_image_key, "quiet")
-    _, env_failed = build_env_images(client, test_specs, force_rebuild, max_workers)
+    _, env_failed = build_env_images(client, test_specs, force_rebuild, max_workers, build_mode=build_mode)
 
     if len(env_failed) > 0:
         # Don't build images for instances that depend on failed-to-build env images
@@ -501,6 +552,7 @@ def build_instance_images(
 def build_instance_image_from_exec_spec(
         exec_spec: ExecSpec,
         force_rebuild: bool,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds the instance image for the given test spec if it does not already exist.
@@ -520,7 +572,7 @@ def build_instance_image_from_exec_spec(
     if force_rebuild:
         remove_image(client, image_name, "quiet")
 
-    build_env_image_from_exec_spec(exec_spec, force_rebuild)
+    build_env_image_from_exec_spec(exec_spec, force_rebuild, build_mode=build_mode)
 
     # Set up logging for the build process
     build_dir = INSTANCE_IMAGE_BUILD_DIR / exec_spec.instance_image_key.replace(":", "__")
@@ -563,6 +615,7 @@ def build_instance_image_from_exec_spec(
             platform=exec_spec.platform,
             client=client,
             build_dir=build_dir,
+            build_mode=build_mode,
         )
         close_logger(logger)
 
@@ -572,6 +625,7 @@ def build_instance_image(
         client: docker.DockerClient,
         logger: logging.Logger,
         nocache: bool,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds the instance image for the given test spec if it does not already exist.
@@ -637,6 +691,7 @@ def build_instance_image(
             client=client,
             build_dir=build_dir,
             nocache=nocache,
+            build_mode=build_mode,
         )
     else:
         logger.info(f"Image {image_name} already exists, skipping build.")
@@ -650,7 +705,8 @@ def build_container(
         client: docker.DockerClient,
         logger: logging.Logger,
         nocache: bool,
-        force_rebuild: bool = False
+        force_rebuild: bool = False,
+        build_mode: BuildMode = "api",
     ):
     """
     Builds the instance image for the given test spec and creates a container from the image.
@@ -666,7 +722,7 @@ def build_container(
     if force_rebuild:
         remove_image(client, exec_spec.instance_image_key, "quiet")
     # build_instance_image(exec_spec, client, logger, nocache)
-    build_instance_image_from_exec_spec(exec_spec, force_rebuild)
+    build_instance_image_from_exec_spec(exec_spec, force_rebuild, build_mode)
 
     container = None
     try:
@@ -696,9 +752,9 @@ def build_container(
         raise BuildImageError(exec_spec.instance_id, str(e), logger) from e
 
 
-def start_container(exec_spec: ExecSpec, client: docker.DockerClient, logger: logging.Logger) -> Container:
+def start_container(exec_spec: ExecSpec, client: docker.DockerClient, logger: logging.Logger, build_mode: BuildMode = "api") -> Container:
     # Build + start instance container (instance image should already be built)
-    container = build_container(exec_spec, client, logger, exec_spec.rm_image, exec_spec.force_rebuild)
+    container = build_container(exec_spec, client, logger, exec_spec.rm_image, exec_spec.force_rebuild, build_mode)
     container.start()
     logger.info(f"Container for {exec_spec.instance_id} started: {container.id}")
     return container

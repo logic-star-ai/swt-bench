@@ -24,8 +24,9 @@ from src.docker_utils import (
     cleanup_container,
     list_images,
     should_remove,
+    checked_exec_run,
 )
-from src.docker_build import start_container
+from src.docker_build import start_container, BuildMode
 from src.test_spec import make_test_spec, TestSpec
 from src.utils import get_log_dir, get_test_directives, log_git_diff, setup_logging, link_image_build_dir, close_logger
 from src.exec_spec import ExecSpec, make_exec_spec
@@ -48,7 +49,7 @@ class EvaluationError(Exception):
         )
 
 
-def extract_model_patch(exec_spec: ExecSpec, raw_model_patch: str, patch_types: List[str]) -> str:
+def extract_model_patch(exec_spec: ExecSpec, raw_model_patch: str, patch_types: List[str], build_mode: BuildMode = "api") -> str:
     log_dir = get_log_dir(exec_spec.run_id, exec_spec.patch_id, exec_spec.instance_id)
 
     if os.path.exists(log_dir / "extracted_patch.diff"):
@@ -60,7 +61,7 @@ def extract_model_patch(exec_spec: ExecSpec, raw_model_patch: str, patch_types: 
         container = None
         client = docker.from_env()
         try:
-            container = start_container(exec_spec, client, logger)
+            container = start_container(exec_spec, client, logger, build_mode=build_mode)
 
             with open(log_dir / "raw_model_patch.txt", "w") as f:
                 f.write(raw_model_patch)
@@ -72,7 +73,7 @@ def extract_model_patch(exec_spec: ExecSpec, raw_model_patch: str, patch_types: 
             extraction_file = Path(os.path.join(os.path.dirname(__file__), "auxillary_src", "extract_patches.py"))
             copy_to_container(container, extraction_file, Path("/root/extract_patches.py"))
 
-            container.exec_run("pip3 install -r /root/requirements_extraction.txt")
+            checked_exec_run(container, "pip3 install -r /root/requirements_extraction.txt")
             res = container.exec_run(f"python3 /root/extract_patches.py --patch_type {' '.join(patch_types)} --reference_commit {exec_spec.base_commit}")
             if res.exit_code == 0:
                 res = container.exec_run("cat /root/extracted_patch.diff")
@@ -166,6 +167,7 @@ def run_instance(
         run_id: str,
         patch_types: List[str],
         timeout: int = None,
+        build_mode: BuildMode = "api",
     ):
     """
     Run a single instance with the given prediction.
@@ -195,7 +197,7 @@ def run_instance(
     if len(patch_types) == 1 and patch_types[0] == "vanilla":
         model_patch = pred["model_patch"]
     else:
-        model_patch = extract_model_patch(exec_spec, pred["model_patch"], patch_types)
+        model_patch = extract_model_patch(exec_spec, pred["model_patch"], patch_types, build_mode=build_mode)
 
     if model_patch:
         caching_log_dir = [False, False, True, True, True, True]
@@ -213,7 +215,7 @@ def run_instance(
                 log_dir = get_log_dir(patch_id, instance_id, "_".join(exec_spec.test_directives).replace("/","__"))
             else:
                 log_dir = None
-            _, test_output_path = run_eval_exec_spec(exec_spec, log_dir)
+            _, test_output_path = run_eval_exec_spec(exec_spec, log_dir, build_mode)
             output_paths.append(test_output_path)
 
         report = report_results(patch_id_base, run_id, test_spec.golden_code_patch, output_paths, instance_id, exec_spec.repo)
@@ -223,7 +225,7 @@ def run_instance(
     return instance_id, report
 
 
-def run_eval_exec_spec(exec_spec: ExecSpec, log_dir: Optional[Path]=None):
+def run_eval_exec_spec(exec_spec: ExecSpec, log_dir: Optional[Path]=None, build_mode: BuildMode = "api") -> Tuple[str, Path]:
     client = docker.from_env()
     instance_id = exec_spec.instance_id
 
@@ -243,7 +245,7 @@ def run_eval_exec_spec(exec_spec: ExecSpec, log_dir: Optional[Path]=None):
     # Run the instance
     container = None
     try:
-        container = start_container(exec_spec, client, logger)
+        container = start_container(exec_spec, client, logger, build_mode=build_mode)
 
         test_output_path = eval_in_container_with_diff(log_dir, container, logger, exec_spec.eval_script, exec_spec.timeout, instance_id, exec_spec.compute_coverage)
 
@@ -274,6 +276,7 @@ def run_instances(
         patch_types: List[str],
         timeout: int,
         client: docker.DockerClient,
+        build_mode: BuildMode,
     ):
     """
     Run all instances for the given predictions in parallel.
@@ -321,6 +324,7 @@ def run_instances(
                     run_id,
                     patch_types,
                     timeout,
+                    build_mode,
                 )
                 for test_spec in test_specs
             ]

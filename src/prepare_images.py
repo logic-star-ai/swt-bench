@@ -3,7 +3,7 @@ import resource
 
 from argparse import ArgumentParser
 
-from src.docker_build import build_instance_images
+from src.docker_build import build_instance_images, BuildMode
 from src.docker_utils import list_images
 from src.test_spec import make_test_spec
 from src.utils import load_swebench_dataset, str2bool
@@ -55,6 +55,7 @@ def main(
     max_workers,
     force_rebuild,
     open_file_limit,
+    build_mode: BuildMode = "api",
 ):
     """
     Build Docker images for the specified instances.
@@ -79,6 +80,7 @@ def main(
         dataset=dataset,
         force_rebuild=force_rebuild,
         max_workers=max_workers,
+        build_mode=build_mode,
     )
     print(f"Successfully built {len(successful)} images")
     print(f"Failed to build {len(failed)} images")
@@ -92,5 +94,6 @@ if __name__ == "__main__":
     parser.add_argument("--max_workers", type=int, default=4, help="Max workers for parallel processing")
     parser.add_argument("--force_rebuild", type=str2bool, default=False, help="Force rebuild images")
     parser.add_argument("--open_file_limit", type=int, default=8192, help="Open file limit")
+    parser.add_argument("--build_mode", choices=["cli", "api"], default="api", help="Build using Docker REST API or Docker CLI. Try CLI if API fails due to UID/GUID error.")
     args = parser.parse_args()
     main(**vars(args))
