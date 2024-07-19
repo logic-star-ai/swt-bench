@@ -215,17 +215,14 @@ def run_instance(
                 log_dir = get_log_dir(patch_id, instance_id, "_".join(exec_spec.test_directives).replace("/","__"))
             else:
                 log_dir = None
-            _, test_output_path = run_eval_exec_spec(exec_spec, log_dir, build_mode)
+            _, test_output_path = run_eval_exec_spec(exec_spec, model_patch, log_dir, build_mode)
             output_paths.append(test_output_path)
 
-        report = report_results(patch_id_base, run_id, test_spec.golden_code_patch, output_paths, instance_id, exec_spec.repo)
-    else:
-        report = report_results(patch_id_base, run_id, test_spec.golden_code_patch, None, instance_id, exec_spec.repo)
 
-    return instance_id, report
+    return instance_id
 
 
-def run_eval_exec_spec(exec_spec: ExecSpec, log_dir: Optional[Path]=None, build_mode: BuildMode = "api") -> Tuple[str, Path]:
+def run_eval_exec_spec(exec_spec: ExecSpec, model_patch: str, log_dir: Optional[Path]=None, build_mode: BuildMode = "api") -> Tuple[str, Path]:
     client = docker.from_env()
     instance_id = exec_spec.instance_id
 
@@ -236,6 +233,9 @@ def run_eval_exec_spec(exec_spec: ExecSpec, log_dir: Optional[Path]=None, build_
 
     with open(log_dir / "exec_spec.json", "w") as f:
         json.dump(exec_spec.as_dict(), f)
+
+    with open(log_dir / "model_patch.diff", "w") as f:
+        f.write(model_patch)
 
     if (log_dir / "test_output.txt").exists():
         return instance_id, (log_dir / "test_output.txt")
@@ -352,6 +352,11 @@ def run_instances(
                 print(f"TimeoutError: {e}")
     print("All instances run.")
 
+def find_all_test_output_paths(dir: Path):
+    for file in dir.rglob("test_output.txt"):
+        yield file
+
+
 
 def make_run_report(
         predictions: dict,
@@ -379,32 +384,49 @@ def make_run_report(
     coverages = []
     coverage_deltas = []
 
+
     # iterate through dataset and check if the instance has been run
     for instance in dataset:
         instance_id = instance["instance_id"]
         prediction = predictions[instance_id]
+        patch_id_base = prediction["model_name_or_path"].replace("/", "__")
         report_file = (
             RUN_INSTANCE_LOG_DIR
             / run_id
-            / prediction["model_name_or_path"].replace("/", "__")
-            / prediction["instance_id"]
+            / patch_id_base
+            / instance_id
             / "report.json"
         )
+        patch_ids = ["pred_pre__" + patch_id_base, "pred_post__" + patch_id_base, "gold_pre", "gold_post", "base_pre", "base_post"]
+        output_paths = [
+            RUN_INSTANCE_LOG_DIR / run_id / patch_id / instance_id / "test_output.txt" for patch_id in patch_ids[:2]
+        ] + sum((
+            list(find_all_test_output_paths(RUN_INSTANCE_LOG_DIR / patch_id / instance_id)) for patch_id in patch_ids[2:]
+        ), start=[])
+        model_patch_file = (
+            output_paths[0].parent
+            / "model_patch.diff"
+        )
         if report_file.exists():
-            # If report file exists, then the instance has been run
+            # If report file exists, then the instance has been run and reported before
             completed_ids.add(instance_id)
             report = json.loads(report_file.read_text())
-            if report[instance_id]["resolved"]:
-                # Record if the instance was resolved
-                resolved_ids.add(instance_id)
-            else:
-                unresolved_ids.add(instance_id)
-            if report[instance_id]["coverage_pred"] is not None:
-                coverage_deltas.append(report[instance_id]["coverage_delta_pred"])
-                coverages.append(report[instance_id]["coverage_pred"])
+            # Otherwise we need to check if the patch could be extracted successfully
+        elif model_patch_file.exists():
+            report = report_results(patch_id_base, run_id, instance["golden_code_patch"], output_paths, instance_id, instance["repo"])
         else:
             # Otherwise, the instance was not run successfully
             error_ids.add(instance_id)
+            continue
+        if report[instance_id]["resolved"]:
+            # Record if the instance was resolved
+            resolved_ids.add(instance_id)
+        else:
+            unresolved_ids.add(instance_id)
+        if report[instance_id]["coverage_pred"] is not None:
+            coverage_deltas.append(report[instance_id]["coverage_delta_pred"])
+            coverages.append(report[instance_id]["coverage_pred"])
+
 
     if len(coverage_deltas) > 0:
         coverage_delta = sum(coverage_deltas)/len(coverage_deltas)
