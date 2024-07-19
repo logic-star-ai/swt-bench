@@ -400,8 +400,9 @@ def make_run_report(
                 "pred_pre__" + patch_id_base,
                 instance_id,
         ) / "model_patch.diff"
-        if not model_patch_file.exists():
-            # Otherwise, the instance was not run successfully
+        test_output_file = model_patch_file.parent / "test_output.txt"
+        if not model_patch_file.exists() or not test_output_file.exists():
+            # The instance was not run successfully
             error_ids.add(instance_id)
             continue
         with model_patch_file.open() as f:
