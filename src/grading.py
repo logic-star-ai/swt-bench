@@ -173,7 +173,7 @@ def compute_pass_to_pass(report: dict[str, dict[str, Any]]) -> float:
     return len(report[PASS_TO_PASS]["success"]) / total
 
 
-def get_resolution_success(report_pred: dict[str, dict[str, Any]], report_base: dict[str, dict[str, Any]]) -> Tuple[bool, int]:
+def get_resolution_success(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> Tuple[bool, int]:
     """
     Determine resolved status of an evaluation instance
 
@@ -229,7 +229,7 @@ def extract_executable_lines(lines: List[Tuple[str, int]], coverage_results: Lis
     return executable_lines
 
 
-def get_coverage_delta(lines: List[Tuple[str, int]], coverage_pre: [Dict[str, List[Tuple[int,int]]]], coverage_post:[Dict[str, List[Tuple[int,int]]]]) -> Dict[str, List[Tuple[int,int]]]:
+def get_coverage_delta(lines: List[Tuple[str, int]], coverage_pre: [Dict[str, List[Tuple[int,int]]]], coverage_post:[Dict[str, List[Tuple[int,int]]]]) -> Dict[str, Dict[int,int]]:
     coverage_delta = {}
     for line in lines:
         file_name = line[0]
@@ -243,7 +243,7 @@ def get_coverage_delta(lines: List[Tuple[str, int]], coverage_pre: [Dict[str, Li
     return coverage_delta
 
 
-def get_restricted_coverage(lines: List[Tuple[str, int]], coverage: [Dict[str, List[Tuple[int,int]]]]) -> Dict[str, List[Tuple[int,int]]]:
+def get_restricted_coverage(lines: List[Tuple[str, int]], coverage: [Dict[str, List[Tuple[int,int]]]]) -> Dict[str, Dict[int,int]]:
     restriced_coverage = {}
     for line in lines:
         file_name = line[0]
