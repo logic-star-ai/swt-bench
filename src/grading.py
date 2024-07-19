@@ -113,7 +113,7 @@ def get_coverage_eval(output_path: str) -> Dict:
 def get_eval_report(
     eval_pre: dict[str, str],
     eval_post: dict[str, str],
-) -> dict[str, dict[str, list[str]]]:
+) -> dict[str, list[str]]:
     """
     Create a report based on failure/pass change from gold results to eval results.
     """
@@ -143,11 +143,11 @@ def get_eval_report(
         results_dict[pre_result][post_result].append(test)
 
     results = {
-        FAIL_TO_PASS: f2p,
+        FAIL_TO_PASS: x2p + f2p,
         PASS_TO_PASS: p2p,
-        FAIL_TO_FAIL: f2f,
-        PASS_TO_FAIL: p2f,
-        UNMATCHED: x2p + x2f + f2x + p2x + x2x
+        FAIL_TO_FAIL: f2f + x2x + x2f + f2x,
+        PASS_TO_FAIL: p2f + p2x,
+        UNMATCHED: []
     }
     return results
 
