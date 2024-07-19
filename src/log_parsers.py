@@ -104,7 +104,7 @@ def parse_log_django(log: str) -> dict[str, str]:
             test = line.split(" ... ERROR")[0]
             test_status_map[test] = TestStatus.ERROR.value
         if line.startswith("ERROR:"):
-            test = line.split()[1].strip()
+            test = line.split("ERROR:")[1].strip()
             test_status_map[test] = TestStatus.ERROR.value
 
     # TODO: This is very brittle, we should do better
