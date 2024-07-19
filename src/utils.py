@@ -233,8 +233,6 @@ def get_test_directives(test_patch: str, repo: str, patch_type: str = "vanilla")
         diff_pat = r"diff --git a/.* b/(.*)"
         test_patch = test_patch
         directives = re.findall(diff_pat, test_patch)
-    elif patch_type in ["fuzzy", "custom"]:
-        directives = [patch.file_name for patch in test_patch]
     else:
         raise ValueError(f"Patch type {patch_type} unkown. Should be one of 'vanilla', 'fuzzy', and 'custom'.")
 

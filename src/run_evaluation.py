@@ -202,12 +202,12 @@ def run_instance(
     if model_patch:
         caching_log_dir = [False, False, True, True, True, True]
         patch_ids = ["pred_pre__" + patch_id_base, "pred_post__" + patch_id_base, "gold_pre", "gold_post", "base_pre", "base_post"]
-        test_patches = [pred["model_patch"], pred["model_patch"], test_spec.golden_test_patch, test_spec.golden_test_patch, None, None]
+        test_patches = [model_patch, model_patch, test_spec.golden_test_patch, test_spec.golden_test_patch, None, None]
         code_patches = [None, test_spec.golden_code_patch, None, test_spec.golden_code_patch, None, test_spec.golden_code_patch]
 
         output_paths = []
         for cld, test_patch, code_patch, patch_id in zip(caching_log_dir, test_patches, code_patches, patch_ids):
-            exec_spec.test_directives = get_test_directives(pred["model_patch"] if test_patch is None else test_patch, exec_spec.repo)
+            exec_spec.test_directives = get_test_directives(model_patch if test_patch is None else test_patch, exec_spec.repo)
             exec_spec.patch_list = [] if code_patch is None else [code_patch]
             exec_spec.patch_list += [test_patch]
             exec_spec.patch_id = patch_id
@@ -398,26 +398,34 @@ def make_run_report(
             / "report.json"
         )
         patch_ids = ["pred_pre__" + patch_id_base, "pred_post__" + patch_id_base, "gold_pre", "gold_post", "base_pre", "base_post"]
-        output_paths = [
-            RUN_INSTANCE_LOG_DIR / run_id / patch_id / instance_id / "test_output.txt" for patch_id in patch_ids[:2]
-        ] + sum((
-            list(find_all_test_output_paths(RUN_INSTANCE_LOG_DIR / patch_id / instance_id)) for patch_id in patch_ids[2:]
-        ), start=[])
         model_patch_file = (
-            output_paths[0].parent
-            / "model_patch.diff"
+                RUN_INSTANCE_LOG_DIR
+                / run_id
+                / "pred_pre__" + patch_id_base
+                / instance_id
+                / "model_patch.diff"
         )
+        if not model_patch_file.exists():
+            # Otherwise, the instance was not run successfully
+            error_ids.add(instance_id)
+            continue
+        with model_patch_file.open() as f:
+            model_patch = f.read()
+        output_paths = (
+           [
+               RUN_INSTANCE_LOG_DIR / run_id / patch_id / instance_id / "test_output.txt" for patch_id in patch_ids[:2]
+           ] + [
+               RUN_INSTANCE_LOG_DIR / patch_id / instance_id / "_".join(get_test_directives(model_patch, instance["repo"])) / "test_output.txt" for patch_id in patch_ids[2:]
+           ]
+        )
+
         if report_file.exists():
             # If report file exists, then the instance has been run and reported before
             completed_ids.add(instance_id)
             report = json.loads(report_file.read_text())
-            # Otherwise we need to check if the patch could be extracted successfully
-        elif model_patch_file.exists() and len(output_paths) == 6:
-            report = report_results(patch_id_base, run_id, instance["golden_code_patch"], output_paths, instance_id, instance["repo"])
         else:
-            # Otherwise, the instance was not run successfully
-            error_ids.add(instance_id)
-            continue
+            report = report_results(patch_id_base, run_id, instance["golden_code_patch"], output_paths, instance_id, instance["repo"])
+
         if report[instance_id]["resolved"]:
             # Record if the instance was resolved
             resolved_ids.add(instance_id)
