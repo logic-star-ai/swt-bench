@@ -61,6 +61,8 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
 
     with open(log_fp) as f:
         content = f.read()
+        # remove coverage dumps
+        content = content.split("\n+ cat coverage.cover")[0]
         # TODO fix constant here
         if (
             any(
