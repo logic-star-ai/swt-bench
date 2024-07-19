@@ -390,32 +390,32 @@ def make_run_report(
         instance_id = instance["instance_id"]
         prediction = predictions[instance_id]
         patch_id_base = prediction["model_name_or_path"].replace("/", "__")
-        report_file = (
-            RUN_INSTANCE_LOG_DIR
-            / run_id
-            / patch_id_base
-            / instance_id
-            / "report.json"
-        )
-        patch_ids = ["pred_pre__" + patch_id_base, "pred_post__" + patch_id_base, "gold_pre", "gold_post", "base_pre", "base_post"]
-        model_patch_file = (
-                RUN_INSTANCE_LOG_DIR
-                / run_id
-                / "pred_pre__" + patch_id_base
-                / instance_id
-                / "model_patch.diff"
-        )
+        report_file = get_log_dir(
+            run_id,
+            patch_id_base,
+            instance_id,
+        ) / "report.json"
+        model_patch_file = get_log_dir(
+                run_id,
+                "pred_pre__" + patch_id_base,
+                instance_id,
+        ) / "model_patch.diff"
         if not model_patch_file.exists():
             # Otherwise, the instance was not run successfully
             error_ids.add(instance_id)
             continue
         with model_patch_file.open() as f:
             model_patch = f.read()
+
+        patch_ids = ["pred_pre__" + patch_id_base, "pred_post__" + patch_id_base, "gold_pre", "gold_post", "base_pre", "base_post"]
+        model_test_directive_path = "_".join(get_test_directives(model_patch, instance["repo"])).replace("/", "__")
+        gold_test_directive_path = "_".join(get_test_directives(instance["golden_test_patch"], instance["repo"])).replace("/", "__")
+        directive_paths = [gold_test_directive_path, gold_test_directive_path, model_test_directive_path, model_test_directive_path]
         output_paths = (
            [
-               RUN_INSTANCE_LOG_DIR / run_id / patch_id / instance_id / "test_output.txt" for patch_id in patch_ids[:2]
+               get_log_dir(run_id, patch_id, instance_id) / "test_output.txt" for patch_id in patch_ids[:2]
            ] + [
-               RUN_INSTANCE_LOG_DIR / patch_id / instance_id / "_".join(get_test_directives(model_patch, instance["repo"])) / "test_output.txt" for patch_id in patch_ids[2:]
+               get_log_dir(patch_id, instance_id, directive_path) / "test_output.txt" for patch_id, directive_path in zip(patch_ids[2:], directive_paths)
            ]
         )
 
