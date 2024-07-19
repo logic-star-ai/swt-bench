@@ -386,7 +386,7 @@ def make_run_report(
 
 
     # iterate through dataset and check if the instance has been run
-    for instance in dataset:
+    for instance in tqdm(dataset):
         instance_id = instance["instance_id"]
         prediction = predictions[instance_id]
         patch_id_base = prediction["model_name_or_path"].replace("/", "__")
@@ -412,7 +412,7 @@ def make_run_report(
             completed_ids.add(instance_id)
             report = json.loads(report_file.read_text())
             # Otherwise we need to check if the patch could be extracted successfully
-        elif model_patch_file.exists():
+        elif model_patch_file.exists() and len(output_paths) == 6:
             report = report_results(patch_id_base, run_id, instance["golden_code_patch"], output_paths, instance_id, instance["repo"])
         else:
             # Otherwise, the instance was not run successfully
