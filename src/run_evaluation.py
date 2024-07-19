@@ -1,3 +1,4 @@
+import hashlib
 import warnings
 
 import docker
@@ -212,7 +213,7 @@ def run_instance(
             exec_spec.patch_list += [test_patch]
             exec_spec.patch_id = patch_id
             if cld:
-                log_dir = get_log_dir(patch_id, instance_id, "_".join(exec_spec.test_directives).replace("/","__"))
+                log_dir = get_log_dir(patch_id, instance_id, test_directive_id(exec_spec.test_directives))
             else:
                 log_dir = None
             _, test_output_path = run_eval_exec_spec(exec_spec, model_patch, log_dir, build_mode)
@@ -356,6 +357,8 @@ def find_all_test_output_paths(dir: Path):
     for file in dir.rglob("test_output.txt"):
         yield file
 
+def test_directive_id(test_directives: list[str]):
+    return hashlib.sha256("__".join(test_directives).encode()).hexdigest()
 
 
 def make_run_report(
@@ -390,11 +393,6 @@ def make_run_report(
         instance_id = instance["instance_id"]
         prediction = predictions[instance_id]
         patch_id_base = prediction["model_name_or_path"].replace("/", "__")
-        report_file = get_log_dir(
-            run_id,
-            patch_id_base,
-            instance_id,
-        ) / "report.json"
         model_patch_file = get_log_dir(
                 run_id,
                 "pred_pre__" + patch_id_base,
@@ -405,26 +403,35 @@ def make_run_report(
             # The instance was not run successfully
             error_ids.add(instance_id)
             continue
-        with model_patch_file.open() as f:
-            model_patch = f.read()
 
-        patch_ids = ["pred_pre__" + patch_id_base, "pred_post__" + patch_id_base, "gold_pre", "gold_post", "base_pre", "base_post"]
-        model_test_directive_path = "_".join(get_test_directives(model_patch, instance["repo"])).replace("/", "__")
-        gold_test_directive_path = "_".join(get_test_directives(instance["golden_test_patch"], instance["repo"])).replace("/", "__")
-        directive_paths = [gold_test_directive_path, gold_test_directive_path, model_test_directive_path, model_test_directive_path]
-        output_paths = (
-           [
-               get_log_dir(run_id, patch_id, instance_id) / "test_output.txt" for patch_id in patch_ids[:2]
-           ] + [
-               get_log_dir(patch_id, instance_id, directive_path) / "test_output.txt" for patch_id, directive_path in zip(patch_ids[2:], directive_paths)
-           ]
-        )
-
+        report_file = get_log_dir(
+            run_id,
+            patch_id_base,
+            instance_id,
+        ) / "report.json"
         if report_file.exists():
             # If report file exists, then the instance has been run and reported before
             completed_ids.add(instance_id)
             report = json.loads(report_file.read_text())
         else:
+            with model_patch_file.open() as f:
+                model_patch = f.read()
+
+            patch_ids = ["pred_pre__" + patch_id_base, "pred_post__" + patch_id_base, "gold_pre", "gold_post",
+                         "base_pre", "base_post"]
+            model_test_directive_path = test_directive_id(get_test_directives(model_patch, instance["repo"]))
+            gold_test_directive_path = test_directive_id(
+                get_test_directives(instance["golden_test_patch"], instance["repo"]))
+            directive_paths = [gold_test_directive_path, gold_test_directive_path, model_test_directive_path,
+                               model_test_directive_path]
+            output_paths = (
+                    [
+                        get_log_dir(run_id, patch_id, instance_id) / "test_output.txt" for patch_id in patch_ids[:2]
+                    ] + [
+                        get_log_dir(patch_id, instance_id, directive_path) / "test_output.txt" for
+                        patch_id, directive_path in zip(patch_ids[2:], directive_paths)
+                    ]
+            )
             report = report_results(patch_id_base, run_id, instance["golden_code_patch"], output_paths, instance_id, instance["repo"])
 
         if report[instance_id]["resolved"]:
