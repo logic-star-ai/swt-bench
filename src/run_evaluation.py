@@ -331,11 +331,11 @@ def run_instances(
             ]
             # Wait for each future to complete
             try:
-                for future in as_completed(futures, timeout=timeout):
+                for future in as_completed(futures):
                     # Update progress bar
                     pbar.update(1)
                     # check if instance ran successfully
-                    e = future.exception(timeout=timeout)
+                    e = future.exception()
                     if e is None:
                         continue
                     try:
