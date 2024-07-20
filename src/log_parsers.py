@@ -61,6 +61,15 @@ def parse_log_pytest_options(log: str) -> dict[str, str]:
             test_status_map[test_name] = test_case[0]
     return test_status_map
 
+django_suffixes = {
+    "ok": TestStatus.PASSED.value,
+    "OK": TestStatus.PASSED.value,
+    "skipped": TestStatus.SKIPPED.value,
+    "FAIL": TestStatus.FAILED.value,
+    "ERROR": TestStatus.ERROR.value,
+}
+django_pattern = re.compile(rf"(?P<testname>test_([^\s]*)\s+\([^)]*\))\s+\.\.\.\s+((.|\n)(?!test_|OK|ok|FAILED|ERROR|skipped))*\s*(?P<status>OK|ok|FAILED|ERROR|skipped)", flags=re.MULTILINE)
+django_fail_error_pattern = re.compile(rf"(?P<testname>test_([^\s]*)\s+\([^)]*\))")
 
 def parse_log_django(log: str) -> dict[str, str]:
     """
@@ -72,57 +81,17 @@ def parse_log_django(log: str) -> dict[str, str]:
         dict: test case to test status mapping
     """
     test_status_map = {}
-    lines = log.split("\n")
-    for line in lines:
-        line = line.strip()
+    for line in log.split("\n"):
+        for key, status in [("ERROR", TestStatus.ERROR), ("FAIL", TestStatus.FAILED)]:
+            if line.startswith(f"{key}:"):
+                tests = list(django_fail_error_pattern.finditer(line.split(key)[1]))
+                assert len(tests) == 1
+                test_status_map[tests[0].group("testname")] = status.value
 
-        # This isn't ideal but the test output spans multiple lines
-        if "--version is equivalent to version" in line:
-            test_status_map["--version is equivalent to version"] = TestStatus.PASSED.value
-
-        pass_suffixes = (" ... ok", " ... OK", " ...  OK")
-        for suffix in pass_suffixes:
-            if line.endswith(suffix):
-                # TODO: Temporary, exclusive fix for django__django-7188
-                # The proper fix should involve somehow getting the test results to
-                # print on a separate line, rather than the same line
-                if line.strip().startswith("Applying sites.0002_alter_domain_unique...test_no_migrations"):
-                    line = line.split("...", 1)[-1].strip()
-                test = line.rsplit(suffix, 1)[0]
-                test_status_map[test] = TestStatus.PASSED.value
-                break
-        if " ... skipped" in line:
-            test = line.split(" ... skipped")[0]
-            test_status_map[test] = TestStatus.SKIPPED.value
-        if line.endswith(" ... FAIL"):
-            test = line.split(" ... FAIL")[0]
-            test_status_map[test] = TestStatus.FAILED.value
-        if line.startswith("FAIL:"):
-            test = line.split()[1].strip()
-            test_status_map[test] = TestStatus.FAILED.value
-        if line.endswith(" ... ERROR"):
-            test = line.split(" ... ERROR")[0]
-            test_status_map[test] = TestStatus.ERROR.value
-        if line.startswith("ERROR:"):
-            test = line.split("ERROR:")[1].strip()
-            test_status_map[test] = TestStatus.ERROR.value
-
-    # TODO: This is very brittle, we should do better
-    # There's a bug in the django logger, such that sometimes a test output near the end gets
-    # interrupted by a particular long multiline print statement.
-    # We have observed this in one of 3 forms:
-    # - "{test_name} ... Testing against Django installed in {*} silenced.\nok"
-    # - "{test_name} ... Internal Server Error: \/(.*)\/\nok"
-    # - "{test_name} ... System check identified no issues (0 silenced).\nok"
-    patterns = [
-        r"^(.*?)\s\.\.\.\sTesting\ against\ Django\ installed\ in\ ((?s:.*?))\ silenced\)\.\nok$",
-        r"^(.*?)\s\.\.\.\sInternal\ Server\ Error:\ \/(.*)\/\nok$",
-        r"^(.*?)\s\.\.\.\sSystem check identified no issues \(0 silenced\)\nok$"
-    ]
-    for pattern in patterns:
-        for match in re.finditer(pattern, log, re.MULTILINE):
-            test_name = match.group(1)
-            test_status_map[test_name] = TestStatus.PASSED.value
+    for match in django_pattern.finditer(log):
+        test_name = match.group("testname")
+        status = match.group("status")
+        test_status_map[test_name] = django_suffixes[status]
     return test_status_map
 
 
