@@ -351,3 +351,72 @@ Running migrations:
 System check identified no issues (0 silenced).
 """
         parse_log_django(log)
+
+class ParseSympyLogTest(unittest.TestCase):
+    def test_parse_sympy_log(self):
+        log = """\
+/testbed/sympy/core/basic.py:3: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+  from collections import Mapping
+/testbed/sympy/plotting/plot.py:28: DeprecationWarning: Using or importing the ABCs from 'collections' instead of from 'collections.abc' is deprecated since Python 3.3, and in 3.10 it will stop working
+  from collections import Callable
+============================= test process starts ==============================
+executable:         /opt/miniconda3/envs/testbed/bin/python3  (3.9.19-final-0) [CPython]
+architecture:       64-bit
+cache:              no
+ground types:       python 
+random seed:        87151617
+hash randomization: on (PYTHONHASHSEED=3328767817)
+
+sympy/printing/tests/test_ccode.py[32] 
+test_printmethod ok
+test_ccode_sqrt ok
+test_ccode_Pow ok
+test_ccode_constants_mathh ok
+test_ccode_constants_other ok
+test_ccode_Rational ok
+test_ccode_Integer ok
+test_ccode_functions ok
+test_ccode_inline_function ok
+test_ccode_exceptions ok
+test_ccode_user_functions ok
+test_ccode_boolean ok
+test_ccode_Relational F
+test_ccode_Piecewise ok
+test_ccode_sinc F
+test_ccode_Piecewise_deep ok
+test_ccode_ITE ok
+test_ccode_settings ok
+test_ccode_Indexed ok
+test_ccode_Indexed_without_looking_for_contraction ok
+test_ccode_loops_matrix_vector ok
+test_dummy_loops ok
+test_ccode_loops_add ok
+test_ccode_loops_multiple_contractions ok
+test_ccode_loops_addfactor ok
+test_ccode_loops_multiple_terms ok
+test_dereference_printing ok
+test_Matrix_printing ok
+test_ccode_reserved_words ok
+test_ccode_sign ok
+test_ccode_Assignment ok
+test_ccode_For ok                                                         [FAIL]
+
+
+________________________________________________________________________________
+___________ sympy/printing/tests/test_ccode.py:test_ccode_Relational ___________
+  File "/testbed/sympy/printing/tests/test_ccode.py", line 125, in test_ccode_Relational
+    assert ccode(Eq(x, y)) == "x == y"
+AssertionError
+________________________________________________________________________________
+______________ sympy/printing/tests/test_ccode.py:test_ccode_sinc ______________
+  File "/testbed/sympy/printing/tests/test_ccode.py", line 178, in test_ccode_sinc
+    assert ccode(expr) == (
+AssertionError
+
+============= tests finished: 30 passed, 2 failed, in 0.46 seconds =============
+DO *NOT* COMMIT!
+    """
+        res = parse_log_sympy(log)
+        self.assertEqual(res.get("test_ccode_Relational"), "FAILED")
+        self.assertEqual(res.get("test_ccode_sinc"), "FAILED")
+        self.assertEqual(res.get("test_ccode_For"), "PASSED")

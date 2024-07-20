@@ -143,6 +143,14 @@ def parse_log_seaborn(log: str) -> dict[str, str]:
             test_status_map[test_case] = TestStatus.PASSED.value
     return test_status_map
 
+sympy_error_pattern = re.compile(r"(_*) (.*)\.py:(.*) (_*)")
+sympy_test_pattern = re.compile(r"test_([^\s]*)\s+(E|F|ok)")
+sympy_status_map = {
+    "E": TestStatus.ERROR.value,
+    "F": TestStatus.FAILED.value,
+    "ok": TestStatus.PASSED.value,
+}
+
 
 def parse_log_sympy(log: str) -> dict[str, str]:
     """
@@ -154,23 +162,13 @@ def parse_log_sympy(log: str) -> dict[str, str]:
         dict: test case to test status mapping
     """
     test_status_map = {}
-    pattern = r"(_*) (.*)\.py:(.*) (_*)"
-    matches = re.findall(pattern, log)
-    for match in matches:
-        test_case = f"{match[1]}.py:{match[2]}"
+    for match in sympy_error_pattern.finditer(log):
+        test_case = match[2]
         test_status_map[test_case] = TestStatus.FAILED.value
-    for line in log.split("\n"):
-        line = line.strip()
-        if line.startswith("test_"):
-            if line.endswith(" E"):
-                test = line.split()[0]
-                test_status_map[test] = TestStatus.ERROR.value
-            if line.endswith(" F"):
-                test = line.split()[0]
-                test_status_map[test] = TestStatus.FAILED.value
-            if line.endswith(" ok"):
-                test = line.split()[0]
-                test_status_map[test] = TestStatus.PASSED.value
+    for match in sympy_test_pattern.finditer(log):
+        test_case = match[1]
+        status = match[2]
+        test_status_map["test_"+test_case] = sympy_status_map[status]
     return test_status_map
 
 
