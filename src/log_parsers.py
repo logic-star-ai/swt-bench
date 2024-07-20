@@ -68,8 +68,8 @@ django_suffixes = {
     "FAIL": TestStatus.FAILED.value,
     "ERROR": TestStatus.ERROR.value,
 }
-django_pattern = re.compile(rf"(?P<testname>test_([^\s]*)\s+\([^)]*\))\s+\.\.\.\s+((.|\n)(?!test_|OK|ok|FAILED|ERROR|skipped))*\s*(?P<status>OK|ok|FAILED|ERROR|skipped)", flags=re.MULTILINE)
-django_fail_error_pattern = re.compile(rf"(?P<testname>test_([^\s]*)\s+\([^)]*\))")
+django_pattern = re.compile(rf"(?P<testname>(test_|app_unmigrated)([^\s]*)\s+\([^)]*\))\s+\.\.\.\s+((.|\n)(?!test_|app_unmigrated|OK|ok|FAILED|ERROR|skipped))*\s*(?P<status>OK|ok|FAILED|ERROR|skipped)", flags=re.MULTILINE)
+django_fail_error_pattern = re.compile(rf"(?P<testname>(test_|app_unmigrated)([^\s]*)\s+\([^)]*\))")
 
 def parse_log_django(log: str) -> dict[str, str]:
     """

@@ -282,3 +282,72 @@ Destroying test database for alias 'default' ('file:memorydb_default?mode=memory
         ks = [k for k in res.keys() if "test_order_by_multiline_sql" in k]
         print(ks)
         self.assertEqual(1, len(ks))
+
+    def test_django_log_parser_4(self):
+        log = """\
+Creating test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+test_migrate_test_setting_false (backends.base.test_creation.TestDbCreationTests) ... ok
+test_migrate_test_setting_true (backends.base.test_creation.TestDbCreationTests) ... ok
+test_custom_test_name (backends.base.test_creation.TestDbSignatureTests) ... ok
+test_custom_test_name_with_test_prefix (backends.base.test_creation.TestDbSignatureTests) ... ok
+test_default_name (backends.base.test_creation.TestDbSignatureTests) ... ok
+test_circular_reference (backends.base.test_creation.TestDeserializeDbFromString) ... ok
+test_circular_reference_with_natural_key (backends.base.test_creation.TestDeserializeDbFromString) ... ok
+test_self_reference (backends.base.test_creation.TestDeserializeDbFromString) ... ok
+app_unmigrated (unittest.loader._FailedTest) ... ERROR
+
+======================================================================
+ERROR: app_unmigrated (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: app_unmigrated
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/testbed/lib/python3.6/unittest/loader.py", line 153, in loadTestsFromName
+    module = __import__(module_name)
+ModuleNotFoundError: No module named 'backends.base.app_unmigrated'
+
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.800s
+
+FAILED (errors=1)
+Destroying test database for alias 'default' ('file:memorydb_default?mode=memory&cache=shared')...
+Testing against Django installed in '/testbed/django'
+Importing application backends
+Skipping setup of unused database(s): other.
+Operations to perform:
+  Synchronize unmigrated apps: auth, backends, contenttypes, messages, sessions, staticfiles
+  Apply all migrations: admin, sites
+Synchronizing apps without migrations:
+  Creating tables...
+    Creating table django_content_type
+    Creating table auth_permission
+    Creating table auth_group
+    Creating table auth_user
+    Creating table django_session
+    Creating table backends_square
+    Creating table backends_person
+    Creating table backends_schoolclass
+    Creating table backends_verylongmodelnamezzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    Creating table backends_tag
+    Creating table CaseSensitive_Post
+    Creating table backends_reporter
+    Creating table backends_article
+    Creating table backends_item
+    Creating table backends_object
+    Creating table backends_objectreference
+    Creating table backends_objectselfreference
+    Creating table backends_circulara
+    Creating table backends_circularb
+    Creating table backends_rawdata
+    Creating table backends_author
+    Creating table backends_book
+    Running deferred SQL...
+Running migrations:
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying sites.0001_initial... OK
+  Applying sites.0002_alter_domain_unique... OK
+System check identified no issues (0 silenced).
+"""
+        parse_log_django(log)
