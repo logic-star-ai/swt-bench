@@ -420,3 +420,4 @@ DO *NOT* COMMIT!
         self.assertEqual(res.get("test_ccode_Relational"), "FAILED")
         self.assertEqual(res.get("test_ccode_sinc"), "FAILED")
         self.assertEqual(res.get("test_ccode_For"), "PASSED")
+        self.assertEqual(res.get("sympy/printing/tests/test_ccode"), None)
