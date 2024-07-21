@@ -65,7 +65,7 @@ django_suffixes = {
     "ok": TestStatus.PASSED.value,
     "OK": TestStatus.PASSED.value,
     "skipped": TestStatus.SKIPPED.value,
-    "FAIL": TestStatus.FAILED.value,
+    "FAILED": TestStatus.FAILED.value,
     "ERROR": TestStatus.ERROR.value,
 }
 django_pattern = re.compile(rf"(?P<testname>\b(test_|app_unmigrated)([^\s]*)\s+\([^)]*\))((.|\n)(?!\.\.\.|test_))*\s*\.\.\.((.|\n)(?!\b(test_|app_unmigrated|OK|ok|FAILED|ERROR|skipped)\b))*\s*\b(?P<status>OK|ok|FAILED|ERROR|skipped)\b", flags=re.MULTILINE)
