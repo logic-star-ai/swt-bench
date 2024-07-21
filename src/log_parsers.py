@@ -68,7 +68,7 @@ django_suffixes = {
     "FAIL": TestStatus.FAILED.value,
     "ERROR": TestStatus.ERROR.value,
 }
-django_pattern = re.compile(rf"(?P<testname>(test_|app_unmigrated)([^\s]*)\s+\([^)]*\))\s+\.\.\.((.|\n)(?!test_|app_unmigrated|OK|ok|FAILED|ERROR|skipped))*\s*(?P<status>OK|ok|FAILED|ERROR|skipped)", flags=re.MULTILINE)
+django_pattern = re.compile(rf"(?P<testname>(test_|app_unmigrated)([^\s]*)\s+\([^)]*\))((.|\n)(?!\.\.\.|test_))*\s*\.\.\.((.|\n)(?!test_|app_unmigrated|OK|ok|FAILED|ERROR|skipped))*\s*(?P<status>OK|ok|FAILED|ERROR|skipped)", flags=re.MULTILINE)
 django_fail_error_pattern = re.compile(rf"(?P<testname>(test_|app_unmigrated)([^\s]*)\s+\([^)]*\))")
 
 def parse_log_django(log: str) -> dict[str, str]:
@@ -81,17 +81,21 @@ def parse_log_django(log: str) -> dict[str, str]:
         dict: test case to test status mapping
     """
     test_status_map = {}
+
+    # first try to extract normal run
+    for match in django_pattern.finditer(log):
+        test_name = match.group("testname")
+        status = match.group("status")
+        test_status_map[test_name] = django_suffixes[status]
+
+    # error and fail reports take precedence (this will overwrite any previous status)
     for line in log.split("\n"):
         for key, status in [("ERROR", TestStatus.ERROR), ("FAIL", TestStatus.FAILED)]:
             if line.startswith(f"{key}:"):
                 tests = list(django_fail_error_pattern.finditer(line.split(key)[1]))
                 assert len(tests) == 1
-                test_status_map[tests[0].group("testname")] = status.value
-
-    for match in django_pattern.finditer(log):
-        test_name = match.group("testname")
-        status = match.group("status")
-        test_status_map[test_name] = django_suffixes[status]
+                test_name = tests[0].group("testname")
+                test_status_map[test_name] = status.value
     return test_status_map
 
 

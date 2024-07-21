@@ -371,6 +371,83 @@ OK (skipped=21)
             res,
         )
 
+    def test_django_log_parser_6(self):
+        log = """\
+test_get_FIELD_display_translated (model_fields.tests.GetFieldDisplayTests)
+A translated display value is coerced to str. ... ok
+test_iterator_choices (model_fields.tests.GetFieldDisplayTests) ... ok
+test_overriding_FIELD_display (model_fields.tests.GetFieldDisplayTests) ... Testing against Django installed in '/testbed/django'
+Importing application model_fields
+Skipping setup of unused database(s): other.
+Operations to perform:
+  Synchronize unmigrated apps: auth, contenttypes, messages, model_fields, sessions, staticfiles
+  Apply all migrations: admin, sites
+Synchronizing apps without migrations:
+  Creating tables...
+    Creating table django_content_type
+    Creating table auth_permission
+    Creating table auth_group
+    Creating table auth_user
+    Creating table django_session
+    Creating table model_fields_foo
+    Creating table model_fields_bar
+    Creating table model_fields_whiz
+    Creating table model_fields_whizdelayed
+    Creating table model_fields_whiziter
+    Creating table model_fields_whiziterempty
+    Creating table model_fields_choiceful
+    Creating table model_fields_bigd
+    Creating table model_fields_floatmodel
+    Creating table model_fields_bigs
+    Creating table model_fields_unicodeslugfield
+    Creating table model_fields_automodel
+    Creating table model_fields_bigautomodel
+
+    Creating table model_fields_personwithheightandwidth
+    Creating table model_fields_persondimensionsfirst
+    Creating table model_fields_persontwoimages
+    Creating table model_fields_allfieldsmodel
+    Creating table model_fields_manytomany
+    Creating table model_fields_uuidmodel
+    Creating table model_fields_nullableuuidmodel
+    Creating table model_fields_primarykeyuuidmodel
+    Creating table model_fields_relatedtouuidmodel
+    Creating table model_fields_uuidchild
+    Creating table model_fields_uuidgrandchild
+    Running deferred SQL...
+Running migrations:
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying sites.0001_initial... OK
+  Applying sites.0002_alter_domain_unique... OK
+System check identified no issues (0 silenced).
+FAIL
+
+======================================================================
+FAIL: test_overriding_FIELD_display (model_fields.tests.GetFieldDisplayTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "./tests/model_fields/tests.py", line 179, in test_overriding_FIELD_display
+    self.assertEqual(f.get_foo_bar_display(), 'something')
+AssertionError: 'foo' != 'something'
+- foo
++ something
+
+
+----------------------------------------------------------------------
+Ran 31 tests in 0.180s
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+                "test_overriding_FIELD_display (model_fields.tests.GetFieldDisplayTests)": "FAILED",
+                "test_get_FIELD_display_translated (model_fields.tests.GetFieldDisplayTests)": "PASSED",
+                "test_iterator_choices (model_fields.tests.GetFieldDisplayTests)": "PASSED",
+            },
+            res,
+        )
+
 class ParseSympyLogTest(unittest.TestCase):
     def test_parse_sympy_log(self):
         log = """\
