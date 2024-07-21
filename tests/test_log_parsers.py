@@ -351,6 +351,25 @@ Running migrations:
 System check identified no issues (0 silenced).
 """
         parse_log_django(log)
+    
+    def test_django_log_parser_5(self):
+        log = """\
+test_watched_roots_contains_files (utils_tests.test_autoreload.WatchmanReloaderTests) ... skipped 'Watchman unavailable: Cannot connect to the watchman service.'
+test_watched_roots_contains_sys_path (utils_tests.test_autoreload.WatchmanReloaderTests) ... skipped 'Watchman unavailable: Cannot connect to the watchman service.'
+
+----------------------------------------------------------------------
+Ran 73 tests in 1.045s
+
+OK (skipped=21)
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+                "test_watched_roots_contains_files (utils_tests.test_autoreload.WatchmanReloaderTests)": "SKIPPED",
+                "test_watched_roots_contains_sys_path (utils_tests.test_autoreload.WatchmanReloaderTests)": "SKIPPED",
+            },
+            res,
+        )
 
 class ParseSympyLogTest(unittest.TestCase):
     def test_parse_sympy_log(self):
