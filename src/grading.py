@@ -61,6 +61,8 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
 
     with open(log_fp) as f:
         content = f.read()
+        # remove coverage dumps
+        content = content.split("\n+ cat coverage.cover")[0]
         # TODO fix constant here
         if (
             any(
@@ -113,7 +115,7 @@ def get_coverage_eval(output_path: str) -> Dict:
 def get_eval_report(
     eval_pre: dict[str, str],
     eval_post: dict[str, str],
-) -> dict[str, dict[str, list[str]]]:
+) -> dict[str, list[str]]:
     """
     Create a report based on failure/pass change from gold results to eval results.
     """
@@ -143,11 +145,11 @@ def get_eval_report(
         results_dict[pre_result][post_result].append(test)
 
     results = {
-        FAIL_TO_PASS: f2p,
+        FAIL_TO_PASS: x2p + f2p,
         PASS_TO_PASS: p2p,
-        FAIL_TO_FAIL: f2f,
-        PASS_TO_FAIL: p2f,
-        UNMATCHED: x2p + x2f + f2x + p2x + x2x
+        FAIL_TO_FAIL: f2f + x2x + x2f + f2x,
+        PASS_TO_FAIL: p2f + p2x,
+        UNMATCHED: []
     }
     return results
 
@@ -173,7 +175,7 @@ def compute_pass_to_pass(report: dict[str, dict[str, Any]]) -> float:
     return len(report[PASS_TO_PASS]["success"]) / total
 
 
-def get_resolution_success(report_pred: dict[str, dict[str, Any]], report_base: dict[str, dict[str, Any]]) -> Tuple[bool, int]:
+def get_resolution_success(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> Tuple[bool, int]:
     """
     Determine resolved status of an evaluation instance
 
@@ -229,7 +231,7 @@ def extract_executable_lines(lines: List[Tuple[str, int]], coverage_results: Lis
     return executable_lines
 
 
-def get_coverage_delta(lines: List[Tuple[str, int]], coverage_pre: [Dict[str, List[Tuple[int,int]]]], coverage_post:[Dict[str, List[Tuple[int,int]]]]) -> Dict[str, List[Tuple[int,int]]]:
+def get_coverage_delta(lines: List[Tuple[str, int]], coverage_pre: [Dict[str, List[Tuple[int,int]]]], coverage_post:[Dict[str, List[Tuple[int,int]]]]) -> Dict[str, Dict[int,int]]:
     coverage_delta = {}
     for line in lines:
         file_name = line[0]
@@ -243,7 +245,7 @@ def get_coverage_delta(lines: List[Tuple[str, int]], coverage_pre: [Dict[str, Li
     return coverage_delta
 
 
-def get_restricted_coverage(lines: List[Tuple[str, int]], coverage: [Dict[str, List[Tuple[int,int]]]]) -> Dict[str, List[Tuple[int,int]]]:
+def get_restricted_coverage(lines: List[Tuple[str, int]], coverage: [Dict[str, List[Tuple[int,int]]]]) -> Dict[str, Dict[int,int]]:
     restriced_coverage = {}
     for line in lines:
         file_name = line[0]

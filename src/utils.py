@@ -214,7 +214,7 @@ def get_requirements(instance: SWEbenchInstance) -> str:
     return get_requirements_by_commit(instance["repo"], commit)
 
 
-def get_test_directives(test_patch: str, repo: str, patch_type: str = "vanilla") -> list:
+def get_test_directives(test_patch: str, repo: str) -> list:
     """
     Get test directives from the test_patch of a task instance
 
@@ -228,15 +228,10 @@ def get_test_directives(test_patch: str, repo: str, patch_type: str = "vanilla")
         return ["test.py"]
 
 
-    if patch_type == "vanilla":
-        # Get test directives from test patch and remove non-test files
-        diff_pat = r"diff --git a/.* b/(.*)"
-        test_patch = test_patch
-        directives = re.findall(diff_pat, test_patch)
-    elif patch_type in ["fuzzy", "custom"]:
-        directives = [patch.file_name for patch in test_patch]
-    else:
-        raise ValueError(f"Patch type {patch_type} unkown. Should be one of 'vanilla', 'fuzzy', and 'custom'.")
+    # Get test directives from test patch and remove non-test files
+    diff_pat = r"diff --git a/.* b/(.*)"
+    test_patch = test_patch
+    directives = re.findall(diff_pat, test_patch)
 
     directives = [d for d in directives if not any(d.endswith(ext) for ext in NON_TEST_EXTS)]
 

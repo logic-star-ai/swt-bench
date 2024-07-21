@@ -30,6 +30,7 @@ def run(
         patch_types: List[str],
         timeout: int,
         build_mode: BuildMode = "api",
+        skip_eval: bool = False,
     ):
     """
     Run evaluation harness for the given dataset and predictions.
@@ -61,6 +62,8 @@ def run(
     print(f"Running {len(dataset)} unevaluated instances...")
     if not dataset:
         print("No instances to run.")
+    elif skip_eval:
+        print("Skipping evaluation and only generating reports")
     else:
         # build environment images + run instances
         # build_env_images(client, dataset, force_rebuild, max_workers)
@@ -106,6 +109,10 @@ if __name__ == "__main__":
         "--clean", type=str2bool, default=False, help="Clean images above cache level"
     )
     parser.add_argument("--run_id", type=str, required=True, help="Run ID - identifies the run")
+    # Skip running the evaluation and just grade
+    parser.add_argument(
+        "--skip_eval", type=str2bool, default=False, help="Skip evaluation and only generate reports"
+    )
     args = parser.parse_args()
 
     run(**vars(args))

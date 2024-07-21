@@ -584,8 +584,6 @@ MAP_VERSION_TO_INSTALL_PYLINT.update(
         for k in ["3.0"]
     }
 )
-for v in ["2.14", "2.15", "2.17", "3.0"]:
-    MAP_VERSION_TO_INSTALL_PYLINT[v]["nano_cpus"] = int(2e9)
 
 MAP_VERSION_TO_INSTALL_XARRAY = {
     k: {
