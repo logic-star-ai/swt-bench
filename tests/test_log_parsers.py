@@ -40,6 +40,35 @@ FAILED (errors=1)
             res,
         )
     
+    def test_parse_log_django_1(self):
+        log = """\
+Importing application ordering
+Skipping setup of unused database(s): default, other.
+System check identified no issues (0 silenced).
+ERROR
+
+======================================================================
+ERROR: tests (unittest.loader._FailedTest)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: tests
+Traceback (most recent call last):
+  File "/opt/miniconda3/envs/testbed/lib/python3.6/unittest/loader.py", line 153, in loadTestsFromName
+    module = __import__(module_name)
+  File "./tests/ordering/tests.py", line 3, in <module>
+    from .models import MyModel  # Assuming MyModel is the model used for testing ordering
+ImportError: cannot import name 'MyModel'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+            },
+            res,
+        )
+
     def test_parse_log_django_2(self):
         log = """\
 test_callable_path (model_fields.test_filepathfield.FilePathFieldTests) ... ok

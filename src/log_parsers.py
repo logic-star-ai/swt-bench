@@ -93,7 +93,8 @@ def parse_log_django(log: str) -> dict[str, str]:
         for key, status in [("ERROR", TestStatus.ERROR), ("FAIL", TestStatus.FAILED)]:
             if line.startswith(f"{key}:"):
                 tests = list(django_fail_error_pattern.finditer(line.split(key)[1]))
-                assert len(tests) == 1
+                if len(tests) != 1:
+                    continue
                 test_name = tests[0].group("testname")
                 test_status_map[test_name] = status.value
     return test_status_map
