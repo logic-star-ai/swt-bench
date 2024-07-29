@@ -1,5 +1,6 @@
 import dataclasses
 import os
+from tempfile import NamedTemporaryFile
 from typing import List, Tuple, Dict
 from collections import defaultdict
 import ast
@@ -379,15 +380,15 @@ def write_diff_and_reset(testbed: str, reference_commit: str ='', target_file:st
     repo.git.reset('--hard', reference_commit)
 
 
-def apply_patch(patch, testbed, target_file:str = "./tmp.diff"):
+def apply_patch(patch, testbed):
     repo = git.Repo(testbed)
-    with open(target_file, "w") as f:
+    with NamedTemporaryFile("w", suffix=".diff") as f:
         f.write(patch)
-    try:
-        repo.git.apply("-v", target_file)
-        return True
-    except git.exc.GitCommandError as e:
-        return False
+        try:
+            repo.git.apply("-v", f.name)
+            return True
+        except git.exc.GitCommandError as e:
+            return False
 
 
 def run(model_output_file: str, testbed:str, patch_type: List[str], reference_commit: str, target_file: str):
