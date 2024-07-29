@@ -212,7 +212,7 @@ def get_hunk_stats(pre_start, pre_len, post_start, post_len, hunk, total_delta):
     return pre_start, pre_len, post_start, post_len, total_delta
 
 
-def apply_fuzzy_patches(fuzzy_patch: List[FuzzyFilePatch], testbed: str, patch_type: str = "") -> bool:
+def apply_fuzzy_patches(fuzzy_patch: List[FuzzyFilePatch], testbed: str, patch_type: str = "fuzzy") -> bool:
     """
     Apply a git diff patch without exact line number matching
 
@@ -289,7 +289,7 @@ class ReplaceFunctionTransformer(ast.NodeTransformer):
         return self.generic_visit(node)
 
 
-def apply_custom_patches(custom_patches: List[CustomPatch], testbed:str, patch_type: str = ""
+def apply_custom_patches(custom_patches: List[CustomPatch], testbed:str, patch_type: str = "custom"
 ) -> bool:
     """
     Apply custom patches to task environment and return a git patch
@@ -379,6 +379,17 @@ def write_diff_and_reset(testbed: str, reference_commit: str ='', target_file:st
     repo.git.reset('--hard', reference_commit)
 
 
+def apply_patch(patch, testbed, target_file:str = "./tmp.diff"):
+    repo = git.Repo(testbed)
+    with open(target_file, "w") as f:
+        f.write(patch)
+    try:
+        repo.git.apply("-v", target_file)
+        return True
+    except git.exc.GitCommandError as e:
+        return False
+
+
 def run(model_output_file: str, testbed:str, patch_type: List[str], reference_commit: str, target_file: str):
     with open(model_output_file, "r") as f:
         raw_model_output = f.read()
@@ -389,13 +400,13 @@ def run(model_output_file: str, testbed:str, patch_type: List[str], reference_co
             break
         if patch_type == "fuzzy":
             model_patch = extract_fuzzy_patch(raw_model_output)
-            success = apply_fuzzy_patches(fuzzy_patch=model_patch, testbed=testbed, patch_type="")
+            success = apply_fuzzy_patches(fuzzy_patch=model_patch, testbed=testbed)
         elif patch_type == "custom":
             model_patch = extract_custom_patches(raw_model_output)
-            success = apply_custom_patches(custom_patches=model_patch, testbed=testbed, patch_type="")
+            success = apply_custom_patches(custom_patches=model_patch, testbed=testbed)
         elif patch_type == "vanilla":
             model_patch = extract_minimal_patch(raw_model_output)
-            success = bool(model_patch)
+            success = apply_patch(patch=model_patch, testbed=testbed)
         else:
             assert False, f"Unkown patch type {patch_type}"
 
