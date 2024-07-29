@@ -61,7 +61,7 @@ def copy_to_container(container: Container, src: Path, dst: Path):
 
     # Send tar file to container and extract
     write_to_container(container, tarf_obj_base64, pathlib.Path(f"{dst}.b64"))
-    checked_exec_run(container, f"base64 -d {dst}.b64 > {dst}.tar.gz")
+    checked_exec_run(container, f"/bin/bash -c \"base64 -d {dst}.b64 | tee {dst}.tar.gz\"")
     checked_exec_run(container, f"rm {dst}.b64")
     checked_exec_run(container, f"tar -xzf {dst}.tar.gz -C {dst.parent}")
     checked_exec_run(container, f"rm {dst}.tar.gz")
