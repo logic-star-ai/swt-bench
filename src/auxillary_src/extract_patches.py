@@ -385,13 +385,17 @@ def run(model_output_file: str, testbed:str, patch_type: List[str], reference_co
 
     success = False
     for patch_type in patch_type:
-        if success: break
+        if success:
+            break
         if patch_type == "fuzzy":
             model_patch = extract_fuzzy_patch(raw_model_output)
             success = apply_fuzzy_patches(fuzzy_patch=model_patch, testbed=testbed, patch_type="")
         elif patch_type == "custom":
             model_patch = extract_custom_patches(raw_model_output)
             success = apply_custom_patches(custom_patches=model_patch, testbed=testbed, patch_type="")
+        elif patch_type == "vanilla":
+            model_patch = extract_minimal_patch(raw_model_output)
+            success = bool(model_patch)
         else:
             assert False, f"Unkown patch type {patch_type}"
 
@@ -402,7 +406,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_output_file", default="/root/raw_model_patch.txt", type=str, help="Path to raw model output")
     parser.add_argument("--testbed", default="/testbed/", type=str, help="Path to raw model output")
-    parser.add_argument("--patch_type", nargs="+", choices=["fuzzy", "custom"], type=str, help="Type of patch to be extracted")
+    parser.add_argument("--patch_type", nargs="+", choices=["vanilla", "fuzzy", "custom"], type=str, help="Type of patch to be extracted")
     parser.add_argument("--reference_commit", required=True, type=str, help="Type of patch to be extracted")
     parser.add_argument("--target_file", default="/root/extracted_patch.diff", type=str, help="Path to raw model output")
 
