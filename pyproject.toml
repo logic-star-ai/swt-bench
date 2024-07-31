@@ -20,4 +20,4 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-testing = ["pytest", "pytest-cov", "pytest-xdist", "GitPython"]
+testing = ["pytest", "pytest-cov", "pytest-xdist", "GitPython", "editdistance", "git", "gitpython"]

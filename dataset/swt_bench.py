@@ -185,7 +185,6 @@ def main(
     output_path: str,
     mode: Literal["base", "plus"] = "plus",
     filter_cases: str = pathlib.Path(__file__.__path__).parent / "filter_cases.txt",
-    tmp_repo_dir: str ="/tmp/swe_bench_repos",
 ):
     # Load the dataset
     dataset = load_dataset(dataset_path)
@@ -196,8 +195,6 @@ def main(
             filtered_instances = {x.strip() for x in f.readlines()}
     else:
         filtered_instances = set()
-
-    pathlib.Path(tmp_repo_dir).mkdir(parents=True, exist_ok=True)
 
     new_diff_prompt = PROMPT_MAP[mode]
 

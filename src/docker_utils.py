@@ -8,7 +8,7 @@ import base64
 import docker
 import os
 import signal
-import tarfile
+import gzip
 import threading
 import traceback
 from pathlib import Path
@@ -48,23 +48,18 @@ def copy_to_container(container: Container, src: Path, dst: Path):
             f"Destination path parent directory cannot be empty!, dst: {dst}"
         )
 
-    tarf_obj = BytesIO()
-    tarf = tarfile.open(mode="w:gz", fileobj=tarf_obj)
-    tarf.add(src, arcname=dst.name)
-    tarf.close()
-    tarf_obj.seek(0)
+    with open(src, "rb") as f:
+        compressed = gzip.compress(f.read())
 
-    tarf_obj_base64 = base64.b64encode(tarf_obj.read()).decode()
+    compressed_obj_base64 = base64.b64encode(compressed).decode()
 
     # Make directory if necessary
     checked_exec_run(container, f"mkdir -p {dst.parent}")
 
     # Send tar file to container and extract
-    write_to_container(container, tarf_obj_base64, pathlib.Path(f"{dst}.b64"))
-    checked_exec_run(container, f"base64 -d {dst}.b64 > {dst}.tar.gz")
+    write_to_container(container, compressed_obj_base64, pathlib.Path(f"{dst}.b64"))
+    checked_exec_run(container, f"/bin/bash -c \"base64 -d {dst}.b64 | gunzip -c - | tee {dst}\"")
     checked_exec_run(container, f"rm {dst}.b64")
-    checked_exec_run(container, f"tar -xzf {dst}.tar.gz -C {dst.parent}")
-    checked_exec_run(container, f"rm {dst}.tar.gz")
 
 
 
