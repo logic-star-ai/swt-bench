@@ -13,10 +13,10 @@ from pathlib import Path
 from figures.util import *
 
 MODEL_KNOWLEDGE_CUTOFF = {
-    "gpt-4-1106-preview": datetime.datetime(month=12, year=2023, day=31),
+    "gpt-4-1106-preview": datetime.datetime(month=4, year=2023, day=30),
 }
 
-def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "princeton-nlp/SWE-bench_Lite", split: str = "test"):
+def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "princeton-nlp/SWE-bench", split: str = "test"):
     instance_log_path = Path(instance_log_path)
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
@@ -32,6 +32,8 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "pri
     ]
     ds = datasets.load_dataset(dataset)
     instance_timestamps = {instance["instance_id"]: datetime.datetime.strptime(instance["created_at"], "%Y-%m-%dT%H:%M:%SZ") for instance in ds[split]}
+    print(max(instance_timestamps.values()))
+    exit()
 
     gold_model, gold_run_id = "gold", "validate-gold"
     gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
