@@ -34,7 +34,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("gpt-4-1106-preview", "acr__gpt-4-1106-preview", r"\acr"),
         ("aider--gpt-4-1106-preview", "aider_gpt-4-1106-preview", r"\aider"),
         ("gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"\swea"),
-        ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"\swea"),
+        ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "sweap__gpt-4-1106-preview", r"\sweap"),
     ]
 
     print("Method & Applicability & FtX & FtP & PtP")
