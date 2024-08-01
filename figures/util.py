@@ -100,7 +100,7 @@ def no_error_count(reports):
     Count the number of instances where at least one test was executed i.e.
     there was no syntax error or name error introduced by the patch
     """
-    return sum(any(t for t in r["tests_pred"].values()) for r in reports.values())
+    return sum(any(t for t in r["tests_pred"].values()) for r in reports.values() if "tests_pred" in r)
 
 def ftp_count(reports):
     return sum(r["resolved"] for r in reports.values())
