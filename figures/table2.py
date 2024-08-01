@@ -8,7 +8,7 @@ import fire
 from pathlib import Path
 import json
 
-from src.constants import FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS
+from constants import FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS
 
 
 def collect_reports(model_name, run_id, instance_log_path: Path):
@@ -49,7 +49,7 @@ def get_ftx(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]
     return bool(added_ftx)
 
 def ftx_count(reports):
-    return sum(get_ftx(r["pred"], r["base"]) for r in reports.values())
+    return sum(get_ftx(r["test_pred"], r["tests_base"]) for r in reports.values())
 
 
 def get_ptp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> int:
@@ -65,7 +65,7 @@ def get_ptp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]
     return bool(added_ptp)
 
 def ptp_count(reports):
-    return sum(get_ptp(r["pred"], r["base"]) for r in reports.values())
+    return sum(get_ptp(r["tests_pred"], r["tests_base"]) for r in reports.values())
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 300):
     instance_log_path = Path(instance_log_path)
