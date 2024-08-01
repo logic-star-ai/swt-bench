@@ -2,14 +2,18 @@
 Method vs Applicability, FtX, FtP and PtP
 """
 import functools
+from typing import Tuple
 
 import fire
 from pathlib import Path
 import json
 
-def fold_over_reports(start, method, model_name, run_id, instance_log_path: Path):
+from src.constants import FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS
+
+
+def collect_reports(model_name, run_id, instance_log_path: Path):
     run_path = instance_log_path / run_id / model_name
-    fold = start
+    reports = {}
     for dir in run_path.iterdir():
         if not dir.is_dir():
             continue
@@ -19,21 +23,49 @@ def fold_over_reports(start, method, model_name, run_id, instance_log_path: Path
         with open(report) as f:
             report_data = json.load(f)
         instance_id = dir.name
-        fold = method(fold, report_data[instance_id])
-    return fold
+        reports[instance_id] = report_data[instance_id]
+    return reports
 
 
-def applied_count(prev, report):
-    prev += report["patch_successfully_applied"]
-    return prev
+def applied_count(reports):
+    return sum(r["patch_successfully_applied"] for r in reports.values())
 
-def ftp_count(prev, report):
-    prev += report["resolved"]
-    return prev
+def ftp_count(reports):
+    return sum(r["resolved"] for r in reports.values())
 
-report_applied_count = functools.partial(fold_over_reports, 0, applied_count)
-report_ftp_count = functools.partial(fold_over_reports, 0, ftp_count)
+def get_ftx(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> int:
+    """
+    Determine resolved status of an evaluation instance
 
+    """
+    base_f2p = set(report_base[FAIL_TO_PASS])
+    pred_f2p = set(report_pred[FAIL_TO_PASS])
+
+    base_f2f = set(report_base[FAIL_TO_FAIL])
+    pred_f2f = set(report_pred[FAIL_TO_FAIL])
+
+    added_ftx = pred_f2p.difference(base_f2p) | pred_f2f.difference(base_f2f)
+
+    return bool(added_ftx)
+
+def ftx_count(reports):
+    return sum(get_ftx(r["pred"], r["base"]) for r in reports.values())
+
+
+def get_ptp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> int:
+    """
+    Determine resolved status of an evaluation instance
+
+    """
+    base_p2p = set(report_base[PASS_TO_PASS])
+    pred_p2p = set(report_pred[PASS_TO_PASS])
+
+    added_ptp = pred_p2p.difference(base_p2p)
+
+    return bool(added_ptp)
+
+def ptp_count(reports):
+    return sum(get_ptp(r["pred"], r["base"]) for r in reports.values())
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 300):
     instance_log_path = Path(instance_log_path)
@@ -51,9 +83,12 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
 
     print("Method & Applicability & FtX & FtP & PtP")
     for model, run_id, name, in methods:
-        applied = report_applied_count(model, run_id, instance_log_path)
-        ftp = report_ftp_count(model, run_id, instance_log_path)
-        print(f"{name} & {100*applied/total_instance_count:.1f} & {100*ftp/total_instance_count:.1f} & {0:.1f} & {0:.1f}")
+        reports = collect_reports(model, run_id, instance_log_path)
+        applied = 100*applied_count(reports)/total_instance_count
+        ftp = 100*ftp_count(reports)/total_instance_count
+        ftx = 100*ftx_count(reports)/total_instance_count
+        ptp = 100*ptp_count(reports)/total_instance_count
+        print(f"{name} & {applied:.1f} & {ftx:.1f} & {ftp:.1f} & {ptp:.1f}")
 
 if __name__ == "__main__":
     fire.Fire(main)
