@@ -5,7 +5,7 @@ Method vs Applicability, FtX, FtP and PtP
 import fire
 from pathlib import Path
 
-from figures.util import collect_reports, applied_count, ftx_count, ftp_count, ptp_count
+from figures.util import *
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 300):
     instance_log_path = Path(instance_log_path)
@@ -25,7 +25,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     print(r"Method & {$\bc{A}$ \up{}} & {\ftx \up{}} & {\ftp \up{}} & {\ptp} \\")
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
-        applied = 100*applied_count(reports)/total_instance_count
+        applied = 100*no_error_count(reports)/total_instance_count
         ftp = 100*ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
         ptp = 100*ptp_count(reports)/total_instance_count

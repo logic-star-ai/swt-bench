@@ -90,7 +90,17 @@ def collect_reports(model_name, run_id, instance_log_path: Path, mode: Literal["
         return _select_reports_libro(all_reports, libro_decision_file)
 
 def applied_count(reports):
+    """
+    Count the number of instances where the patch was successfully applied
+    """
     return sum(r["patch_successfully_applied"] for r in reports.values())
+
+def no_error_count(reports):
+    """
+    Count the number of instances where at least one test was executed i.e.
+    there was no syntax error or name error introduced by the patch
+    """
+    return sum(any(t for t in r["tests_pred"].values()) for r in reports.values())
 
 def ftp_count(reports):
     return sum(r["resolved"] for r in reports.values())
