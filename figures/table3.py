@@ -1,5 +1,6 @@
 """
-Method vs Applicability, FtX, FtP and PtP
+Method vs coverage
+main
 """
 
 import fire
@@ -38,7 +39,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "sweap__gpt-4-1106-preview", r"\sweap"),
     ]
 
-    print(r"Method & total delta & resolved delta & unresolved delta \\")
+    print(r"Method & {$\dc^{\text{all}}$ } & {$\dc^{\ftp}$} & {$\dc^{\neg(\ftp)}$} \\")
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
         resolved_reports, unresolved_reports = filtered_by_resolved(reports)

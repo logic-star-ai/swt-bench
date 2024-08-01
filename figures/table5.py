@@ -1,6 +1,6 @@
 """
 Method vs Applicability, FtX, FtP and PtP
-for different models
+for different additional context
 """
 
 import fire
@@ -13,12 +13,12 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
-        ("gold", "validate-gold", r"Gold"),
-        ("gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"GPT-4"),
-        ("claude-3-haiku-20240307__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__claude-3-haiku-20240307", r"Haiku"),
-        ("gpt4o-mini__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4o-mini-2024-07-18", r"GPT-4o mini"),
-        ("mixtral8x22b__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__together_mistralai_Mixtral-8x22B-Instruct-v0.1", r"Mixtral"),
-        ("mistral-large__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__mistral_large", r"Mistral Large 2"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=-,patch=-__seed=0,temperature=0.json', r"- & - & -"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=y,patch=y__seed=0,temperature=0.json', r"- & \cmark & \cmark"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=x,patch=x__seed=0,temperature=0.json', r"- & \xmark & \xmark"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=-,patch=-__seed=0,temperature=0.json', r"\cmark & - & -"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=y,patch=y__seed=0,temperature=0.json', r"\cmark & \cmark & \cmark"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=x,patch=x__seed=0,temperature=0.json', r"\cmark & \xmark & \xmark"),
     ]
 
     print(r"Method & {$\bc{A}$ \up{}} & {\ftx \up{}} & {\ftp \up{}} & {\ptp} \\")

@@ -1,5 +1,6 @@
 """
 Method vs Applicability, FtX, FtP and PtP
+main
 """
 
 import fire
