@@ -113,11 +113,14 @@ def main(
             execution_trace_post = extract_execution_trace_from_log(post_log)
             patch = logs_by_instance[seed]["patch"].get(instance_id)
 
-            diffstuff = list(difflib.unified_diff(execution_trace_pre, execution_trace_post))
+            diffstuff = "".join(difflib.unified_diff(execution_trace_pre, execution_trace_post))
+            if not diffstuff:
+                # if there is no difference in the traces, the unit test is not testing anything
+                continue
 
             new_example = {
                 **example,
-                "text": PROMPT.format(user_issue, "".join(diffstuff) or "There was no difference in the execution trace."),
+                "text": PROMPT.format(user_issue, diffstuff),
                 "execution_trace_pre": execution_trace_pre,
                 "execution_trace_post": execution_trace_post,
                 "unittest_patch": patch,
