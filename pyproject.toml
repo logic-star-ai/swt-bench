@@ -17,6 +17,7 @@ dependencies = [
     "unidiff",
     'python-dotenv',
     'tqdm',
+    'fire',
 ]
 
 [project.optional-dependencies]
