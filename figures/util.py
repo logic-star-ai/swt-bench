@@ -1,3 +1,4 @@
+import functools
 from collections import defaultdict
 from typing import Tuple, Literal
 
@@ -5,6 +6,14 @@ from pathlib import Path
 import json
 
 from constants import FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS
+
+FILTER_FILE = "dataset/filter_cases.txt"
+
+@functools.lru_cache(maxsize=1)
+def _filter_cases():
+    with open(FILTER_FILE) as f:
+        FILTER_CASES = set(f.read().splitlines())
+    return frozenset(FILTER_CASES)
 
 def _collect_reports(model_name, run_id, instance_log_path: Path):
     run_path = instance_log_path / run_id / model_name
@@ -16,6 +25,8 @@ def _collect_reports(model_name, run_id, instance_log_path: Path):
         if not report.exists():
             continue
         instance_id = dir.name
+        if instance_id in _filter_cases():
+            continue
         with open(report) as f:
             report_data = json.load(f)[instance_id]
         patch_path = instance_log_path / run_id / f"pred_post_{model_name}" / dir.name / "model_patch.diff"
