@@ -1,13 +1,15 @@
 """
 Method vs Applicability, FtX, FtP and PtP
 """
+import functools
+
 import fire
 from pathlib import Path
 import json
 
-def applied_count(model_name, run_id, instance_log_path: Path):
+def fold_over_reports(start, method, model_name, run_id, instance_log_path: Path):
     run_path = instance_log_path / run_id / model_name
-    patch_successfully_applied = 0
+    fold = start
     for dir in run_path.iterdir():
         if not dir.is_dir():
             continue
@@ -17,10 +19,20 @@ def applied_count(model_name, run_id, instance_log_path: Path):
         with open(report) as f:
             report_data = json.load(f)
         instance_id = dir.name
-        patch_successfully_applied += report_data[instance_id]["patch_successfully_applied"]
-    return patch_successfully_applied
+        fold = method(fold, report_data[instance_id])
+    return fold
 
 
+def applied_count(prev, report):
+    prev += report["patch_successfully_applied"]
+    return prev
+
+def ftp_count(prev, report):
+    prev += report["resolved"]
+    return prev
+
+report_applied_count = functools.partial(fold_over_reports, 0, applied_count)
+report_ftp_count = functools.partial(fold_over_reports, 0, ftp_count)
 
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 300):
@@ -39,8 +51,9 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
 
     print("Method & Applicability & FtX & FtP & PtP")
     for model, run_id, name, in methods:
-        applied = applied_count(model, run_id, instance_log_path)
-        print(f"{name} & {applied} & {100*applied/total_instance_count:.1f} & {0:.1f} & {0:.1f} & {0:.1f}")
+        applied = report_applied_count(model, run_id, instance_log_path)
+        ftp = report_ftp_count(model, run_id, instance_log_path)
+        print(f"{name} & {100*applied/total_instance_count:.1f} & {100*ftp/total_instance_count:.1f} & {0:.1f} & {0:.1f}")
 
 if __name__ == "__main__":
     fire.Fire(main)
