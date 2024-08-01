@@ -16,12 +16,11 @@ MODEL_KNOWLEDGE_CUTOFF = {
     "gpt-4-1106-preview": datetime.datetime(month=12, year=2023, day=31),
 }
 
-def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 279, dataset: str = "princeton_nlp/SWE-bench_Lite", split: str = "test"):
+def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "princeton-nlp/SWE-bench_Lite", split: str = "test"):
     instance_log_path = Path(instance_log_path)
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
-        ("gold", "validate-gold", r"Gold"),
         ("gpt-4-1106-preview", "zsb__gpt-4-1106-preview__bm25_27k_cl100k__seed=0,temperature=0", r"\zsb"),
         ("gpt-4-1106-preview", "zsp__gpt-4-1106-preview__bm25_27k_cl100k__seed=0,temperature=0", r"\zsp"),
         ("gpt-4-1106-preview", "libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl", r"\libro", "libro", [1,2,3,4,5], Path("inference_output/gpt-4-1106-preview__libro__libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl__[1, 2, 3, 4, 5]__gpt-4-1106-preview__test__all__seed=0,temperature=0__test.jsonl")),
@@ -34,15 +33,20 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     ds = datasets.load_dataset(dataset)
     instance_timestamps = {instance["instance_id"]: datetime.datetime.strptime(instance["created_at"], "%Y-%m-%dT%H:%M:%SZ") for instance in ds[split]}
 
+    gold_model, gold_run_id = "gold", "validate-gold"
+    gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
+
     print(r"Method & before cutoff & after cutoff \\")
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
         actual_model = "gpt-4-1106-preview"
         cutoff = MODEL_KNOWLEDGE_CUTOFF.get(actual_model)
+        gold_before_cutoff = {instance_id: report for instance_id, report in gold_reports.items() if instance_timestamps[instance_id] <= cutoff and report["resolved"]}
+        gold_after_cutoff = {instance_id: report for instance_id, report in gold_reports.items() if instance_timestamps[instance_id] > cutoff and report["resolved"]}
         before_cutoff = {instance_id: report for instance_id, report in reports.items() if instance_timestamps[instance_id] <= cutoff}
         after_cutoff = {instance_id: report for instance_id, report in reports.items() if instance_timestamps[instance_id] > cutoff}
-        resolved_before_cutoff = 100*ftp_count(before_cutoff)/len(before_cutoff)
-        resolved_after_cutoff = 100*ftp_count(after_cutoff)/len(after_cutoff)
+        resolved_before_cutoff = 100*ftp_count(before_cutoff)/len(gold_before_cutoff)
+        resolved_after_cutoff = 100*ftp_count(after_cutoff)/len(gold_after_cutoff)
         print(rf"{name} & {resolved_before_cutoff:.1f} & {resolved_after_cutoff:.1f} \\")
 
 
