@@ -29,7 +29,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ftp = 100*ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
         ptp = 100*ptp_count(reports)/total_instance_count
-        print(f"{name} & {applied:.1f} & {ftx:.1f} & {ftp:.1f} & {ptp:.1f} \\")
+        print(rf"{name} & {applied:.1f} & {ftx:.1f} & {ftp:.1f} & {ptp:.1f} \\")
 
 if __name__ == "__main__":
     fire.Fire(main)
