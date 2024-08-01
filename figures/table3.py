@@ -42,9 +42,9 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
         resolved_reports, unresolved_reports = filtered_by_resolved(reports)
-        total_coverage_delta = avg_coverage_delta(reports)
-        resolved_coverage_delta = avg_coverage_delta(resolved_reports)
-        unresolved_coverage_delta = avg_coverage_delta(unresolved_reports)
+        total_coverage_delta = 100*avg_coverage_delta(reports)
+        resolved_coverage_delta = 100*avg_coverage_delta(resolved_reports)
+        unresolved_coverage_delta = 100*avg_coverage_delta(unresolved_reports)
         print(rf"{name} & {total_coverage_delta:.1f} & {resolved_coverage_delta:.1f} & {unresolved_coverage_delta:.1f} \\")
 
 if __name__ == "__main__":
