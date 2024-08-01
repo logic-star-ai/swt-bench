@@ -20,7 +20,7 @@ def avg_coverage_delta(reports):
         if report["coverage_delta_pred"] is not None:
             s += report["coverage_delta_pred"]
             total += 1
-    return s / total
+    return s / total if total > 0 else 0
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 279):
     instance_log_path = Path(instance_log_path)
