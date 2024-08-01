@@ -53,7 +53,7 @@ def _select_reports_libro(all_reports, libro_decision_file: Path):
             best_case = [r for r in i_reports.values()][0]
         else:
             def get_patch_len(x):
-                if len(x["patch"]) is None:
+                if x.get("patch") is None:
                     return float("inf")
                 return len(x["patch"])
             if not cluster_preferred:

@@ -5,7 +5,7 @@ Method vs Applicability, FtX, FtP and PtP
 import fire
 from pathlib import Path
 
-from .util import collect_reports, applied_count, ftx_count, ftp_count, ptp_count
+from figures.util import collect_reports, applied_count, ftx_count, ftp_count, ptp_count
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 300):
     instance_log_path = Path(instance_log_path)
