@@ -49,7 +49,7 @@ def get_ftx(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]
     return bool(added_ftx)
 
 def ftx_count(reports):
-    return sum(get_ftx(r["test_pred"], r["tests_base"]) for r in reports.values())
+    return sum(get_ftx(r["tests_pred"], r["tests_base"]) for r in reports.values() if "tests_pred" in r)
 
 
 def get_ptp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> int:
@@ -65,7 +65,7 @@ def get_ptp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]
     return bool(added_ptp)
 
 def ptp_count(reports):
-    return sum(get_ptp(r["tests_pred"], r["tests_base"]) for r in reports.values())
+    return sum(get_ptp(r["tests_pred"], r["tests_base"]) for r in reports.values() if "tests_pred" in r)
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 300):
     instance_log_path = Path(instance_log_path)
@@ -81,14 +81,14 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "sweap__gpt-4-1106-preview", r"\sweap"),
     ]
 
-    print("Method & Applicability & FtX & FtP & PtP")
+    print(r"Method & {$\bc{A}$ \up{}} & {\ftx \up{}} & {\ftp \up{}} & {\ptp} \\")
     for model, run_id, name, in methods:
         reports = collect_reports(model, run_id, instance_log_path)
         applied = 100*applied_count(reports)/total_instance_count
         ftp = 100*ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
         ptp = 100*ptp_count(reports)/total_instance_count
-        print(f"{name} & {applied:.1f} & {ftx:.1f} & {ftp:.1f} & {ptp:.1f}")
+        print(f"{name} & {applied:.1f} & {ftx:.1f} & {ftp:.1f} & {ptp:.1f} \\")
 
 if __name__ == "__main__":
     fire.Fire(main)
