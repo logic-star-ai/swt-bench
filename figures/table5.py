@@ -13,12 +13,12 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
-        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=-,patch=-__seed=0,temperature=0.json', r"- & - & -"),
-        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=y,patch=y__seed=0,temperature=0.json', r"- & \cmark & \cmark"),
-        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=x,patch=x__seed=0,temperature=0.json', r"- & \xmark & \xmark"),
-        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=-,patch=-__seed=0,temperature=0.json', r"\cmark & - & -"),
-        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=y,patch=y__seed=0,temperature=0.json', r"\cmark & \cmark & \cmark"),
-        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=x,patch=x__seed=0,temperature=0.json', r"\cmark & \xmark & \xmark"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=-,patch=-__seed=0,temperature=0', r"- & - & -"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=y,patch=y__seed=0,temperature=0', r"- & \cmark & \cmark"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=-,files=x,patch=x__seed=0,temperature=0', r"- & \xmark & \xmark"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=-,patch=-__seed=0,temperature=0', r"\cmark & - & -"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=y,patch=y__seed=0,temperature=0', r"\cmark & \cmark & \cmark"),
+        ('gpt-4-1106-preview', 'zsp__gpt-4-1106-preview__bm25_27k_cl100k_test=y,files=x,patch=x__seed=0,temperature=0', r"\cmark & \xmark & \xmark"),
     ]
 
     print(r"Method & {$\bc{A}$ \up{}} & {\ftx \up{}} & {\ftp \up{}} & {\ptp} \\")
