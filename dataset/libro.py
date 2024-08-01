@@ -34,21 +34,6 @@ Please answer whether the test case accurately tests the issue described by the 
 Please answer with "yes" or "no".
 """
 
-
-def extract_issue_from_text(text: List[str]) -> str:
-    # extract the issue from the text
-    for i, line in enumerate(text):
-        if "<issue>" in line:
-            break
-    if i == len(text) - 1:
-        return None
-    for j, line in enumerate(text[i:]):
-        if "</issue>" in line:
-            break
-    if j == len(text) - 1:
-        return None
-    return "\n".join(text[i:j])
-
 def extract_execution_trace_from_log(log: str) -> List[str]:
     # extract the execution trace from the evaluation output
     log = log.splitlines()
@@ -102,7 +87,7 @@ def load_pre_post_logs(eval_output_dir: str, run_id, model) -> dict:
 def main(
     eval_output_dir: str = "./run_instance_swt_logs",
     dataset: str = "princeton-nlp/SWE-bench_Lite",
-    run_id_pattern: str = "libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7",
+    run_id_pattern: str = "libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl",
     model: str = "gpt-4-1106-preview",
     seeds: str = "1,2,3,4,5",
     out_dataset_prefix: str = "./datasets/libro",
@@ -132,7 +117,7 @@ def main(
 
             new_example = {
                 **example,
-                "text": PROMPT.format(user_issue, "".join(diffstuff)),
+                "text": PROMPT.format(user_issue, "".join(diffstuff) or "There was no difference in the execution trace."),
                 "execution_trace_pre": execution_trace_pre,
                 "execution_trace_post": execution_trace_post,
                 "unittest_patch": patch,
