@@ -68,7 +68,7 @@ def _select_reports_passatk(all_reports):
     for instance_id, i_reports in all_reports.items():
         for attribute_pref in ["resolved", "added_f2p", "coverage_delta_pred", "patch_successfully_applied"]:
             for seed, report in i_reports.items():
-                if (report[attribute_pref] or 0) > reports.get(instance_id, {}).get(attribute_pref, 0):
+                if (report.get(attribute_pref) or 0) > reports.get(instance_id, {}).get(attribute_pref, 0):
                     reports[instance_id] = report
                     break
             if reports.get(instance_id) is not None:
