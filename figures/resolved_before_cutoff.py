@@ -32,7 +32,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "sweap__gpt-4-1106-preview", r"\sweap"),
     ]
     ds = datasets.load_dataset(dataset)
-    instance_timestamps = {instance["instance_id"]: datetime.datetime.fromisoformat(instance["created_at"]) for instance in ds[split]}
+    instance_timestamps = {instance["instance_id"]: datetime.datetime.strptime(instance["created_at"], "%Y-%m-%dT%H:%M:%SZ") for instance in ds[split]}
 
     print(r"Method & before cutoff & after cutoff \\")
     for model, run_id, name, *args in methods:
