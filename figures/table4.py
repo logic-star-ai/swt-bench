@@ -24,7 +24,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     headers = (
         ["Method", r"{$\bc{A}}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}"]
         if format == "latex" else
-        ["Method", "Applicability", "FtX", "FtP", "PtP", "Cost"]
+        ["Method", "Applicability", "F2X", "F2P", "P2P"]
     )
     rows = []
     for model, run_id, name, *args in methods:
