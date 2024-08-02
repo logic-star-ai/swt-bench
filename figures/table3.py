@@ -4,24 +4,10 @@ main
 """
 
 import fire
-from pathlib import Path
 
 from figures.util import *
+from figures.util import filtered_by_resolved, avg_coverage_delta
 
-def filtered_by_resolved(reports):
-    return (
-        {instance_id: report for instance_id, report in reports.items() if report["resolved"]},
-        {instance_id: report for instance_id, report in reports.items() if not report["resolved"]}
-    )
-
-def avg_coverage_delta(reports):
-    s = 0
-    total = 0
-    for report in reports.values():
-        if report["coverage_delta_pred"] is not None:
-            s += report["coverage_delta_pred"]
-            total += 1
-    return s / total if total > 0 else 0
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 279):
     instance_log_path = Path(instance_log_path)
@@ -43,9 +29,9 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
         resolved_reports, unresolved_reports = filtered_by_resolved(reports)
-        total_coverage_delta = 100*avg_coverage_delta(reports)
-        resolved_coverage_delta = 100*avg_coverage_delta(resolved_reports)
-        unresolved_coverage_delta = 100*avg_coverage_delta(unresolved_reports)
+        total_coverage_delta = 100 * avg_coverage_delta(reports)
+        resolved_coverage_delta = 100 * avg_coverage_delta(resolved_reports)
+        unresolved_coverage_delta = 100 * avg_coverage_delta(unresolved_reports)
         print(rf"{name} & {total_coverage_delta:.1f} & {resolved_coverage_delta:.1f} & {unresolved_coverage_delta:.1f} \\")
 
 if __name__ == "__main__":

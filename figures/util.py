@@ -157,3 +157,20 @@ def get_ptp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]
 
 def ptp_count(reports):
     return sum(get_ptp(r["tests_pred"], r["tests_base"]) for r in reports.values() if "tests_pred" in r)
+
+
+def filtered_by_resolved(reports):
+    return (
+        {instance_id: report for instance_id, report in reports.items() if report["resolved"]},
+        {instance_id: report for instance_id, report in reports.items() if not report["resolved"]}
+    )
+
+
+def avg_coverage_delta(reports):
+    s = 0
+    total = 0
+    for report in reports.values():
+        if report["coverage_delta_pred"] is not None:
+            s += report["coverage_delta_pred"]
+            total += 1
+    return s / total if total > 0 else 0
