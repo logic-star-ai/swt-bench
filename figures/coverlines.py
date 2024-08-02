@@ -29,7 +29,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         total_coverage_delta = 100*avg_coverage_delta(reports)
         resolved_coverage_delta = 100*avg_coverage_delta(resolved_reports)
         unresolved_coverage_delta = 100*avg_coverage_delta(unresolved_reports)
-        print(rf"{name} & {applied:.1f} & {ftx:.1f} & {ftp:.1f} & {ptp:.1f} & {total_coverage_delta:.f} & {resolved_coverage_delta:.f} & {unresolved_coverage_delta:.f} \\")
+        print(rf"{name} & {applied:.1f} & {ftx:.1f} & {ftp:.1f} & {ptp:.1f} & {total_coverage_delta:.1f} & {resolved_coverage_delta:.1f} & {unresolved_coverage_delta:.1f} \\")
 
 if __name__ == "__main__":
     fire.Fire(main)
