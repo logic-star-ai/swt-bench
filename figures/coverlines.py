@@ -15,7 +15,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("gold", "validate-gold", r"Gold"),
         ("gpt-4-1106-preview", "gpt-4-1106-preview__swt_bench_linecover_oracle__seed=0,temperature=0__test", r"\zsp"),
         ("gpt-4-1106-preview", "gpt-4-1106-preview__swt_bench_linecover_oracle__seed=0,temperature=0.7,n=5__test._0", r"\pak", "p@k", [0,1,2,3,4]),
-        # ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "sweap__gpt-4-1106-preview", r"\sweap"),
+        ("gpt4__SWE-bench_Lite__default_test_demo6__t-0.00__p-0.95__s-0__c-3.00__install-1", "swe-agent-demo6__swt_bench_lite_coverlines__test", r"\sweap"),
     ]
 
     print(r"Method & {$\bc{A}$ \up{}} & {\ftx \up{}} & {\ftp \up{}} & {\ptp} & {$\dc^{\text{all}}$ } & {$\dc^{\ftp}$} & {$\dc^{\neg(\ftp)}$} \\")
