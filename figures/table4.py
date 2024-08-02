@@ -14,12 +14,11 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
-        ("gold", "validate-gold", r"Gold"),
         ("gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"GPT-4"),
-        ("claude-3-haiku-20240307__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__claude-3-haiku-20240307", r"Haiku"),
+        ("mistral-large__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__mistral_large", r"Mistral Large 2"),
         ("gpt4o-mini__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4o-mini-2024-07-18", r"GPT-4o mini"),
         ("mixtral8x22b__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__together_mistralai_Mixtral-8x22B-Instruct-v0.1", r"Mixtral"),
-        ("mistral-large__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__mistral_large", r"Mistral Large 2"),
+        ("claude-3-haiku-20240307__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__claude-3-haiku-20240307", r"Haiku"),
     ]
 
     headers = (
@@ -34,8 +33,8 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ftp = 100*ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
         ptp = 100*ptp_count(reports)/total_instance_count
-        rows.append([name, f"{applied:.1f}", f"{ftx:.1f}", f"{ftp:.1f}", f"{ptp:.1f}"])
-    print(tabulate(rows, headers=headers, tablefmt=format))
+        rows.append([name, applied, ftx, ftp, ptp])
+    print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
 if __name__ == "__main__":
     fire.Fire(main)
