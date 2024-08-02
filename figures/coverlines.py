@@ -20,9 +20,9 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     ]
 
     headers = (
-        ["Method", r"{$\bc{A}}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }", r"{$\dc^{\ftp}$}", r"{$\dc^{\neg(\ftp)}$}"]
+        ["Method", r"{$\bc{A}}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]
         if format == "latex" else
-        ["Method", "Applicability", "F2X", "F2P", "P2P", "Coverage", "Resolved Coverage", "Unresolved Coverage"]
+        ["Method", "Applicability", "F2X", "F2P", "P2P", "Coverage"]
     )
     rows = []
     for model, run_id, name, *args in methods:
@@ -31,11 +31,8 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ftp = 100*ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
         ptp = 100*ptp_count(reports)/total_instance_count
-        resolved_reports, unresolved_reports = filtered_by_resolved(reports)
         total_coverage_delta = 100*avg_coverage_delta(reports)
-        resolved_coverage_delta = 100*avg_coverage_delta(resolved_reports)
-        unresolved_coverage_delta = 100*avg_coverage_delta(unresolved_reports)
-        rows.append([name, applied, ftx, ftp, ptp, total_coverage_delta, resolved_coverage_delta, unresolved_coverage_delta])
+        rows.append([name, applied, ftx, ftp, ptp, total_coverage_delta])
     print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
 if __name__ == "__main__":
