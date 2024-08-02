@@ -32,7 +32,7 @@ def main(
             else:
                 instances_after_cutoff.append(instance)
 
-        max_amount = max(len(instances_after_cutoff), len(instances_before_cutoff))
+        max_amount = min(len(instances_after_cutoff), len(instances_before_cutoff))
         print(f"Split {split}: {max_amount} of {len(instances_before_cutoff)} instances before cutoff, {max_amount} of {len(instances_after_cutoff)} instances after cutoff")
         rnd = random.Random(seed)
         instances_before_cutoff = rnd.sample(instances_before_cutoff, max_amount) if len(instances_before_cutoff) > max_amount else instances_before_cutoff
