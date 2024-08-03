@@ -89,11 +89,10 @@ def main(
     dataset: str = "princeton-nlp/SWE-bench_Lite",
     run_id_pattern: str = "libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl",
     model: str = "gpt-4-1106-preview",
-    seeds: str = "1,2,3,4,5",
+    seeds: list[int] = (1,2,3,4,5),
     out_dataset_prefix: str = "./datasets/libro",
     split: str = "test",
 ):
-    seeds = [int(s) for s in seeds.split(",")]
     run_ids = [run_id_pattern.format(seed=seed) for seed in seeds]
 
     dataset = load_dataset(dataset)
