@@ -24,14 +24,17 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"\swea"),
         ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "sweap__gpt-4-1106-preview", r"\sweap"),
     ]
+    gold_reports = collect_reports("gold", "validate-gold", instance_log_path)
+    total_coverage_possible = count_coverage_delta_gold(gold_reports)
 
     print(r"Method & {$\dc^{\text{all}}$ } & {$\dc^{\ftp}$} & {$\dc^{\neg(\ftp)}$} \\")
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
         resolved_reports, unresolved_reports = filtered_by_resolved(reports)
-        total_coverage_delta = 100 * avg_coverage_delta(reports)
-        resolved_coverage_delta = 100 * avg_coverage_delta(resolved_reports)
-        unresolved_coverage_delta = 100 * avg_coverage_delta(unresolved_reports)
+        total_coverage_delta = 100 * sum_coverage_delta(reports) / total_coverage_possible
+        countable_resolved = count_coverage_delta_gold(resolved_reports)
+        resolved_coverage_delta = 100 * sum_coverage_delta(resolved_reports) / countable_resolved if countable_resolved > 0 else 0
+        unresolved_coverage_delta = 100 * sum_coverage_delta(unresolved_reports) / (total_coverage_possible - countable_resolved) if total_coverage_possible - countable_resolved > 0 else 0
         print(rf"{name} & {total_coverage_delta:.1f} & {resolved_coverage_delta:.1f} & {unresolved_coverage_delta:.1f} \\")
 
 if __name__ == "__main__":
