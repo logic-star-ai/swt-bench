@@ -5,6 +5,9 @@ from typing import Tuple, Literal
 from pathlib import Path
 import json
 
+import numpy as np
+from scipy import stats
+
 from constants import FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS
 
 FILTER_FILE = "dataset/filter_cases.txt"
@@ -179,3 +182,22 @@ def count_coverage_delta_gold(reports):
     for report in reports.values():
         s += report.get("coverage_delta_gold") is not None
     return s
+
+
+def with_error_bars(data, confidence=0.95):
+    # Calculate mean
+    mean = np.mean(data)
+
+    # Calculate standard deviation
+    std_dev = np.std(data, ddof=1)  # ddof=1 for sample standard deviation
+
+    # Calculate standard error
+    std_error = std_dev / np.sqrt(len(data))
+
+    # Calculate 95% confidence interval
+    confidence_level = confidence
+    degrees_freedom = len(data) - 1
+    t_value = stats.t.ppf((1 + confidence_level) / 2, degrees_freedom)
+    margin_of_error = t_value * std_error
+
+    return mean, margin_of_error

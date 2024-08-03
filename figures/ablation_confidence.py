@@ -5,9 +5,10 @@ main
 
 from tabulate import tabulate
 import fire
-from pathlib import Path
 
 from figures.util import *
+
+from figures.util import with_error_bars
 
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 279, format="github"):
@@ -15,11 +16,10 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
-        ("gold", "validate-gold", r"Gold"),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0,n=5__test._{seed}", r"\zsp 0"),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.2,n=5__test._{seed}", r"\zsp 0.2"),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.4,n=5__test._{seed}", r"\zsp 0.4"),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\zsp 0.7"),
+        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\zsp 0.7", [0,1,2,3,4]),
+        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\pak 0.7", [f"{{seed[{i}]}}" for i in range(5)], "p@k", ([0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14], [15,16,17,18,19], [20,21,22,23,24])),
+        ("gpt4o-mini__SWE-bench_Lite__default_test_demo4__t-0.70__p-0.95__s-5__c-3.00__install-1", "swe-agent-demo4-gpt4omini__swt_bench_lite__test__{seed}", r"\sweap 0.7", [1,2,3,4,5]),
+        ("aider_gpt4omini__swt-lite__test_s{seed}", r"\aider 0.7", [0,1,2,3,4]),
     ]
 
     headers = (
@@ -28,8 +28,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ["Method", "Applicability", "F2X", "F2P", "P2P"]
     )
     rows = []
-    seeds = [0, 1, 2, 3, 4]
-    for model, run_id, name, *args in methods:
+    for model, run_id, name, seeds, *args in methods:
         ftp_scores = []
         ftx_scores = []
         ptp_scores = []
