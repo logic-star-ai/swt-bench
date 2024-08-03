@@ -169,7 +169,9 @@ def filtered_by_resolved(reports):
 def sum_coverage_delta(reports):
     s = 0
     for report in reports.values():
-        s += report.get("coverage_delta_pred", 0)
+        delta = report.get("coverage_delta_pred")
+        if delta is not None:
+            s += delta
     return s
 
 def count_coverage_delta_gold(reports):
