@@ -6,7 +6,6 @@ main
 import fire
 
 from figures.util import *
-from figures.util import filtered_by_resolved, avg_coverage_delta
 
 
 def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 279):
