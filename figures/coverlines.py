@@ -18,6 +18,8 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("gpt-4-1106-preview", "gpt-4-1106-preview__swt_bench_linecover_oracle__seed=0,temperature=0.7,n=5__test._0", r"\pak", "p@k", [0,1,2,3,4]),
         ("gpt4__SWE-bench_Lite__default_test_demo6__t-0.00__p-0.95__s-0__c-3.00__install-1", "swe-agent-demo6__swt_bench_lite_coverlines__test", r"\sweap"),
     ]
+    gold_reports = collect_reports("gold", "validate-gold", instance_log_path)
+    total_coverage_possible = count_coverage_delta_gold(gold_reports)
 
     headers = (
         ["Method", r"{$\bc{A}}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]
@@ -31,7 +33,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ftp = 100*ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
         ptp = 100*ptp_count(reports)/total_instance_count
-        total_coverage_delta = 100*avg_coverage_delta(reports)
+        total_coverage_delta = 100*sum_coverage_delta(reports)/total_coverage_possible
         rows.append([name, applied, ftx, ftp, ptp, total_coverage_delta])
     print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
