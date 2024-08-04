@@ -18,7 +18,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     methods = [
         ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\zsp 0.7", [0,1,2,3,4]),
         ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\pak 0.7", [f"{{seed[{k}]}}" for k in range(5)], "p@k", [tuple(i+j for j in (0,5,10,15,20)) for i in range(5)]),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\libro 0.7", [f"{{seed[{k}]}}" for k in range(5)], "libro", [tuple((i+j+1)%25 for j in (0,5,10,15,20)) for i in range(5)]),
+        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\libro 0.7", [f"{{seed[{k}]}}" for k in range(5)], "libro", [tuple((i+j+1)%25 for j in (0,5,10,15,20)) for i in range(5)], "inference_output/gpt-4o-mini-2024-07-18__libro__gpt-4o-mini-2024-07-18__bm25_27k_cl100k_selfmade__seed=0,temperature=0.7__{seed}__test__seed=0,temperature=0.7__test.jsonl"),
         ("gpt4o-mini__SWE-bench_Lite__default_test_demo4__t-0.70__p-0.95__s-{seed}__c-3.00__install-1", "swe-agent-demo4-gpt4omini__swt_bench_lite__test__{seed}", r"\sweap 0.7", [1,2,3,4,5]),
         ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_s{seed}", r"\aider 0.7", [0,1,2,3,4]),
     ]
@@ -35,6 +35,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ptp_scores = []
         applied_scores = []
         for seed in seeds:
+            args = [arg.format(seed=seed) if isinstance(arg, str) else arg for arg in args]
             reports = collect_reports(model.format(seed=seed), run_id.format(seed=seed), instance_log_path, *args)
             applied_scores.append(100*no_error_count(reports)/total_instance_count)
             ftp_scores.append(100*ftp_count(reports)/total_instance_count)
