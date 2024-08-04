@@ -22,6 +22,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.2", r"\aider 0", [0]),
         ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.2", r"\aider 0.2", [0]),
         ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.4", r"\aider 0.4", [0]),
+        ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.4", r"\aider 0.4", [0]),
 
     ]
 
