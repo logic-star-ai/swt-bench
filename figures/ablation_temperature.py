@@ -16,12 +16,13 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
         ("gold", "validate-gold", r"Gold"),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0,n=5__test._{seed}", r"\zsp 0"),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.2,n=5__test._{seed}", r"\zsp 0.2"),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.4,n=5__test._{seed}", r"\zsp 0.4"),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\zsp 0.7"),
-        ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.2", r"\aider 0.2"),
-        ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.4", r"\aider 0.4"),
+        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0,n=5__test._{seed}", r"\zsp 0", [0,1,2,3,4]),
+        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.2,n=5__test._{seed}", r"\zsp 0.2", [0,1,2,3,4]),
+        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.4,n=5__test._{seed}", r"\zsp 0.4", [0,1,2,3,4]),
+        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"\zsp 0.7", [0,1,2,3,4]),
+        ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.2", r"\aider 0", [0]),
+        ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.2", r"\aider 0.2", [0]),
+        ("aider--gpt-4o-mini-2024-07-18", "aider_gpt4omini__swt-lite__test_t0.4", r"\aider 0.4", [0]),
 
     ]
 
@@ -31,8 +32,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ["Method", "Applicability", "F2X", "F2P", "P2P"]
     )
     rows = []
-    seeds = [0, 1, 2, 3, 4]
-    for model, run_id, name, *args in methods:
+    for model, run_id, name, seeds, *args in methods:
         ftp_scores = []
         ftx_scores = []
         ptp_scores = []
