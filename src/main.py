@@ -17,6 +17,7 @@ from run_evaluation import run_instances, make_run_report
 
 def run(
         dataset_name: str,
+        is_swt: bool,
         split: str,
         instance_ids: list,
         predictions_path: str,
@@ -43,7 +44,7 @@ def run(
     # load predictions as map of instance_id to prediction
     if predictions_path == 'gold':
         print("Using gold tests - ignoring predictions_path")
-        predicted_tests = get_gold_predictions(dataset_name, split)
+        predicted_tests = get_gold_predictions(dataset_name, split, is_swt)
     else:
         if predictions_path.endswith(".json"):
             with open(predictions_path, "r") as f:
@@ -56,8 +57,8 @@ def run(
     predicted_tests = {pred["instance_id"]: pred for pred in predicted_tests}
 
     # get dataset from predictions
-    dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id)
-    full_dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, False)
+    dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, is_swt=is_swt)
+    full_dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, False, is_swt=is_swt)
     existing_images = list_images(client)
     print(f"Running {len(dataset)} unevaluated instances...")
     if not dataset:
@@ -77,6 +78,10 @@ def run(
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--dataset_name", default="princeton-nlp/SWE-bench_Lite", type=str, help="name of dataset")
+    # don't switch golden patches
+    parser.add_argument(
+        "--is_swt", type=str2bool, default=False, help="Indicate that benchmark is SWT, no need to swap golden patches"
+    )
     parser.add_argument("--split", type=str, default="test")
     parser.add_argument("--instance_ids", nargs="+", type=str, help="Instance IDs to run (space separated)")
     parser.add_argument("--predictions_path", type=str, help="Path to predictions file - if 'gold', uses gold predictions", required=True)
