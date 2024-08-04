@@ -1,7 +1,8 @@
 import json
+import pathlib
 from typing import List, Tuple, Optional, Dict, cast
 import re
-from datasets import load_dataset, Dataset
+from datasets import load_dataset, Dataset, load_from_disk
 
 
 from src.constants import (
@@ -121,7 +122,10 @@ def load_swebench_dataset(name="princeton-nlp/SWE-bench", split="test") -> list[
         name = "princeton-nlp/SWE-bench"
     elif name.lower() in {"swe-bench-lite", "swebench-lite", "swe_bench_lite", "swe-bench_lite", "lite"}:
         name = "princeton-nlp/SWE-bench_Lite"
-    dataset = cast(Dataset, load_dataset(name, split=split))
+    if pathlib.Path(name).exists():
+        dataset = load_from_disk(name)[split]
+    else:
+        dataset = cast(Dataset, load_dataset(name, split=split))
     return [cast(SWEbenchInstance, swe_to_swt_instance(instance)) for instance in dataset]
 
 
