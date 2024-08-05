@@ -107,8 +107,8 @@ def swe_to_swt_instance(dataset_instance: Dict) -> Dict:
     return dataset_instance
 
 def swt_to_swt_instance(dataset_instance: Dict) -> Dict:
-    dataset_instance["golden_test_patch"] = dataset_instance.pop("patch")
-    dataset_instance["golden_code_patch"] = dataset_instance.pop("test_patch")
+    dataset_instance["golden_code_patch"] = dataset_instance.pop("patch")[len("<patch>\n"):-len("\n</patch>")].strip()
+    dataset_instance["golden_test_patch"] = dataset_instance.pop("test_patch")
     return dataset_instance
 
 def load_swebench_dataset(name="princeton-nlp/SWE-bench", split="test", is_swt: bool=False) -> list[SWEbenchInstance]:
