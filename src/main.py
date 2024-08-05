@@ -80,7 +80,7 @@ if __name__ == "__main__":
     parser.add_argument("--dataset_name", default="princeton-nlp/SWE-bench_Lite", type=str, help="name of dataset")
     # don't switch golden patches
     parser.add_argument(
-        "--is_swt", type=str2bool, default=False, help="Indicate that benchmark is SWT, no need to swap golden patches"
+        "--is_swt", type=str2bool, default=False, help="Indicate that benchmark is extended with RAG, need to handle patches differently"
     )
     parser.add_argument("--split", type=str, default="test")
     parser.add_argument("--instance_ids", nargs="+", type=str, help="Instance IDs to run (space separated)")
