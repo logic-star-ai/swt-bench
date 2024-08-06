@@ -33,11 +33,10 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./d
     gold_model, gold_run_id = "gold", "validate-gold-balanced"
     gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
 
-    print(r"Method & n & F2X & F2P & P2P & Coverage \\")
     headers = (
-        ["Method", "$n$", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]
+        ["PR created", "$n$", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]
         if format.startswith("latex") else
-        ["Method", "n", "F2X", "F2P", "P2P", "Coverage"]
+        ["PR created", "n", "F2X", "F2P", "P2P", "Coverage"]
     )
     rows = []
     for model, run_id, name, *args in methods:
@@ -49,14 +48,14 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./d
         before_cutoff = {instance_id: report for instance_id, report in reports.items() if instance_timestamps[instance_id] <= cutoff}
         after_cutoff = {instance_id: report for instance_id, report in reports.items() if instance_timestamps[instance_id] > cutoff}
 
-        for cutoff_relation, pred_reports, gold_reports in [("after", after_cutoff, gold_after_cutoff), ("before", before_cutoff, gold_before_cutoff)]:
+        for cutoff_relation, pred_reports, gold_reports in [("after $KC$", after_cutoff, gold_after_cutoff), ("before $KC$", before_cutoff, gold_before_cutoff)]:
 
             ftx = 100*ftx_count(pred_reports)/len(gold_reports)
             resolved = 100*ftp_count(pred_reports)/len(gold_reports)
             ptp = 100*ptp_count(pred_reports)/len(gold_reports)
             total_coverage_possible = count_coverage_delta_gold(gold_reports)
             total_coverage_delta = 100 * sum_coverage_delta(reports) / total_coverage_possible
-            rows.append([f"{name} {cutoff_relation}", len(gold_reports), ftx, resolved, ptp, total_coverage_delta])
+            rows.append([f"{cutoff_relation}", len(gold_reports), ftx, resolved, ptp, total_coverage_delta])
     print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
 if __name__ == "__main__":
