@@ -1,4 +1,3 @@
-import src.run_evaluation
 from src.auxillary_src import extract_patches
 
 def test_extract_minimal_patch():
@@ -160,5 +159,5 @@ index 0000000..c570e62
 +    assert separate_paren_groups(' ( ) ') == ['()'], "Failed to handle spaces correctly"
 +
 """
-    patch_parsed = src.run_evaluation.remove_binary_diffs(patch_raw)
+    patch_parsed = extract_patches.remove_binary_diffs(patch_raw)
     assert patch_parsed == goal_patch
