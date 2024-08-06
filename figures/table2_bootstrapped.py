@@ -12,7 +12,7 @@ from bootstrapped import stats_functions as bs_stats
 
 from figures.util import *
 
-def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 279, format="github"):
+def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 279, format="github", alpha=0.05):
     instance_log_path = Path(instance_log_path)
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
@@ -42,11 +42,11 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ftx_f = reports_to_array(gold_reports, ftx_reports(reports))
         ftp_f = reports_to_array(gold_reports, ftp_reports(reports))
         ptp_f = reports_to_array(gold_reports, ptp_reports(reports))
-        applied, applied_ci = bs.bootstrap(applied_f, stat_func=bs_stats.mean, alpha=0.05)
-        ftx, ftx_ci = bs.bootstrap(ftx_f, stat_func=bs_stats.mean, alpha=0.05)
-        ftp, ftp_ci = bs.bootstrap(ftp_f, stat_func=bs_stats.mean, alpha=0.05)
-        ptp, ptp_ci = bs.bootstrap(ptp_f, stat_func=bs_stats.mean, alpha=0.05)
-        rows.append([name, f"{applied:.f} ({applied_ci[0]:.1f}-{applied_ci[1]:.1f})", f"{ftx:.1f} ({ftx_ci[0]:.1f}-{ftx_ci[1]:.1f})", f"{ftp:.1f} ({ftp_ci[0]:.1f}-{ftp_ci[1]:.1f})", f"{ptp:.1f} ({ptp_ci[0]:.1f}-{ptp_ci[1]:.1f})"])
+        applied = bs.bootstrap(applied_f, stat_func=bs_stats.mean, alpha=alpha)
+        ftx = bs.bootstrap(ftx_f, stat_func=bs_stats.mean, alpha=alpha)
+        ftp = bs.bootstrap(ftp_f, stat_func=bs_stats.mean, alpha=alpha)
+        ptp = bs.bootstrap(ptp_f, stat_func=bs_stats.mean, alpha=alpha)
+        rows.append([name, f"{applied.value:.1f} ({applied.lower_bound:.1f}-{applied.upper_bound:.1f})", f"{ftx.value:.1f} ({ftx.lower_bound:.1f}-{ftx.upper_bound:.1f})", f"{ftp.value:.1f} ({ftp.lower_bound:.1f}-{ftp.upper_bound:.1f})", f"{ptp.value:.1f} ({ptp.lower_bound:.1f}-{ptp.upper_bound:.1f})"])
     print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
 if __name__ == "__main__":
