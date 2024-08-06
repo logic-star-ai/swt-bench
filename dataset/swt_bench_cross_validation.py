@@ -31,14 +31,8 @@ def main(dataset_name: str = "princeton-nlp/SWE-bench_Lite", split: str = "test"
         return sub
 
     instance_ids = []
-    splits = {}
-    count = 0
-    num_new_funs = 0
-    total_count = 0
     new_examples = []
     for i, example in enumerate(dataset[split]):
-        files = []
-        repo_name = example["repo"].split("/")[-1]
         instance_id = example["instance_id"]
         patch = load_swe_agent_patch(instance_id)
         if patch is None:
