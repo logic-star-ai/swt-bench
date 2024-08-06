@@ -217,7 +217,7 @@ def run_instance(
     exec_spec.patch_id = patch_id_base
 
     if len(patch_types) == 1 and patch_types[0] == "vanilla":
-        model_patch = pred["model_patch"]
+        model_patch = remove_binary_diffs(pred["model_patch"])
     else:
         model_patch = extract_model_patch(exec_spec, pred["model_patch"], patch_types, build_mode=build_mode)
 
