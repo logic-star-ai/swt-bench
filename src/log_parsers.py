@@ -236,5 +236,6 @@ MAP_REPO_TO_PARSER = {
     "scikit-learn/scikit-learn": parse_log_scikit,
     "sqlfluff/sqlfluff": parse_log_sqlfluff,
     "sphinx-doc/sphinx": parse_log_sphinx,
+    "nielstron/humaneval": parse_log_pytest,
     "sympy/sympy": parse_log_sympy,
 }

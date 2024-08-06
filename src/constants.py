@@ -781,6 +781,7 @@ MAP_VERSION_TO_INSTALL_PYDICOM.update(
     {k: {**MAP_VERSION_TO_INSTALL_PYDICOM[k], "python": "3.11"} for k in ["2.4", "3.0"]}
 )
 MAP_VERSION_TO_INSTALL_HUMANEVAL = {k: {"python": "3.9"} for k in ["1.0"]}
+MAP_VERSION_TO_INSTALL_HUMANEVAL_FIX = {k: {"python": "3.10",  "packages": "pytest"} for k in ["0.0.1"]}
 
 # Constants - Task Instance Instllation Environment
 MAP_VERSION_TO_INSTALL = {
@@ -803,6 +804,7 @@ MAP_VERSION_TO_INSTALL = {
     "sphinx-doc/sphinx": MAP_VERSION_TO_INSTALL_SPHINX,
     "sqlfluff/sqlfluff": MAP_VERSION_TO_INSTALL_SQLFLUFF,
     "swe-bench/humaneval": MAP_VERSION_TO_INSTALL_HUMANEVAL,
+    "nielstron/humaneval_fix": MAP_VERSION_TO_INSTALL_HUMANEVAL,
     "sympy/sympy": MAP_VERSION_TO_INSTALL_SYMPY,
 }
 
@@ -850,6 +852,9 @@ MAP_REPO_TO_TEST_FRAMEWORK = {
     },
     "swe-bench/humaneval": {
         k: "python" for k in MAP_VERSION_TO_INSTALL_HUMANEVAL.keys()
+    },
+    "nielstron/humaneval_fix": {
+        k: TEST_PYTEST for k in MAP_VERSION_TO_INSTALL_HUMANEVAL_FIX.keys()
     },
     "sympy/sympy": {
         k: "PYTHONWARNINGS='ignore::UserWarning,ignore::SyntaxWarning' bin/test -C --verbose"
@@ -914,6 +919,9 @@ MAP_REPO_TO_TEST_FRAMEWORK_VERBOSE = {
     },
     "swe-bench/humaneval": {
         k: "python" for k in MAP_VERSION_TO_INSTALL_HUMANEVAL.keys()
+    },
+    "nielstron/humaneval_fix": {
+        k: TEST_PYTEST_VERBOSE for k in MAP_VERSION_TO_INSTALL_HUMANEVAL.keys()
     },
     "sympy/sympy": {
         k: "bin/test -C --verbose" for k in MAP_VERSION_TO_INSTALL_SYMPY.keys()
