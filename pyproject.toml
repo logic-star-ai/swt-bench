@@ -17,6 +17,13 @@ dependencies = [
     "unidiff",
     'python-dotenv',
     'tqdm',
+    'fire',
+    'tabulate',
+    'numpy',
+    'scipy',
+    'editdistance',
+    'GitPython',
+    'bootstrapped',
 ]
 
 [project.optional-dependencies]

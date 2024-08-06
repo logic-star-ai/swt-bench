@@ -69,6 +69,25 @@ def strip_content(hunk):
     new_hunk = "\n" + "\n".join(new_lines) + "\n"
     return new_hunk, first_idx - 1
 
+def remove_binary_diffs(diff_content):
+    binary_file_indicator = 'Binary files'
+
+    lines = diff_content.splitlines()
+
+    new_lines = []
+    curr_diff = []
+    skip_current_diff = False
+    for line in lines + ["diff --git"]:
+        if line.startswith('diff --git'):
+            if curr_diff and not skip_current_diff:
+                new_lines.append('\n'.join(curr_diff))
+            curr_diff = []
+            skip_current_diff = False
+        if binary_file_indicator in line:
+            skip_current_diff = True
+        curr_diff.append(line)
+
+    return '\n'.join(new_lines) + "\n"
 
 def extract_fuzzy_patch(model_patch) -> List[FuzzyFilePatch]:
     """
@@ -168,6 +187,7 @@ def extract_minimal_patch(model_patch) -> str:
     * Recalculates hunk start/end position and diff delta
     * Returns new patch
     """
+    model_patch = remove_binary_diffs(model_patch)
     model_patch = model_patch.lstrip("\n")
     new_patch = ""
     for patch in PATCH_PATTERN.findall(model_patch):
@@ -429,3 +449,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

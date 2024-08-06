@@ -1,5 +1,5 @@
 import hashlib
-import warnings
+from time import time
 
 import docker
 from docker.models.containers import Container
@@ -11,10 +11,10 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from tqdm import tqdm
-from typing import List, Tuple, Optional, Dict
+from typing import List, Tuple, Optional
 
+from auxillary_src.extract_patches import remove_binary_diffs
 from src.constants import (
-    RUN_INSTANCE_LOG_DIR,
     APPLY_PATCH_FAIL,
     APPLY_PATCH_PASS
 )
@@ -158,7 +158,6 @@ def eval_in_container_with_diff(log_dir: Path, container: Container, logger: log
     return test_output_path
 
 
-
 def run_instance(
         test_spec: TestSpec,
         pred: dict,
@@ -196,7 +195,7 @@ def run_instance(
     exec_spec.patch_id = patch_id_base
 
     if len(patch_types) == 1 and patch_types[0] == "vanilla":
-        model_patch = pred["model_patch"]
+        model_patch = remove_binary_diffs(pred["model_patch"])
     else:
         model_patch = extract_model_patch(exec_spec, pred["model_patch"], patch_types, build_mode=build_mode)
 
@@ -231,6 +230,7 @@ def run_eval_exec_spec(exec_spec: ExecSpec, model_patch: str, log_dir: Optional[
         log_dir = get_log_dir(exec_spec.run_id, exec_spec.patch_id, exec_spec.instance_id)
 
     logger, _ = setup_logging(log_dir, instance_id)
+    logger.warning(f"Starting evaluation at {time()}")
 
     with open(log_dir / "exec_spec.json", "w") as f:
         json.dump(exec_spec.as_dict(), f)
@@ -262,6 +262,7 @@ def run_eval_exec_spec(exec_spec: ExecSpec, model_patch: str, log_dir: Optional[
         cleanup_container(client, container, logger)
         if exec_spec.rm_image:
             remove_image(client, exec_spec.instance_image_key, logger)
+        logger.warning(f"End of eval at {time()}")
         close_logger(logger)
 
 

@@ -184,7 +184,7 @@ def main(
     dataset_path: str,
     output_path: str,
     mode: Literal["base", "plus"] = "plus",
-    filter_cases: str = pathlib.Path(__file__.__path__).parent / "filter_cases.txt",
+    filter_cases: str = pathlib.Path(__file__).parent / "filter_cases.txt",
 ):
     # Load the dataset
     dataset = load_dataset(dataset_path)
