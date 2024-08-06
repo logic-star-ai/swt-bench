@@ -109,23 +109,35 @@ def applied_count(reports):
     """
     return sum(r["patch_successfully_applied"] for r in reports.values())
 
+def no_error_filter(r):
+    """
+    Return the instances where at least one test was executed i.e.
+    there was no syntax error or name error introduced by the patch
+    """
+    if "tests_pred" not in r:
+        return False
+    original_number_tests = sum(len(t) for t in r["tests_base"])
+    tests_after_pred = sum(len(t) for t in r["tests_pred"].values())
+    # if tests after pred is less than 10% of the original number of tests this counts as error
+    return tests_after_pred >= 0.1*original_number_tests
+
+
+
 def no_error_count(reports):
     """
     Count the number of instances where at least one test was executed i.e.
     there was no syntax error or name error introduced by the patch
     """
-    count = 0
-    for r in reports.values():
-        if "tests_pred" not in r:
-            continue
-        original_number_tests = sum(len(t) for t in r["tests_base"])
-        tests_after_pred = sum(len(t) for t in r["tests_pred"].values())
-        # if tests after pred is less than 10% of the original number of tests this counts as error
-        count += tests_after_pred >= 0.1*original_number_tests
-    return count
+    return sum(no_error_filter(r) for r in reports.values())
+
+def no_error_reports(reports):
+    return {instance_id: report for instance_id, report in reports.items() if no_error_filter(report)}
 
 def ftp_count(reports):
     return sum(r["resolved"] for r in reports.values())
+
+def ftp_reports(reports):
+    return {instance_id: report for instance_id, report in reports.items() if report["resolved"]}
 
 def get_ftx(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> int:
     """
@@ -145,6 +157,9 @@ def get_ftx(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]
 def ftx_count(reports):
     return sum(get_ftx(r["tests_pred"], r["tests_base"]) for r in reports.values() if "tests_pred" in r)
 
+def ftx_reports(reports):
+    return {instance_id: report for instance_id, report in reports.items() if "tests_pred" in report and get_ftx(report["tests_pred"], report["tests_base"])}
+
 
 def get_ptp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> int:
     """
@@ -161,6 +176,8 @@ def get_ptp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]
 def ptp_count(reports):
     return sum(get_ptp(r["tests_pred"], r["tests_base"]) for r in reports.values() if "tests_pred" in r)
 
+def ptp_reports(reports):
+    return {instance_id: report for instance_id, report in reports.items() if "tests_pred" in report and get_ptp(report["tests_pred"], report["tests_base"])}
 
 def filtered_by_resolved(reports):
     return (
@@ -201,3 +218,6 @@ def with_error_bars(data, confidence=0.95):
     margin_of_error = t_value * std_error
 
     return mean, margin_of_error
+
+def reports_to_array(gold_reports, reports):
+    return np.array([100 if k in reports else 0 for k in sorted(gold_reports.keys())])

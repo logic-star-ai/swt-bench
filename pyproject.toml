@@ -23,6 +23,7 @@ dependencies = [
     'scipy',
     'editdistance',
     'GitPython',
+    'bootstrapped',
 ]
 
 [project.optional-dependencies]
