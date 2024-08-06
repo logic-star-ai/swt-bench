@@ -46,7 +46,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
             num_turns_per_instance = {x["instance_id"]: x["num_turns"] for x in num_turns}
             reports = collect_reports(model, run_id, instance_log_path, *args)
             res = []
-            for i in range(20):
+            for i in range(21):
                 reports_i = {k: v for k, v in reports.items() if num_turns_per_instance[k] <= i}
                 counted = 100*counter(reports_i)/total_instance_count
                 res.append((i, counted))
