@@ -28,7 +28,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
 
     headers = (
         ["Method", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}"]
-        if format == "latex" else
+        if format.startswith("latex") else
         ["Method", "Applicability", "F2X", "F2P", "P2P"]
     )
     rows = []

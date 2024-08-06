@@ -36,7 +36,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./d
     print(r"Method & n & F2X & F2P & P2P & Coverage \\")
     headers = (
         ["Method", "$n$", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]
-        if format == "latex" else
+        if format.startswith("latex") else
         ["Method", "n", "F2X", "F2P", "P2P", "Coverage"]
     )
     rows = []
