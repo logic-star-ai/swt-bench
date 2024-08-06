@@ -61,33 +61,33 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
     log_parser = MAP_REPO_TO_PARSER[repo]
 
     with open(log_fp) as f:
-        content = f.read()
+        raw_content = f.read()
         # remove installation logs
-        content = re.split(r"\n\+ python3 [^\n]*trace.py --count -C coverage.cover [^\n]*\n", content, flags=re.MULTILINE)[1]
-        # remove coverage dumps
-        content = content.split("\n+ cat coverage.cover")[0]
-        # TODO fix constant here
-        if (
-            any(
-                [
-                    x in content
-                    for x in [
-                        APPLY_PATCH_FAIL,
-                        RESET_FAILED,
-                        TESTS_ERROR,
-                        TESTS_TIMEOUT,
-                        "Failed to reset task environment",
-                    ]
+    content = re.split(r"\n\+ python3 [^\n]*trace.py --count -C coverage.cover [^\n]*\n", raw_content, flags=re.MULTILINE)[1]
+    # remove coverage dumps
+    content = content.split("\n+ cat coverage.cover")[0]
+    # TODO fix constant here
+    if (
+        any(
+            [
+                x in raw_content
+                for x in [
+                    APPLY_PATCH_FAIL,
+                    RESET_FAILED,
+                    TESTS_ERROR,
+                    TESTS_TIMEOUT,
+                    "Failed to reset task environment",
                 ]
-            )
-            # or "applied patch" not in content.lower()
-        ):
-            # Eval patch was not applied successfully
-            return {}, False
+            ]
+        )
+        # or "applied patch" not in content.lower()
+    ):
+        # Eval patch was not applied successfully
+        return {}, False
 
-        # # Get status map of evaluation results
-        # content =
-        return log_parser(content), "applied patch" in content.lower()
+    # # Get status map of evaluation results
+    # content =
+    return log_parser(content), "applied patch" in raw_content.lower()
 
 
 def get_coverage_eval(output_path: str) -> Dict:
