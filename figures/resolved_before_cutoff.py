@@ -9,6 +9,7 @@ import datasets
 import dataset
 import fire
 from pathlib import Path
+from tabulate import tabulate
 
 from figures.util import *
 
@@ -16,7 +17,7 @@ MODEL_KNOWLEDGE_CUTOFF = {
     "gpt-4-1106-preview": datetime.datetime(month=4, year=2023, day=30),
 }
 
-def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./datasets/SWE-bench-balanced-2024-04-30__style-3__fs-bm25__mcc-27000-cl100k", split: str = "test"):
+def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./datasets/SWE-bench-balanced-2024-04-30__style-3__fs-bm25__mcc-27000-cl100k", split: str = "test", format="github"):
     instance_log_path = Path(instance_log_path)
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
@@ -33,6 +34,12 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./d
     gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
 
     print(r"Method & n & F2X & F2P & P2P & Coverage \\")
+    headers = (
+        ["Method", "$n$", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]
+        if format == "latex" else
+        ["Method", "n", "F2X", "F2P", "P2P", "Coverage"]
+    )
+    rows = []
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
         actual_model = "gpt-4-1106-preview"
@@ -49,8 +56,8 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./d
             ptp = 100*ptp_count(pred_reports)/len(gold_reports)
             total_coverage_possible = count_coverage_delta_gold(gold_reports)
             total_coverage_delta = 100 * sum_coverage_delta(reports) / total_coverage_possible
-            print(rf"{name} {cutoff_relation} & {len(gold_reports)} & {ftx:.1f} & {resolved:.1f} & {ptp:.1f} & {total_coverage_delta:.1f} \\")
-
+            rows.append([f"{name} {cutoff_relation}", len(gold_reports), ftx, resolved, ptp, total_coverage_delta])
+    print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
 if __name__ == "__main__":
     fire.Fire(main)
