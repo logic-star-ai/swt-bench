@@ -21,6 +21,8 @@ dependencies = [
     'tabulate',
     'numpy',
     'scipy',
+    'editdistance',
+    'GitPython',
 ]
 
 [project.optional-dependencies]
