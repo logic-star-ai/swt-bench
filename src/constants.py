@@ -804,7 +804,7 @@ MAP_VERSION_TO_INSTALL = {
     "sphinx-doc/sphinx": MAP_VERSION_TO_INSTALL_SPHINX,
     "sqlfluff/sqlfluff": MAP_VERSION_TO_INSTALL_SQLFLUFF,
     "swe-bench/humaneval": MAP_VERSION_TO_INSTALL_HUMANEVAL,
-    "nielstron/humaneval_fix": MAP_VERSION_TO_INSTALL_HUMANEVAL,
+    "nielstron/humaneval_fix": MAP_VERSION_TO_INSTALL_HUMANEVAL_FIX,
     "sympy/sympy": MAP_VERSION_TO_INSTALL_SYMPY,
 }
 
