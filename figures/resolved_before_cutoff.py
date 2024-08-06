@@ -49,7 +49,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./d
             ptp = 100*ptp_count(pred_reports)/len(gold_reports)
             total_coverage_possible = count_coverage_delta_gold(gold_reports)
             total_coverage_delta = 100 * sum_coverage_delta(reports) / total_coverage_possible
-            print(rf"{name} {cutoff_relation} & {len(gold_reports)} & {ftx:.f} & {resolved:.1f} & {ptp:.1f} & {total_coverage_delta:.f} \\")
+            print(rf"{name} {cutoff_relation} & {len(gold_reports)} & {ftx:.1f} & {resolved:.1f} & {ptp:.1f} & {total_coverage_delta:.1f} \\")
 
 
 if __name__ == "__main__":
