@@ -201,7 +201,7 @@ def count_coverage_delta_gold(reports):
     return s
 
 
-def with_error_bars(data, confidence=0.95):
+def with_error_bars(data, z=1.96):
     # Calculate mean
     mean = np.mean(data)
 
@@ -212,10 +212,7 @@ def with_error_bars(data, confidence=0.95):
     std_error = std_dev / np.sqrt(len(data))
 
     # Calculate 95% confidence interval
-    confidence_level = confidence
-    degrees_freedom = len(data) - 1
-    t_value = stats.t.ppf((1 + confidence_level) / 2, degrees_freedom)
-    margin_of_error = t_value * std_error
+    margin_of_error = z * std_error
 
     return mean, margin_of_error
 

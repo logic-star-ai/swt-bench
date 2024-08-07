@@ -19,9 +19,9 @@ def main(swe_bench_results: str = "results/experiments-swe-bench/20240402_sweage
     resolved_own_test = ftp_reports(swt_bench_reports)
     swe_bench_accept_own = [r for r in swe_bench_applied if r in resolved_own_test]
     swe_bench_resolve_own = [r for r in swe_bench_resolved if r in resolved_own_test]
-    print("Own precision", len(swe_bench_resolve_own) / len(swe_bench_accept_own))
-    print("Own filtered out ratio", len(swe_bench_accept_own) / len(swe_bench_applied))
-    print("Own recall", len(swe_bench_resolve_own) / len(swe_bench_resolved))
+    print("Filtered on F2P precision", len(swe_bench_resolve_own) / len(swe_bench_accept_own))
+    print("Filtered on F2P recall", len(swe_bench_resolve_own) / len(swe_bench_resolved))
+    print("% Filtered out", 1 - (len(swe_bench_accept_own) / len(swe_bench_applied)))
 
 if __name__ == '__main__':
     fire.Fire(main)
