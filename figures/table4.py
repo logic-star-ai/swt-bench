@@ -21,8 +21,9 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("claude-3-haiku-20240307__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__claude-3-haiku-20240307", r"Claude 3.0 Haiku"),
         ("mixtral8x22b__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__together_mistralai_Mixtral-8x22B-Instruct-v0.1", r"Mixtral 8x22B"),
     ]
-    gold_model, gold_run_id = "gold", "validate-gold-balanced"
+    gold_model, gold_run_id = "gold", "validate-gold"
     gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
+    total_coverage_possible = count_coverage_delta_gold(gold_reports)
 
     headers = (
         ["Model", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}",  r"{$\dc^{\text{all}}$ }"]
@@ -36,7 +37,6 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ftp = 100*ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
         ptp = 100*ptp_count(reports)/total_instance_count
-        total_coverage_possible = count_coverage_delta_gold(gold_reports)
         total_coverage_delta = 100 * sum_coverage_delta(reports) / total_coverage_possible
         rows.append([name, applied, ftx, ftp, ptp, total_coverage_delta])
     print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
