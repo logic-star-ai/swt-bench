@@ -106,10 +106,19 @@ def get_coverage_eval(output_path: str) -> Dict:
             continue
         try:
             d = json.loads(line.strip())
-            for k, v in d.items():
-                l = {int(l): int(h) for l, h in v.items()}
-                # l.sort(key=lambda x: x[0])
-                coverage[k.replace("/testbed/", "")] = l
+            for file_name, file_coverage in d.items():
+                file_wise_coverage = {int(line_id): int(line_coverage) for line_id, line_coverage in file_coverage.items()}
+                key = file_name.replace("/testbed/", "")
+                if key in coverage:
+                    updated_coverage = coverage[key]
+                    for kk, vv in file_wise_coverage.items():
+                        if kk in updated_coverage:
+                            updated_coverage[kk] += vv
+                        else:
+                            updated_coverage[kk] = vv
+                    coverage[key] = updated_coverage
+                else:
+                    coverage[key] = file_wise_coverage
         except json.JSONDecodeError:
             continue
     return coverage
