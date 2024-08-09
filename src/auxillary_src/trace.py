@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import time
+
 # Main Code adapted from python standard library trace module
 # Source code: https://github.com/python/cpython/blob/3.12/Lib/trace.py
 #
@@ -299,6 +301,31 @@ def patch_subprocess(viz_args: list[str]) -> None:
 #             sys.addaudithook(audit_hook)  # type: ignore
 ################# End of code adapted from viztracer ############################################
 
+class FileLock:
+    def __init__(self, path, suffix=".lock"):
+        self.path = path
+        self.f = None
+        self.suffix = suffix
+    def __enter__(self):
+        if self.f is not None:
+            raise Exception("FileLock already acquired")
+        lock_file = self.path + self.suffix
+        while True:
+            try:
+                self.f = os.open(lock_file, os.O_CREAT | os.O_EXCL)
+                break
+            except FileExistsError:
+                pass
+            time.sleep(0.1)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.f is None:
+            raise Exception("FileLock not acquired")
+        os.close(self.f)
+        os.unlink(self.path + self.suffix)
+        self.f = None
+
 class _Ignore:
     def __init__(self, modules=None, dirs=None):
         self._mods = set() if not modules else set(modules)
@@ -586,37 +613,38 @@ class CoverageResults:
         """Return a coverage results file in path."""
         # ``lnotab`` is a dict of executable lines, or a line number "table"
 
-        try:
-            outfile = open(path, "a", encoding="utf-8")
-        except OSError as err:
-            print(
-                (
-                    "trace: Could not open %r for writing: %s "
-                    "- skipping" % (path, err)
-                ),
-                file=sys.stderr,
-            )
-            return 0, 0
-
-        n_lines = 0
-        n_hits = 0
-        with outfile:
-            n_d = {}
-            for line in _find_executable_linenos(file):
-                n_lines += 1
-                if line in lines_hit:
-                    n_hits += 1
-                    n_d[line] = lines_hit[line]
-                else:
-                    n_d[line] = 0
-            outfile.write(
-                json.dumps(
-                    {file: n_d}
+        with FileLock(path):
+            try:
+                outfile = open(path, "a", encoding="utf-8")
+            except OSError as err:
+                print(
+                    (
+                        "trace: Could not open %r for writing: %s "
+                        "- skipping" % (path, err)
+                    ),
+                    file=sys.stderr,
                 )
-            )
-            outfile.write("\n")
+                return 0, 0
 
-        return n_hits, n_lines
+            n_lines = 0
+            n_hits = 0
+            with outfile:
+                n_d = {}
+                for line in _find_executable_linenos(file):
+                    n_lines += 1
+                    if line in lines_hit:
+                        n_hits += 1
+                        n_d[line] = lines_hit[line]
+                    else:
+                        n_d[line] = 0
+                outfile.write(
+                    json.dumps(
+                        {file: n_d}
+                    )
+                )
+                outfile.write("\n")
+
+            return n_hits, n_lines
 
 
 def _find_all_lines_of_stmt_in_line(file, lines_hit: dict):
