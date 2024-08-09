@@ -1,3 +1,7 @@
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from docker_build import BuildMode
+
 import docker
 import json
 import resource
@@ -5,7 +9,6 @@ import resource
 from argparse import ArgumentParser
 from typing import List, Tuple, Optional, Dict, Literal
 
-from docker_build import BuildMode
 from src.docker_utils import (
     list_images,
     clean_images,
@@ -30,7 +33,7 @@ def run(
         run_id: str,
         patch_types: List[str],
         timeout: int,
-        build_mode: BuildMode = "api",
+        build_mode: "BuildMode" = "api",
         skip_eval: bool = False,
     ):
     """
