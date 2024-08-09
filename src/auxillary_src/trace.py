@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 import time
 
 # Main Code adapted from python standard library trace module
@@ -101,7 +99,7 @@ import textwrap
 from multiprocessing import Process
 from typing import Any, Callable, Dict, List, Sequence, Union, no_type_check
 
-def patch_subprocess(viz_args: list[str]) -> None:
+def patch_subprocess(viz_args):
     import shlex
     import subprocess
 
@@ -112,8 +110,8 @@ def patch_subprocess(viz_args: list[str]) -> None:
     # Unlikely to be used in practice anyway so we just skip wrapping interactive python processes.
     interactive_pat = re.compile("-[A-Za-z]*?i[A-Za-z]*$")
 
-    def build_command(args: Sequence[str]) -> list[str] | None:
-        py_args: list[str] = []
+    def build_command(args):
+        py_args = []
         mode = []
         script = None
         args_iter = iter(args[1:])
@@ -150,7 +148,7 @@ def patch_subprocess(viz_args: list[str]) -> None:
         return None
 
     @functools.wraps(subprocess.Popen.__init__)
-    def subprocess_init(self: subprocess.Popen[Any], args: Union[str, Sequence[Any], Any], **kwargs: Any) -> None:
+    def subprocess_init(self, args, **kwargs):
         new_args = args
         if isinstance(new_args, str):
             new_args = shlex.split(new_args, posix=sys.platform != "win32")
