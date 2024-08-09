@@ -1,6 +1,9 @@
-from __future__ import annotations
 #!/usr/bin/env python3
+from __future__ import annotations
 
+# Main Code adapted from python standard library trace module
+# Source code: https://github.com/python/cpython/blob/3.12/Lib/trace.py
+#
 # portions copyright 2001, Autonomous Zones Industries, Inc., all rights...
 # err...  reserved and offered to the public under the terms of the
 # Python 2.2 license.
@@ -71,8 +74,21 @@ import threading
 
 PRAGMA_NOCOVER = "#pragma NO COVER"
 
-# Licensed under the Apache License: http://www.apache.org/licenses/LICENSE-2.0
-# For details: https://github.com/gaogaotiantian/viztracer/blob/master/NOTICE.txt
+################# Code adapted from viztracer ############################################
+# Copyright 2020-2023 Tian Gao
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# For details: https://github.com/gaogaotiantian/viztracer
 
 
 import functools
@@ -281,7 +297,7 @@ def patch_subprocess(viz_args: list[str]) -> None:
 #                 if len(audit_regex_list) == 0 or any((regex.fullmatch(event) for regex in audit_regex_list)):
 #                     tracer.log_instant(event, args={"args": [str(arg) for arg in args]})
 #             sys.addaudithook(audit_hook)  # type: ignore
-
+################# End of code adapted from viztracer ############################################
 
 class _Ignore:
     def __init__(self, modules=None, dirs=None):
