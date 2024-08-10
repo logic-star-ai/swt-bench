@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import time
+from types import FunctionType
 
 # Main Code adapted from python standard library trace module
 # Source code: https://github.com/python/cpython/blob/3.12/Lib/trace.py
@@ -831,20 +832,28 @@ class Trace:
             self._calledfuncs[this_func] = 1
 
     def mk_globaltrace_lt(self):
-        def globaltrace_lt(include, localtrace, frame, why, arg):
-            """Handler for call events.
+        globaltrace_lt_code = """
+def globaltrace_lt(frame, why, arg):
+    \"""Handler for call events.
 
-            If the code block being entered is to be ignored, returns `None',
-            else returns self.localtrace.
-            """
-            if why == "call":
-                filename = frame.f_globals.get("__file__", None)
-                if filename is not None:
-                    include_it = include.fullmatch(filename)
-                    if include_it:
-                        return localtrace
-            return None
-        return functools.partial(globaltrace_lt, self.include, self.localtrace)
+    If the code block being entered is to be ignored, returns `None',
+    else returns self.localtrace.
+    \"""
+    if why == "call":
+        filename = frame.f_globals.get("__file__", None)
+        if filename is not None:
+            include_it = include.fullmatch(filename)
+            if include_it:
+                return localtrace
+    return None
+        """
+        globaltrace_lt_func = compile(globaltrace_lt_code, "<string>", "exec", optimize=2).co_consts[0]
+        globaltrace_lt_globs = globals()
+        globaltrace_lt_globs["include"] = self.include
+        globaltrace_lt_globs["localtrace"] = self.localtrace
+        globaltrace_lt_name = "globaltrace_lt"
+        globaltrace = FunctionType(globaltrace_lt_func, globaltrace_lt_globs, globaltrace_lt_name)
+        return globaltrace
 
     def localtrace_trace_and_count(self, frame, why, arg):
         if why == "line":
@@ -1005,11 +1014,6 @@ def main():
 
     _prefix = sysconfig.get_path("stdlib")
     _exec_prefix = sysconfig.get_path("platstdlib")
-
-    def parse_dir(s):
-        s = os.path.expanduser(os.path.expandvars(s))
-        s = s.replace("$prefix", _prefix).replace("$exec_prefix", _exec_prefix)
-        return os.path.abspath(s)
 
     opts.include_patterns = opts.include_pattern
 
