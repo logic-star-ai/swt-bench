@@ -60,6 +60,9 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
     # Convert e.g. "logs/scikit-learn__scikit-learn-12421/test_output.txt" to "scikit-learn/scikit-learn"
     log_parser = MAP_REPO_TO_PARSER[repo]
 
+    if not Path(log_fp).exists():
+        # likely due to a timeout
+        return {}, False
     with open(log_fp) as f:
         raw_content = f.read()
         # remove installation logs
