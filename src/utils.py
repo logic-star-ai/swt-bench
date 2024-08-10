@@ -251,7 +251,7 @@ def extract_changed_files(patch: str) -> List[str]:
     # Get changed files from patch
     diff_pat = r"diff --git a/(.*) b/(.*)"
     files = re.findall(diff_pat, patch)
-    files = sum(files, ())
+    files = list(set(sum(files, ())))
     return files
 
 
