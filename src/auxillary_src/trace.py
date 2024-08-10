@@ -750,11 +750,7 @@ class Trace:
         trace=1,
         countfuncs=0,
         countcallers=0,
-        includemods=(),
-        includedirs=(),
         includepatterns=(),
-        ignoremods=(),
-        ignoredirs=(),
         infile=None,
         outfile=None,
         timing=False,
@@ -796,14 +792,14 @@ class Trace:
         elif countfuncs:
             self.globaltrace = self.globaltrace_countfuncs
         elif trace and count:
-            self.globaltrace = self.globaltrace_lt
             self.localtrace = self.localtrace_trace_and_count
+            self.globaltrace = self.mk_globaltrace_lt()
         elif trace:
-            self.globaltrace = self.globaltrace_lt
             self.localtrace = self.localtrace_trace
+            self.globaltrace = self.mk_globaltrace_lt()
         elif count:
-            self.globaltrace = self.globaltrace_lt
             self.localtrace = self.localtrace_count
+            self.globaltrace = self.mk_globaltrace_lt()
         else:
             # Ahem -- do nothing?  Okay.
             self.donothing = 1
@@ -890,19 +886,21 @@ class Trace:
             this_func = self.file_module_function_of(frame)
             self._calledfuncs[this_func] = 1
 
-    def globaltrace_lt(self, frame, why, arg):
-        """Handler for call events.
+    def mk_globaltrace_lt(self):
+        def globaltrace_lt(include, localtrace, frame, why, arg):
+            """Handler for call events.
 
-        If the code block being entered is to be ignored, returns `None',
-        else returns self.localtrace.
-        """
-        if why == "call":
-            filename = frame.f_globals.get("__file__", None)
-            if filename is not None:
-                include_it = self.include.fullmatch(filename)
-                if include_it:
-                    return self.localtrace
-        return None
+            If the code block being entered is to be ignored, returns `None',
+            else returns self.localtrace.
+            """
+            if why == "call":
+                filename = frame.f_globals.get("__file__", None)
+                if filename is not None:
+                    include_it = include.fullmatch(filename)
+                    if include_it:
+                        return localtrace
+            return None
+        return functools.partial(globaltrace_lt, self.include, self.localtrace)
 
     def localtrace_trace_and_count(self, frame, why, arg):
         if why == "line":
@@ -1042,36 +1040,6 @@ def main():
 
     grp = parser.add_argument_group("Filters", "Can be specified multiple times")
     grp.add_argument(
-        "--ignore-module",
-        action="append",
-        default=[],
-        help="Ignore the given module(s) and its submodules "
-        "(if it is a package). Accepts comma separated list of "
-        "module names.",
-    )
-    grp.add_argument(
-        "--ignore-dir",
-        action="append",
-        default=[],
-        help="Ignore files in the given directory "
-        "(multiple directories can be joined by os.pathsep).",
-    )
-    grp.add_argument(
-        "--include-module",
-        action="append",
-        default=[],
-        help="Include the given module(s) and its submodules "
-        "(if it is a package). Accepts comma separated list of "
-        "module names.",
-    )
-    grp.add_argument(
-        "--include-dir",
-        action="append",
-        default=[],
-        help="Include files in the given directory "
-        "(multiple directories can be joined by os.pathsep).",
-    )
-    grp.add_argument(
         "--include-pattern",
         action="append",
         default=[],
@@ -1100,19 +1068,7 @@ def main():
         s = s.replace("$prefix", _prefix).replace("$exec_prefix", _exec_prefix)
         return os.path.abspath(s)
 
-    opts.ignore_module = [
-        mod.strip() for i in opts.ignore_module for mod in i.split(",")
-    ]
-    opts.include_module = [
-        mod.strip() for i in opts.include_module for mod in i.split(",")
-    ]
     opts.include_patterns = opts.include_pattern
-    opts.ignore_dir = [
-        parse_dir(s) for i in opts.ignore_dir for s in i.split(os.pathsep)
-    ]
-    opts.include_dir = [
-        parse_dir(s) for i in opts.include_dir for s in i.split(os.pathsep)
-    ]
 
     if opts.report:
         if not opts.file:
@@ -1150,11 +1106,7 @@ def main():
         opts.trace,
         countfuncs=opts.listfuncs,
         countcallers=opts.trackcalls,
-        ignoremods=opts.ignore_module,
-        ignoredirs=opts.ignore_dir,
         includepatterns=opts.include_patterns,
-        includemods=opts.include_module,
-        includedirs=opts.include_dir,
         infile=opts.file,
         outfile=opts.file,
         timing=opts.timing,
