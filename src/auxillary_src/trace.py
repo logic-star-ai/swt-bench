@@ -141,6 +141,9 @@ def patch_subprocess(viz_args):
 
             # -pyopts
             py_args.append(arg)
+            if arg in ("-X", "-W", "--check-hash-based-pycs"):
+                # -X dev
+                py_args.append(next(args_iter, None))
 
         if script:
             return [sys.executable, *py_args, __file__, *viz_args, script, *args_iter]
@@ -1047,6 +1050,7 @@ def main():
             parser.error("must specify -m or -c before the module or command")
         # pop the cmd and module arguments
         args = args[:-1]
+    print(args)
 
     t = Trace(
         opts.count,
