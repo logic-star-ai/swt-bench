@@ -94,6 +94,8 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
 
 
 def get_coverage_eval(output_path: str) -> Dict:
+    if not Path(output_path).exists():
+        return {}
     with open(output_path, "r") as f:
         eval_output = f.readlines()
 
