@@ -570,28 +570,26 @@ class CoverageResults:
         # accumulate summary info, if needed
         sums = {}
 
-        # if os.path.isfile(coverdir):
-        #     os.unlink(coverdir)
-        for filename, count in per_file.items():
-            if self.is_ignored_filename(filename):
-                continue
+        with FileLock(coverdir):
+            for filename, count in per_file.items():
+                if self.is_ignored_filename(filename):
+                    continue
 
-            if filename.endswith(".pyc"):
-                filename = filename[:-1]
+                if filename.endswith(".pyc"):
+                    filename = filename[:-1]
 
-            if coverdir is None:
-                modulename = _modname(filename)
-            else:
-                modulename = _fullmodname(filename)
+                if coverdir is None:
+                    modulename = _modname(filename)
+                else:
+                    modulename = _fullmodname(filename)
 
-            source = linecache.getlines(filename)
-            coverpath = coverdir
-            n_hits, n_lines = self.write_results_file(
-                coverpath, source, filename, count
-            )
-            if summary and n_lines:
-                percent = int(100 * n_hits / n_lines)
-                sums[modulename] = n_lines, percent, modulename, filename
+                source = linecache.getlines(filename)
+                n_hits, n_lines = self.write_results_file(
+                    coverdir, source, filename, count
+                )
+                if summary and n_lines:
+                    percent = int(100 * n_hits / n_lines)
+                    sums[modulename] = n_lines, percent, modulename, filename
 
         if summary and sums:
             print("lines   cov%   module   (path)")
@@ -611,38 +609,37 @@ class CoverageResults:
         """Return a coverage results file in path."""
         # ``lnotab`` is a dict of executable lines, or a line number "table"
 
-        with FileLock(path):
-            try:
-                outfile = open(path, "a", encoding="utf-8")
-            except OSError as err:
-                print(
-                    (
-                        "trace: Could not open %r for writing: %s "
-                        "- skipping" % (path, err)
-                    ),
-                    file=sys.stderr,
-                )
-                return 0, 0
+        try:
+            outfile = open(path, "a", encoding="utf-8")
+        except OSError as err:
+            print(
+                (
+                    "trace: Could not open %r for writing: %s "
+                    "- skipping" % (path, err)
+                ),
+                file=sys.stderr,
+            )
+            return 0, 0
 
-            n_lines = 0
-            n_hits = 0
-            with outfile:
-                n_d = {}
-                for line in _find_executable_linenos(file):
-                    n_lines += 1
-                    if line in lines_hit:
-                        n_hits += 1
-                        n_d[line] = lines_hit[line]
-                    else:
-                        n_d[line] = 0
-                outfile.write(
-                    json.dumps(
-                        {file: n_d}
-                    )
+        n_lines = 0
+        n_hits = 0
+        with outfile:
+            n_d = {}
+            for line in _find_executable_linenos(file):
+                n_lines += 1
+                if line in lines_hit:
+                    n_hits += 1
+                    n_d[line] = lines_hit[line]
+                else:
+                    n_d[line] = 0
+            outfile.write(
+                json.dumps(
+                    {file: n_d}
                 )
-                outfile.write("\n")
+            )
+            outfile.write("\n")
 
-            return n_hits, n_lines
+        return n_hits, n_lines
 
 
 def _find_all_lines_of_stmt_in_line(file, lines_hit: dict):
