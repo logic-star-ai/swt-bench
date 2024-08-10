@@ -1106,7 +1106,7 @@ def main():
     opts.include_module = [
         mod.strip() for i in opts.include_module for mod in i.split(",")
     ]
-    opts.include_patterns = [re.compile(pat) for pat in opts.include_pattern]
+    opts.include_patterns = opts.include_pattern
     opts.ignore_dir = [
         parse_dir(s) for i in opts.ignore_dir for s in i.split(os.pathsep)
     ]
