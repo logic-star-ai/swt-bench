@@ -148,7 +148,7 @@ def parse_log_seaborn(log: str) -> dict[str, str]:
             test_status_map[test_case] = TestStatus.PASSED.value
     return test_status_map
 
-sympy_error_pattern = re.compile(r"_\n(_*) (.*)\.py:(.*) (_*)", flags=re.MULTILINE)
+sympy_error_pattern = re.compile(r"_\n(_*) (.*)\.py::?(.*) (_*)", flags=re.MULTILINE)
 sympy_test_pattern = re.compile(r"test_([^\s]*)\s+(E|F|ok)")
 sympy_status_map = {
     "E": TestStatus.ERROR.value,
