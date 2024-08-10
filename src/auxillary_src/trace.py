@@ -374,62 +374,6 @@ class _Ignore:
         return 0
 
 
-class _Include:
-    def __init__(self, modules=None, dirs=None, patterns=None):
-        self._mods = set() if not modules else set(modules)
-        self._dirs = [] if not dirs else [os.path.abspath(d) for d in dirs]
-        self._patterns = [] if not patterns else patterns
-        self._include = {}
-
-    def names(self, filename, modulename):
-        if modulename in self._include:
-            return self._include[modulename]
-
-        # check if the pattern matches
-        for pattern in self._patterns:
-            if pattern.match(modulename) or pattern.match(filename):
-                self._include[modulename] = 1
-                return 1
-
-        # haven't seen this one before, so see if the module name is
-        # on the include list.
-        if modulename in self._mods:  # Identical names, so include
-            self._include[modulename] = 1
-            return 1
-
-        # check if the module is a proper submodule of something on
-        # the include list
-        for mod in self._mods:
-            # Need to take some care since ignoring
-            # "cmp" mustn't mean ignoring "cmpcache" but including
-            # "Spam" must also mean ignoring "Spam.Eggs".
-            if modulename.startswith(mod + "."):
-                self._include[modulename] = 1
-                return 1
-
-        # Now check that filename isn't in one of the directories
-        if filename is None:
-            # must be a built-in, so we must ignore
-            self._include[modulename] = 0
-            return 0
-
-        # Include a file when it contains one of the includable paths
-        norm_filename = os.path.abspath(filename)
-        for d in self._dirs:
-            # The '+ os.sep' is to ensure that d is a parent directory,
-            # as compared to cases like:
-            #  d = "/usr/local"
-            #  filename = "/usr/local.py"
-            # or
-            #  d = "/usr/local.py"
-            #  filename = "/usr/local.py"
-            if norm_filename.startswith(d + os.sep):
-                self._include[modulename] = 1
-                return 1
-
-        # Tried the different ways, so we don't include this module
-        self._include[modulename] = 0
-        return 0
 
 
 def _modname(path):
@@ -1059,9 +1003,8 @@ def main():
 
     opts = parser.parse_args()
 
-    if opts.ignore_dir or opts.include_dir:
-        _prefix = sysconfig.get_path("stdlib")
-        _exec_prefix = sysconfig.get_path("platstdlib")
+    _prefix = sysconfig.get_path("stdlib")
+    _exec_prefix = sysconfig.get_path("platstdlib")
 
     def parse_dir(s):
         s = os.path.expanduser(os.path.expandvars(s))
