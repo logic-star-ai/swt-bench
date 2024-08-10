@@ -779,8 +779,7 @@ class Trace:
         """
         self.infile = infile
         self.outfile = outfile
-        self.include = _Include(includemods, includedirs, includepatterns)
-        self.ignore = _Ignore(ignoremods, ignoredirs)
+        self.include = re.compile("|".join(includepatterns))
         self.counts = {}  # keys are (filename, linenumber)
         self.pathtobasename = {}  # for memoizing os.path.basename
         self.donothing = 0
@@ -898,26 +897,12 @@ class Trace:
         else returns self.localtrace.
         """
         if why == "call":
-            code = frame.f_code
             filename = frame.f_globals.get("__file__", None)
-            if filename:
-                # XXX _modname() doesn't work right for packages, so
-                # the ignore support won't work right for packages
-                modulename = _modname(filename)
-                if modulename is not None:
-                    include_it = self.include.names(filename, modulename)
-                    ignore_it = self.ignore.names(filename, modulename)
-                    if include_it and not ignore_it:
-                        if self.trace:
-                            print(
-                                (
-                                    " --- modulename: %s, funcname: %s"
-                                    % (modulename, code.co_name)
-                                )
-                            )
-                        return self.localtrace
-            else:
-                return None
+            if filename is not None:
+                include_it = self.include.fullmatch(filename)
+                if include_it:
+                    return self.localtrace
+        return None
 
     def localtrace_trace_and_count(self, frame, why, arg):
         if why == "line":
