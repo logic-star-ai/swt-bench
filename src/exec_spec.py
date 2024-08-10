@@ -20,7 +20,7 @@ from src.dockerfiles import (
 )
 from src.utils import (
     get_environment_yml_by_commit,
-    get_requirements_by_commit,
+    get_requirements_by_commit, extract_changed_files,
 )
 
 DIFF_MODIFIED_FILE_REGEX = r"--- a/(.*)"
@@ -39,6 +39,7 @@ class ExecSpec:
     arch: str
     base_commit: str
     test_directives: Optional[List[str]]
+    coverage_files: Optional[List[str]]
     env_name: str
 
     run_id: str = None
@@ -76,7 +77,8 @@ class ExecSpec:
             return test_command
 
         trace_path = "/root/trace.py"
-        trace_pattern = f"python3 {trace_path} --count -C coverage.cover --include-pattern '/testbed/.*'"
+        changed_files_pattern = "({})".format("|".join(re.escape(x) for x in self.coverage_files))
+        trace_pattern = f"python3 {trace_path} --count -C coverage.cover --include-pattern '/testbed/.*{changed_files_pattern}'"
 
         cleaned_test_cmd = test_command.replace("--tb=no", "")
 
@@ -372,6 +374,8 @@ def make_exec_spec(instance: SWEbenchInstance) -> ExecSpec:
     else:
         arch = "x86_64"
 
+    changed_files = extract_changed_files(instance["golden_code_patch"])
+
     return ExecSpec(
         instance_id=instance_id,
         repo=repo,
@@ -381,5 +385,6 @@ def make_exec_spec(instance: SWEbenchInstance) -> ExecSpec:
         version=version,
         arch=arch,
         test_directives=test_directives,
-        patch_list=patch_list
+        patch_list=patch_list,
+        coverage_files=changed_files,
     )
