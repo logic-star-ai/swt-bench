@@ -247,6 +247,13 @@ def get_test_directives(test_patch: str, repo: str) -> list:
 
     return directives
 
+def extract_changed_files(patch: str) -> List[str]:
+    # Get changed files from patch
+    diff_pat = r"diff --git a/(.*) b/(.*)"
+    files = re.findall(diff_pat, patch)
+    files = list(set(sum(files, ())))
+    return files
+
 
 def link_image_build_dir(log_dir: Path, instance_image_key: str):
     # Link the image build dir in the log dir

@@ -600,3 +600,42 @@ DO *NOT* COMMIT!
         self.assertEqual(res.get("test_ccode_sinc"), "FAILED")
         self.assertEqual(res.get("test_ccode_For"), "PASSED")
         self.assertEqual(res.get("sympy/printing/tests/test_ccode"), None)
+        
+    def test_parse_sympy_log_1(self):
+        log = """\
+============================= test process starts ==============================
+executable:         /opt/miniconda3/envs/testbed/bin/python3  (3.9.19-final-0) [CPython]
+architecture:       64-bit
+cache:              no
+ground types:       python 
+numpy:              None
+random seed:        9713485
+hash randomization: on (PYTHONHASHSEED=4179724166)
+
+sympy/physics/units/tests/test_prefixes.py[4] 
+test_prefix_operations F
+test_prefix_unit ok
+test_bases ok
+test_repr ok                                                              [FAIL]
+
+
+________________________________________________________________________________
+______ sympy/physics/units/tests/test_prefixes.py::test_prefix_operations ______
+Traceback (most recent call last):
+  File "/testbed/sympy/physics/units/tests/test_prefixes.py", line 20, in test_prefix_operations
+    assert m * k is S.One
+AssertionError
+
+============= tests finished: 3 passed, 1 failed, in 0.94 seconds ==============
+DO *NOT* COMMIT!
+    """
+        res = parse_log_sympy(log)
+        self.assertDictEqual(
+            {
+                "test_prefix_operations": "FAILED",
+                "test_repr": "PASSED",
+                "test_bases": "PASSED",
+                "test_prefix_unit": "PASSED",
+            },
+            res,
+        )

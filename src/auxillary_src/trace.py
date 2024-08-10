@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import time
+from types import FunctionType
 
 # Main Code adapted from python standard library trace module
 # Source code: https://github.com/python/cpython/blob/3.12/Lib/trace.py
@@ -140,6 +141,9 @@ def patch_subprocess(viz_args):
 
             # -pyopts
             py_args.append(arg)
+            if arg in ("-X", "-W", "--check-hash-based-pycs"):
+                # -X dev
+                py_args.append(next(args_iter, None))
 
         if script:
             return [sys.executable, *py_args, __file__, *viz_args, script, *args_iter]
@@ -374,62 +378,6 @@ class _Ignore:
         return 0
 
 
-class _Include:
-    def __init__(self, modules=None, dirs=None, patterns=None):
-        self._mods = set() if not modules else set(modules)
-        self._dirs = [] if not dirs else [os.path.abspath(d) for d in dirs]
-        self._patterns = [] if not patterns else patterns
-        self._include = {}
-
-    def names(self, filename, modulename):
-        if modulename in self._include:
-            return self._include[modulename]
-
-        # check if the pattern matches
-        for pattern in self._patterns:
-            if pattern.match(modulename) or pattern.match(filename):
-                self._include[modulename] = 1
-                return 1
-
-        # haven't seen this one before, so see if the module name is
-        # on the include list.
-        if modulename in self._mods:  # Identical names, so include
-            self._include[modulename] = 1
-            return 1
-
-        # check if the module is a proper submodule of something on
-        # the include list
-        for mod in self._mods:
-            # Need to take some care since ignoring
-            # "cmp" mustn't mean ignoring "cmpcache" but including
-            # "Spam" must also mean ignoring "Spam.Eggs".
-            if modulename.startswith(mod + "."):
-                self._include[modulename] = 1
-                return 1
-
-        # Now check that filename isn't in one of the directories
-        if filename is None:
-            # must be a built-in, so we must ignore
-            self._include[modulename] = 0
-            return 0
-
-        # Include a file when it contains one of the includable paths
-        norm_filename = os.path.abspath(filename)
-        for d in self._dirs:
-            # The '+ os.sep' is to ensure that d is a parent directory,
-            # as compared to cases like:
-            #  d = "/usr/local"
-            #  filename = "/usr/local.py"
-            # or
-            #  d = "/usr/local.py"
-            #  filename = "/usr/local.py"
-            if norm_filename.startswith(d + os.sep):
-                self._include[modulename] = 1
-                return 1
-
-        # Tried the different ways, so we don't include this module
-        self._include[modulename] = 0
-        return 0
 
 
 def _modname(path):
@@ -570,28 +518,26 @@ class CoverageResults:
         # accumulate summary info, if needed
         sums = {}
 
-        # if os.path.isfile(coverdir):
-        #     os.unlink(coverdir)
-        for filename, count in per_file.items():
-            if self.is_ignored_filename(filename):
-                continue
+        with FileLock(coverdir):
+            for filename, count in per_file.items():
+                if self.is_ignored_filename(filename):
+                    continue
 
-            if filename.endswith(".pyc"):
-                filename = filename[:-1]
+                if filename.endswith(".pyc"):
+                    filename = filename[:-1]
 
-            if coverdir is None:
-                modulename = _modname(filename)
-            else:
-                modulename = _fullmodname(filename)
+                if coverdir is None:
+                    modulename = _modname(filename)
+                else:
+                    modulename = _fullmodname(filename)
 
-            source = linecache.getlines(filename)
-            coverpath = coverdir
-            n_hits, n_lines = self.write_results_file(
-                coverpath, source, filename, count
-            )
-            if summary and n_lines:
-                percent = int(100 * n_hits / n_lines)
-                sums[modulename] = n_lines, percent, modulename, filename
+                source = linecache.getlines(filename)
+                n_hits, n_lines = self.write_results_file(
+                    coverdir, source, filename, count
+                )
+                if summary and n_lines:
+                    percent = int(100 * n_hits / n_lines)
+                    sums[modulename] = n_lines, percent, modulename, filename
 
         if summary and sums:
             print("lines   cov%   module   (path)")
@@ -611,38 +557,37 @@ class CoverageResults:
         """Return a coverage results file in path."""
         # ``lnotab`` is a dict of executable lines, or a line number "table"
 
-        with FileLock(path):
-            try:
-                outfile = open(path, "a", encoding="utf-8")
-            except OSError as err:
-                print(
-                    (
-                        "trace: Could not open %r for writing: %s "
-                        "- skipping" % (path, err)
-                    ),
-                    file=sys.stderr,
-                )
-                return 0, 0
+        try:
+            outfile = open(path, "a", encoding="utf-8")
+        except OSError as err:
+            print(
+                (
+                    "trace: Could not open %r for writing: %s "
+                    "- skipping" % (path, err)
+                ),
+                file=sys.stderr,
+            )
+            return 0, 0
 
-            n_lines = 0
-            n_hits = 0
-            with outfile:
-                n_d = {}
-                for line in _find_executable_linenos(file):
-                    n_lines += 1
-                    if line in lines_hit:
-                        n_hits += 1
-                        n_d[line] = lines_hit[line]
-                    else:
-                        n_d[line] = 0
-                outfile.write(
-                    json.dumps(
-                        {file: n_d}
-                    )
+        n_lines = 0
+        n_hits = 0
+        with outfile:
+            n_d = {}
+            for line in _find_executable_linenos(file):
+                n_lines += 1
+                if line in lines_hit:
+                    n_hits += 1
+                    n_d[line] = lines_hit[line]
+                else:
+                    n_d[line] = 0
+            outfile.write(
+                json.dumps(
+                    {file: n_d}
                 )
-                outfile.write("\n")
+            )
+            outfile.write("\n")
 
-            return n_hits, n_lines
+        return n_hits, n_lines
 
 
 def _find_all_lines_of_stmt_in_line(file, lines_hit: dict):
@@ -753,11 +698,7 @@ class Trace:
         trace=1,
         countfuncs=0,
         countcallers=0,
-        includemods=(),
-        includedirs=(),
         includepatterns=(),
-        ignoremods=(),
-        ignoredirs=(),
         infile=None,
         outfile=None,
         timing=False,
@@ -782,8 +723,7 @@ class Trace:
         """
         self.infile = infile
         self.outfile = outfile
-        self.include = _Include(includemods, includedirs, includepatterns)
-        self.ignore = _Ignore(ignoremods, ignoredirs)
+        self.include = re.compile("|".join(includepatterns))
         self.counts = {}  # keys are (filename, linenumber)
         self.pathtobasename = {}  # for memoizing os.path.basename
         self.donothing = 0
@@ -800,14 +740,14 @@ class Trace:
         elif countfuncs:
             self.globaltrace = self.globaltrace_countfuncs
         elif trace and count:
-            self.globaltrace = self.globaltrace_lt
             self.localtrace = self.localtrace_trace_and_count
+            self.globaltrace = self.mk_globaltrace_lt()
         elif trace:
-            self.globaltrace = self.globaltrace_lt
             self.localtrace = self.localtrace_trace
+            self.globaltrace = self.mk_globaltrace_lt()
         elif count:
-            self.globaltrace = self.globaltrace_lt
             self.localtrace = self.localtrace_count
+            self.globaltrace = self.mk_globaltrace_lt()
         else:
             # Ahem -- do nothing?  Okay.
             self.donothing = 1
@@ -894,33 +834,29 @@ class Trace:
             this_func = self.file_module_function_of(frame)
             self._calledfuncs[this_func] = 1
 
-    def globaltrace_lt(self, frame, why, arg):
-        """Handler for call events.
+    def mk_globaltrace_lt(self):
+        globaltrace_lt_code = """
+def globaltrace_lt(frame, why, arg):
+    \"""Handler for call events.
 
-        If the code block being entered is to be ignored, returns `None',
-        else returns self.localtrace.
+    If the code block being entered is to be ignored, returns `None',
+    else returns self.localtrace.
+    \"""
+    if why == "call":
+        filename = frame.f_globals.get("__file__", None)
+        if filename is not None:
+            include_it = include.fullmatch(filename)
+            if include_it:
+                return localtrace
+    return None
         """
-        if why == "call":
-            code = frame.f_code
-            filename = frame.f_globals.get("__file__", None)
-            if filename:
-                # XXX _modname() doesn't work right for packages, so
-                # the ignore support won't work right for packages
-                modulename = _modname(filename)
-                if modulename is not None:
-                    include_it = self.include.names(filename, modulename)
-                    ignore_it = self.ignore.names(filename, modulename)
-                    if include_it and not ignore_it:
-                        if self.trace:
-                            print(
-                                (
-                                    " --- modulename: %s, funcname: %s"
-                                    % (modulename, code.co_name)
-                                )
-                            )
-                        return self.localtrace
-            else:
-                return None
+        globaltrace_lt_func = compile(globaltrace_lt_code, "<string>", "exec", optimize=2).co_consts[0]
+        globaltrace_lt_globs = globals()
+        globaltrace_lt_globs["include"] = self.include
+        globaltrace_lt_globs["localtrace"] = self.localtrace
+        globaltrace_lt_name = "globaltrace_lt"
+        globaltrace = FunctionType(globaltrace_lt_func, globaltrace_lt_globs, globaltrace_lt_name)
+        return globaltrace
 
     def localtrace_trace_and_count(self, frame, why, arg):
         if why == "line":
@@ -1060,36 +996,6 @@ def main():
 
     grp = parser.add_argument_group("Filters", "Can be specified multiple times")
     grp.add_argument(
-        "--ignore-module",
-        action="append",
-        default=[],
-        help="Ignore the given module(s) and its submodules "
-        "(if it is a package). Accepts comma separated list of "
-        "module names.",
-    )
-    grp.add_argument(
-        "--ignore-dir",
-        action="append",
-        default=[],
-        help="Ignore files in the given directory "
-        "(multiple directories can be joined by os.pathsep).",
-    )
-    grp.add_argument(
-        "--include-module",
-        action="append",
-        default=[],
-        help="Include the given module(s) and its submodules "
-        "(if it is a package). Accepts comma separated list of "
-        "module names.",
-    )
-    grp.add_argument(
-        "--include-dir",
-        action="append",
-        default=[],
-        help="Include files in the given directory "
-        "(multiple directories can be joined by os.pathsep).",
-    )
-    grp.add_argument(
         "--include-pattern",
         action="append",
         default=[],
@@ -1109,28 +1015,10 @@ def main():
 
     opts = parser.parse_args()
 
-    if opts.ignore_dir or opts.include_dir:
-        _prefix = sysconfig.get_path("stdlib")
-        _exec_prefix = sysconfig.get_path("platstdlib")
+    _prefix = sysconfig.get_path("stdlib")
+    _exec_prefix = sysconfig.get_path("platstdlib")
 
-    def parse_dir(s):
-        s = os.path.expanduser(os.path.expandvars(s))
-        s = s.replace("$prefix", _prefix).replace("$exec_prefix", _exec_prefix)
-        return os.path.abspath(s)
-
-    opts.ignore_module = [
-        mod.strip() for i in opts.ignore_module for mod in i.split(",")
-    ]
-    opts.include_module = [
-        mod.strip() for i in opts.include_module for mod in i.split(",")
-    ]
-    opts.include_patterns = [re.compile(pat) for pat in opts.include_pattern]
-    opts.ignore_dir = [
-        parse_dir(s) for i in opts.ignore_dir for s in i.split(os.pathsep)
-    ]
-    opts.include_dir = [
-        parse_dir(s) for i in opts.include_dir for s in i.split(os.pathsep)
-    ]
+    opts.include_patterns = opts.include_pattern
 
     if opts.report:
         if not opts.file:
@@ -1162,17 +1050,14 @@ def main():
             parser.error("must specify -m or -c before the module or command")
         # pop the cmd and module arguments
         args = args[:-1]
+    print(args)
 
     t = Trace(
         opts.count,
         opts.trace,
         countfuncs=opts.listfuncs,
         countcallers=opts.trackcalls,
-        ignoremods=opts.ignore_module,
-        ignoredirs=opts.ignore_dir,
         includepatterns=opts.include_patterns,
-        includemods=opts.include_module,
-        includedirs=opts.include_dir,
         infile=opts.file,
         outfile=opts.file,
         timing=opts.timing,
