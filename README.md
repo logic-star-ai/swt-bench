@@ -54,9 +54,10 @@ The final evaluation results will be stored in the `evaluation_results` director
 
 
 ## ⬇️ Downloads
-| Datasets | 
-| - |
-| TBD |
+| Prompt Format | SWT-bench                                                                     | SWT-bench_Lite                                                                     |
+|---------------|-------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
+| ZeroShotBase  | [Download](https://huggingface.co/datasets/nmuendler/SWT-bench_bm25_27k_zsb/) | [Download](https://huggingface.co/datasets/nmuendler/SWT-bench_Lite_bm25_27k_zsb/) |             
+| ZeroShotPlus  | [Download](https://huggingface.co/datasets/nmuendler/SWT-bench_bm25_27k_zsp/) | [Download](https://huggingface.co/datasets/nmuendler/SWT-bench_Lite_bm25_27k_zsp/) |             
 
 ## 🏗 Building SWT-Bench and Zero-Shot inference
 
