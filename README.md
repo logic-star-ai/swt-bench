@@ -90,7 +90,7 @@ This repo is based on the [SWE-Bench evaluation harness](https://github.com/prin
 ## ✍️ Citation
 If you find our work helpful, please use the following citations.
 ```
-@misc{mündler2024codeagentsstateart,
+@misc{muendler2024codeagentsstateart,
       title={Code Agents are State of the Art Software Testers}, 
       author={Niels Mündler and Mark Niklas Müller and Jingxuan He and Martin Vechev},
       year={2024},
