@@ -18,7 +18,7 @@ def _filter_cases():
         FILTER_CASES = set(f.read().splitlines())
     return frozenset(FILTER_CASES)
 
-def _collect_reports(model_name, run_id, instance_log_path: Path):
+def _collect_reports(model_name, run_id, instance_log_path: Path, filter_cases=True):
     run_path = instance_log_path / run_id / model_name
     reports = {}
     for dir in run_path.iterdir():
@@ -28,7 +28,7 @@ def _collect_reports(model_name, run_id, instance_log_path: Path):
         if not report.exists():
             continue
         instance_id = dir.name
-        if instance_id in _filter_cases():
+        if filter_cases and instance_id in _filter_cases():
             continue
         with open(report) as f:
             report_data = json.load(f)[instance_id]
@@ -39,11 +39,11 @@ def _collect_reports(model_name, run_id, instance_log_path: Path):
         reports[instance_id] = report_data
     return reports
 
-def _collect_reports_multi(model_name, run_id_pattern, instance_log_path: Path, seeds: Tuple[int]):
+def _collect_reports_multi(model_name, run_id_pattern, instance_log_path: Path, seeds: Tuple[int], filter_cases=True):
     all_reports = defaultdict(dict)
     for seed in seeds:
         run_id = run_id_pattern.format(seed=seed)
-        reports = collect_reports(model_name, run_id, instance_log_path)
+        reports = collect_reports(model_name, run_id, instance_log_path, filter_cases=filter_cases)
         for instance_id, report in reports.items():
             all_reports[instance_id][seed] = report
     return all_reports
@@ -90,12 +90,12 @@ def _select_reports_passatk(all_reports):
     return reports
 
 
-def collect_reports(model_name, run_id, instance_log_path: Path, mode: Literal["single", "libro", "p@k"] = "single", seeds: Tuple[int] = None, libro_decision_file: Path = None):
+def collect_reports(model_name, run_id, instance_log_path: Path, mode: Literal["single", "libro", "p@k"] = "single", seeds: Tuple[int] = None, libro_decision_file: Path = None, filter_cases=True):
     if mode == "single":
-        return _collect_reports(model_name, run_id, instance_log_path)
+        return _collect_reports(model_name, run_id, instance_log_path, filter_cases)
     if seeds is None:
         raise ValueError("seeds must be provided for mode 'libro' or 'p@k'")
-    all_reports = _collect_reports_multi(model_name, run_id, instance_log_path, seeds)
+    all_reports = _collect_reports_multi(model_name, run_id, instance_log_path, seeds, filter_cases)
     if mode == "p@k":
         return _select_reports_passatk(all_reports)
     if mode == "libro":
