@@ -1,3 +1,8 @@
+datasets
+evaluation_results
+inference_output
+run_instance_swt_logs
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

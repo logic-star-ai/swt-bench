@@ -23,8 +23,8 @@ dependencies = [
     'scipy',
     'editdistance',
     'GitPython',
-    'bootstrapped',
 ]
 
 [project.optional-dependencies]
 testing = ["pytest", "pytest-cov", "pytest-xdist", "GitPython", "editdistance", "git", "gitpython"]
+figures = ["tiktoken"]

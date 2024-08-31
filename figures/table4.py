@@ -16,12 +16,12 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     methods = [
         ("gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"GPT-4 Preview 1106"),
         ("mistral-large__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__mistral_large", r"Mistral Large 2"),
-        ("claude-3.5__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__s-0__c-3.00__install-1", "claude-3.5__sweap__test", "Claude 3.5 Sonnet"),
+        ("claude-3.5__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__s-0__c-3.00__install-1", "swea__claude-3.5-sonnet", "Claude 3.5 Sonnet"),
         ("gpt4o-mini__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4o-mini-2024-07-18", r"GPT-4o mini  (2024-07-18)"),
         ("claude-3-haiku-20240307__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__claude-3-haiku-20240307", r"Claude 3.0 Haiku"),
         ("mixtral8x22b__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__together_mistralai_Mixtral-8x22B-Instruct-v0.1", r"Mixtral 8x22B"),
     ]
-    gold_model, gold_run_id = "gold", "validate-gold"
+    gold_model, gold_run_id = "gold", "validate-gold-1"
     gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
     total_coverage_possible = count_coverage_delta_gold(gold_reports)
 
