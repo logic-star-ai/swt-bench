@@ -9,7 +9,7 @@ from pathlib import Path
 from figures.util import *
 from tabulate import tabulate
 
-def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = 279, format: str = "github"):
+def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = total_cases_lite, format: str = "github"):
     instance_log_path = Path(instance_log_path)
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")

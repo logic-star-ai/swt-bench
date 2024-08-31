@@ -24,9 +24,9 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset_name: str =
     resolved_instances = all_instances.copy()
     for model, run_id in methods:
         reports = collect_reports(model, run_id, instance_log_path, filter_cases=False)
-        resolved_instances &= {instance_id for instance_id, report in reports.items() if report["resolved"]}
+        resolved_instances &= {instance_id for instance_id, report in reports.items() if report["resolved"] and no_error_filter(report)}
     print(f"Resolved by all: {len(resolved_instances)}")
-    for instance in all_instances - resolved_instances:
+    for instance in sorted(all_instances - resolved_instances):
         print(instance)
 
 if __name__ == "__main__":

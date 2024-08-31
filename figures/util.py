@@ -18,6 +18,8 @@ def _filter_cases():
         FILTER_CASES = set(f.read().splitlines())
     return frozenset(FILTER_CASES)
 
+total_cases_lite = 276
+
 def _collect_reports(model_name, run_id, instance_log_path: Path, filter_cases=True):
     run_path = instance_log_path / run_id / model_name
     reports = {}
@@ -116,7 +118,7 @@ def no_error_filter(r):
     """
     if "tests_pred" not in r:
         return False
-    original_number_tests = sum(len(t) for t in r["tests_base"])
+    original_number_tests = sum(len(t) for t in r["tests_base"].values())
     tests_after_pred = sum(len(t) for t in r["tests_pred"].values())
     # if tests after pred is less than 10% of the original number of tests this counts as error
     return tests_after_pred >= 0.1*original_number_tests
