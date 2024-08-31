@@ -18,13 +18,10 @@ dependencies = [
     'python-dotenv',
     'tqdm',
     'fire',
-    'tabulate',
-    'numpy',
-    'scipy',
     'editdistance',
     'GitPython',
 ]
 
 [project.optional-dependencies]
 testing = ["pytest", "pytest-cov", "pytest-xdist", "GitPython", "editdistance", "git", "gitpython"]
-figures = ["tiktoken"]
+figures = ["tiktoken", "numpy", "tabulate", "git+https://github.com/nielstron/venny4py.git"]

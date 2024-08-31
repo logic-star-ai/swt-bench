@@ -6,7 +6,6 @@ from pathlib import Path
 import json
 
 import numpy as np
-from scipy import stats
 
 from constants import FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS
 
@@ -104,6 +103,8 @@ def collect_reports(model_name, run_id, instance_log_path: Path, mode: Literal["
         if libro_decision_file is None:
             raise ValueError("libro_decision_file must be provided for mode 'libro'")
         return _select_reports_libro(all_reports, libro_decision_file)
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
 
 def applied_count(reports):
     """
