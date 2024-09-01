@@ -14,7 +14,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
-        ("gpt-4-1106-preview", "libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl", rf"\libro {i}", "libro", [1,2,3,4,5][:i], Path("inference_output/gpt-4-1106-preview__libro__libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl__[1, 2, 3, 4, 5]__gpt-4-1106-preview__test__all__seed=0,temperature=0__test.jsonl"))
+        ("gpt-4-1106-preview", "libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl", rf"\libro {i}", "libro", [1,2,3,4,5][:i], Path("inference_output/gpt-4-1106-preview__libro__libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl__(1, 2, 3, 4, 5)__gpt-4-1106-preview__test__test.jsonl"))
         for i in range(1, 6)
     ]
     for counter, y_axis in [

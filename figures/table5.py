@@ -8,7 +8,7 @@ from pathlib import Path
 
 from figures.util import *
 
-def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_count: int = total_cases_lite):
+def main(instance_log_path: str = "./run_instance_swt_logs"):
     instance_log_path = Path(instance_log_path)
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
@@ -24,11 +24,14 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         lines = [json.loads(l) for l in f.readlines()]
     instances_with_invalid_patch = {l["instance_id"] for l in lines}
     print("sample size:", len(instances_with_invalid_patch))
+    total_instance_count = len(instances_with_invalid_patch)
+
 
     print(r"Method & {$\bc{A}$ \up{}} & {\ftx \up{}} & {\ftp \up{}} & {\ptp} \\")
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
         reports = {i: r for i, r in reports.items() if i in instances_with_invalid_patch}
+        reports = no_error_reports(reports)
         applied = 100*no_error_count(reports)/total_instance_count
         ftp = 100*ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
