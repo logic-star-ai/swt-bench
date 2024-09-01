@@ -17,10 +17,10 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
         ("gpt-4-1106-preview", "libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl", rf"\libro {i}", "libro", [1,2,3,4,5][:i], Path("inference_output/gpt-4-1106-preview__libro__libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl__(1, 2, 3, 4, 5)__gpt-4-1106-preview__test__test.jsonl"))
         for i in range(1, 6)
     ]
-    for counter, y_axis in [
-        (no_error_count, r"{$\bc{A}$ \up{}}"),
+    for counter, y_axis, color in [
+        (no_error_count, r"{$\bc{A}$ \up{}}", "myred"),
         # (ftx_count, r"{\ftx \up{}}"),
-        (ftp_count, r"{\ftp \up{}}"),
+        (ftp_count, r"{\ftp \up{}}", "myblue"),
         # (ptp_count, r"{\ptp}"),
     ]:
         print(r"""\begin{subfigure}{0.45\textwidth}
@@ -44,7 +44,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
             counted = 100*counter(reports)/total_instance_count
             coordinates.append((i+1, counted))
         print(r"""\addplot[
-                    color=blue,
+                    color=myblue,
                     mark=triangle,
                     ]
                     coordinates {

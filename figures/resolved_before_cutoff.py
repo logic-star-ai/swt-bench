@@ -17,7 +17,7 @@ MODEL_KNOWLEDGE_CUTOFF = {
     "gpt-4-1106-preview": datetime.datetime(month=4, year=2023, day=30),
 }
 
-def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./datasets/SWE-bench-balanced-2024-04-30__style-3__fs-bm25__mcc-27000-cl100k", split: str = "test", format="github"):
+def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "princeton-nlp/SWE-bench", split: str = "test", format="github"):
     instance_log_path = Path(instance_log_path)
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
@@ -31,7 +31,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "./d
     instance_timestamps = {instance["instance_id"]: datetime.datetime.strptime(instance["created_at"], "%Y-%m-%dT%H:%M:%SZ") for instance in ds[split]}
 
     gold_model, gold_run_id = "gold", "validate-gold-balanced"
-    gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
+    gold_reports = no_error_reports(collect_reports(gold_model, gold_run_id, instance_log_path))
 
     headers = (
         ["PR created", "$n$", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]

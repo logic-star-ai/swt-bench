@@ -14,10 +14,10 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
-        ("gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"\swea", "inference_output/swe-agent__gpt4__swe-bench_lite_demo3_turns.jsonl", "blue", "square"),
-        ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "sweap__gpt-4-1106-preview", r"\sweap", "inference_output/swe-agent__gpt4__swe-bench_lite_demo4_turns.jsonl", "red", "triangle"),
-        ("gpt-4-1106-preview", "acr__gpt-4-1106-preview", r"\acr", "inference_output/acr__gpt4__swe-bench_lite__test_turns.jsonl", "green", "diamond"),
-        ("aider--gpt-4-1106-preview", "aider_gpt-4-1106-preview", r"\aider", "inference_output/aider__swt-bench_lite__test__turns.jsonl", "black", "circle"),
+        ("gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"\swea", "inference_output/swe-agent__gpt4__swe-bench_lite_demo3_turns.jsonl", r"myblue", "square"),
+        ("gpt4__SWE-bench_Lite__default_test_demo4__t-0.00__p-0.95__c-3.00__install-1", "sweap__gpt-4-1106-preview", r"\sweap", "inference_output/swe-agent__gpt4__swe-bench_lite_demo4_turns.jsonl", r"myred", "triangle"),
+        ("gpt-4-1106-preview", "acr__gpt-4-1106-preview", r"\acr", "inference_output/acr__gpt4__swe-bench_lite__test_turns.jsonl", r"mygreen", "diamond"),
+        ("aider--gpt-4-1106-preview", "aider_gpt-4-1106-preview", r"\aider", "inference_output/aider__swt-bench_lite__test__turns.jsonl", r"myyellow", "circle"),
     ]
 
     for counter, y_axis in [

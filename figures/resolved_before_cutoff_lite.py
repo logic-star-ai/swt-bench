@@ -15,7 +15,7 @@ from figures.util import *
 
 MODEL_KNOWLEDGE_CUTOFF = {
     "gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1": datetime.datetime(month=4, year=2023, day=30),
-    "mistral-large__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__s-0__c-3.00__install-1": datetime.datetime(month=1, year=2024, day=31),
+    "mistral-large__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1": datetime.datetime(month=1, year=2024, day=31),
     "claude-3.5__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__s-0__c-3.00__install-1": datetime.datetime(month=4, year=2024, day=30),
     "gpt4o-mini__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1": datetime.datetime(month=10, year=2023, day=31),
     "claude-3-haiku-20240307__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1": datetime.datetime(month=8, year=2023, day=31),
@@ -29,8 +29,8 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "pri
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
         ("gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4-1106-preview", r"GPT-4 Preview 1106"),
-        ("mistral-large__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__s-0__c-3.00__install-1", "swea__mistral_large", r"Mistral Large 2"),
-        ("claude-3.5__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__s-0__c-3.00__install-1", "claude-3.5__sweap__test", "Claude 3.5 Sonnet"),
+        ("mistral-large__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__mistral_large", r"Mistral Large 2"),
+        ("claude-3.5__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__s-0__c-3.00__install-1", "swea__claude-3.5-sonnet", "Claude 3.5 Sonnet"),
         ("gpt4o-mini__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__gpt-4o-mini-2024-07-18", r"GPT-4o mini  (2024-07-18)"),
         ("claude-3-haiku-20240307__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__claude-3-haiku-20240307", r"Claude 3.0 Haiku"),
         ("mixtral8x22b__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1", "swea__together_mistralai_Mixtral-8x22B-Instruct-v0.1", r"Mixtral 8x22B"),
@@ -41,7 +41,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "pri
         ds = datasets.load_from_disk(dataset)
     instance_timestamps = {instance["instance_id"]: datetime.datetime.strptime(instance["created_at"], "%Y-%m-%dT%H:%M:%SZ") for instance in ds[split]}
 
-    gold_model, gold_run_id = "gold", "validate-gold"
+    gold_model, gold_run_id = "gold", "validate-gold-1"
     all_gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
 
     headers = (

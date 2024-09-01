@@ -1,6 +1,5 @@
 """
-Method vs Applicability, FtX, FtP and PtP
-main
+Temperature ablation for gpt4
 """
 
 from tabulate import tabulate
@@ -15,12 +14,12 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     methods = [
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0,n=5__test._{seed}", r"0", [0,1,2,3,4]),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.2,n=5__test._{seed}", r"0.2", [0,1,2,3,4]),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.4,n=5__test._{seed}", r"0.4", [0,1,2,3,4]),
-        ("gpt-4o-mini-2024-07-18", "gpt-4o-mini-2024-07-18__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"0.7", [0,1,2,3,4]),
+        ("gpt-4-1106-preview", "zsp__gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0", r"0", [0]),
+        ("gpt-4-1106-preview", "gpt-4-1106-preview__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.2,n=25__test._{seed}", r"0.2", range(11)),
+        ("gpt-4-1106-preview", "gpt-4-1106-preview__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.4,n=25__test._{seed}", r"0.4", range(11)),
+        ("gpt-4-1106-preview", "gpt-4-1106-preview__swt_bench_lite_aug1_bm25_27k_cl100k_selfmade__seed=0,temperature=0.7,n=25__test._{seed}", r"0.7", range(11)),
     ]
-    gold_model, gold_run_id = "gold", "validate-gold"
+    gold_model, gold_run_id = "gold", "validate-gold-1"
     gold_reports = collect_reports(gold_model, gold_run_id, instance_log_path)
 
     headers = (
