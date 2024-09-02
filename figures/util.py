@@ -8,14 +8,18 @@ import json
 import numpy as np
 
 from constants import FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS
+import difflib
 
-FILTER_FILE = "dataset/filter_cases.txt"
+FILTER_FILE = "dataset/filter_cases_lite.txt"
+FILTER_FILE_FULL = "dataset/filter_cases_full.txt"
 
 @functools.lru_cache(maxsize=1)
 def _filter_cases():
-    with open(FILTER_FILE) as f:
-        FILTER_CASES = set(f.read().splitlines())
-    return frozenset(FILTER_CASES)
+    filter_cases = set()
+    for file in [FILTER_FILE, FILTER_FILE_FULL]:
+        with open(file) as f:
+            filter_cases.update(f.read().splitlines(keepends=False))
+    return frozenset(filter_cases)
 
 total_cases_lite = 276
 
@@ -221,3 +225,10 @@ def with_error_bars(data, z=1.96):
 
 def reports_to_array(gold_reports, reports):
     return np.array([100 if k in reports else 0 for k in sorted(gold_reports.keys())])
+
+def load_diff(instance, model, run_id, instance_log_path):
+    diff_path = instance_log_path / run_id / f"pred_post__{model}" / instance / "model_patch.diff"
+    if diff_path.exists():
+        with open(diff_path) as f:
+            return f.read()
+    return None

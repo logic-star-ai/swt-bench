@@ -17,10 +17,17 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset_name: str =
     instance_log_path = Path(instance_log_path)
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
-    methods = [
-        ("gold", f"validate-gold-{i}")
-        for i in range(1, 6)
-    ]
+    if dataset_name == "princeton-nlp/SWE-bench_Lite":
+        methods = [
+            ("gold", f"validate-gold-{i}")
+            for i in range(1, 6)
+        ]
+    elif dataset_name == "princeton-nlp/SWE-bench":
+        methods = [
+            ("gold", "validate-full-gold")
+        ]
+    else:
+        raise ValueError(f"Unknown dataset {dataset_name}")
     resolved_instances = all_instances.copy()
     for model, run_id in methods:
         reports = collect_reports(model, run_id, instance_log_path, filter_cases=False)

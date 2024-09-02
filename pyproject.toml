@@ -23,5 +23,5 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-testing = ["pytest", "pytest-cov", "pytest-xdist", "GitPython", "editdistance", "git", "gitpython"]
-figures = ["tiktoken", "numpy", "tabulate", "git+https://github.com/nielstron/venny4py.git"]
+testing = ["pytest", "pytest-cov", "pytest-xdist", "git"]
+figures = ["tiktoken", "numpy", "tabulate", "git+https://github.com/nielstron/venny4py.git", "nltk"]
