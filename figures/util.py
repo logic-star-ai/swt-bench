@@ -232,3 +232,6 @@ def load_diff(instance, model, run_id, instance_log_path):
         with open(diff_path) as f:
             return f.read()
     return None
+
+def repo_from_instance_id(instance_id):
+    return instance_id.split("__")[1].split("-")[0]

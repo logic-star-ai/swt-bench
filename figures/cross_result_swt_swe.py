@@ -2,13 +2,14 @@ import json
 import sys
 
 import fire
+import requests
 
 from figures.util import *
 
-def main(swe_bench_results: str = "results/experiments-swe-bench/20240402_sweagent_gpt4/results/results.json", instance_log_path: str = "./run_instance_swt_logs"):
+def main(swe_bench_results: str = "https://raw.githubusercontent.com/swe-bench/experiments/main/evaluation/lite/20240402_rag_gpt4/results/results.json", instance_log_path: str = "./run_instance_swt_logs"):
     instance_log_path = Path(instance_log_path)
 
-    raw_swe_bench_ress = json.load(open(swe_bench_results))
+    raw_swe_bench_ress = requests.get(swe_bench_results).json()
     swe_bench_resolved = raw_swe_bench_ress["resolved"]
     swe_bench_applied = raw_swe_bench_ress["applied"]
 

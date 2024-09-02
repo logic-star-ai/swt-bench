@@ -13,7 +13,9 @@ from unidiff import PatchSet
 import tabulate
 
 table_rows = {
-    "len_issues": "\# Words",
+    "len_issues": r"\# Words",
+    "files": r"\# Files",
+    "lines": r"\# Lines",
     "base_ftp": r"\# \ftp",
     "base_ftf": r"\# \ftf",
     "base_ptp": r"\# \ptp",
@@ -35,10 +37,15 @@ def main(
     instance_log_path: str = "run_instance_swt_logs",
     dataset: str = "princeton-nlp/SWE-bench",
     split: str = "test",
+    path_to_line_counts: str = "counted_lines_files.jsonl",
     format="github",
 ):
     instance_log_path = Path(instance_log_path)
     model, run_id = ("gold", "validate-full-gold")
+
+    with open(path_to_line_counts) as f:
+        line_counts = [json.loads(l) for l in f.readlines()]
+    line_counts = {lc["instance_id"]: lc for lc in line_counts}
 
     reports = collect_reports(model, run_id, instance_log_path)
     dataset = load_dataset(dataset)
@@ -75,16 +82,20 @@ def main(
             patchset = PatchSet(patch)
             measures["gold_edited_files"].append(len(patchset))
             measures["gold_edited_lines"].append(sum(file.added + file.removed for file in patchset))
+        measures["lines"].append(line_counts[instance_id]["num_lines"])
+        measures["files"].append(line_counts[instance_id]["num_files"])
     avg = lambda x: sum(x) / len(x) if x else "-"
     max_f = lambda x: max(x) if x else "-"
     headers = ["", "Mean", "Max"]
     rows = []
     for key, label in table_rows.items():
         values = measures[key]
-        if key != "base_coverage":
-            rows.append([label, f"{avg(values):.1f}", f"{max_f(values):.0f}"])
-        else:
+        if key == "base_coverage":
             rows.append([label, f"{avg(values):.1%}", f"{max_f(values):.0%}"])
+        if key == "lines":
+            rows.append([label, f"{avg(values)/1000:.0f}K", f"{max_f(values)/1000:.0f}K"])
+        else:
+            rows.append([label, f"{avg(values):.1f}", f"{max_f(values):.0f}"])
     print(tabulate.tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
 

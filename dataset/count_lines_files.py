@@ -6,6 +6,7 @@ import pathlib
 import subprocess
 
 from datasets import load_dataset
+from tqdm import tqdm
 
 
 def clone_repo(example, tmp_dir):
@@ -17,6 +18,7 @@ def clone_repo(example, tmp_dir):
     subprocess.run(["bash", "-c",
                     f"cd {tmp_dir}/{repo_name} && git reset && git stash && git clean -fdx && git checkout {example['base_commit']}"],
                    check=True, capture_output=True)
+    return f"{tmp_dir}/{repo_name}"
 
 def count_lines_files(dir):
     """
@@ -29,7 +31,10 @@ def count_lines_files(dir):
             if file.endswith(".py"):
                 num_files += 1
                 with open(os.path.join(root, file)) as f:
-                    num_lines += len(f.readlines())
+                    try:
+                        num_lines += len(f.readlines())
+                    except UnicodeDecodeError:
+                        pass
     return num_files, num_lines
 
 def main(dataset_name: str = "princeton-nlp/SWE-bench", tmp_dir: str = "/tmp", out_file: str = "counted_lines_files.jsonl"):
@@ -42,12 +47,12 @@ def main(dataset_name: str = "princeton-nlp/SWE-bench", tmp_dir: str = "/tmp", o
 
     dataset = load_dataset(dataset_name)
     with open(out_file, "a") as f:
-        for example in dataset["test"]:
+        for example in tqdm(dataset["test"]):
             if example["instance_id"] in processed_instances:
                 continue
-            clone_repo(example, tmp_dir)
-            num_files, num_lines = count_lines_files(tmp_dir)
-            print(json.dumps({"num_files": num_files, "num_lines": num_lines, "instance_id": example["instance_id"]}), file=f)
+            repo_dir = clone_repo(example, tmp_dir)
+            num_files, num_lines = count_lines_files(repo_dir)
+            print(json.dumps({"num_files": num_files, "num_lines": num_lines, "instance_id": example["instance_id"]}), file=f, flush=True)
 
 if __name__ == '__main__':
     fire.Fire(main)
