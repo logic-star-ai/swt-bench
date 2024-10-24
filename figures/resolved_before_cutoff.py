@@ -34,7 +34,7 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "pri
     gold_reports = no_error_reports(collect_reports(gold_model, gold_run_id, instance_log_path))
 
     headers = (
-        ["PR created", "$n$", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]
+        ["PR created", "$n$", r"{$\bc{A}$ \up{}}", r"{\suc \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}", r"{$\dc^{\text{all}}$ }"]
         if format.startswith("latex") else
         ["PR created", "n", "Applicable", "F2X", "F2P", "P2P", "Coverage"]
     )
@@ -53,10 +53,11 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset: str = "pri
             applicable = 100*no_error_count(pred_reports)/len(gold_reports)
             ftx = 100*ftx_count(pred_reports)/len(gold_reports)
             resolved = 100*ftp_count(pred_reports)/len(gold_reports)
+            ftp = 100*actual_ftp_count(pred_reports)/len(gold_reports)
             ptp = 100*ptp_count(pred_reports)/len(gold_reports)
             total_coverage_possible = count_coverage_delta_gold(gold_reports)
             total_coverage_delta = 100 * sum_coverage_delta(reports) / total_coverage_possible
-            rows.append([f"{cutoff_relation}", len(gold_reports), applicable, ftx, resolved, ptp, total_coverage_delta])
+            rows.append([f"{cutoff_relation}", len(gold_reports), applicable, resolved, ftx, ftp, ptp, total_coverage_delta])
     print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
 if __name__ == "__main__":

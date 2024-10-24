@@ -146,6 +146,24 @@ def ftp_count(reports):
 def ftp_reports(reports):
     return {instance_id: report for instance_id, report in reports.items() if report["resolved"]}
 
+def get_actual_ftp(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> int:
+    """
+    Determine resolved status of an evaluation instance
+
+    """
+    base_f2p = set(report_base[FAIL_TO_PASS])
+    pred_f2p = set(report_pred[FAIL_TO_PASS])
+
+    added_ftp = pred_f2p.difference(base_f2p)
+
+    return bool(added_ftp)
+
+def actual_ftp_count(reports):
+    return sum(get_actual_ftp(r["tests_pred"], r["tests_base"]) for r in reports.values() if "tests_pred" in r)
+
+def actual_ftp_reports(reports):
+    return {instance_id: report for instance_id, report in reports.items() if "tests_pred" in report and get_ftp(report["tests_pred"], report["tests_base"])}
+
 def get_ftx(report_pred: dict[str, list[str]], report_base: dict[str, list[str]]) -> int:
     """
     Determine resolved status of an evaluation instance

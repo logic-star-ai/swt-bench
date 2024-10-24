@@ -26,18 +26,19 @@ def main(instance_log_path: str = "./run_instance_swt_logs", total_instance_coun
     ]
 
     headers = (
-        ["Method", r"{$\bc{A}$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}"]
+        ["Method", r"{$\mathcal{W}$ \up{}}", r"{$\suc$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}"]
         if format.startswith("latex") else
-        ["Method", "Applicability", "F2X", "F2P", "P2P"]
+        ["Method", "Applicability", "Success", "F2X", "F2P", "P2P"]
     )
     rows = []
     for model, run_id, name, *args in methods:
         reports = collect_reports(model, run_id, instance_log_path, *args)
         applied = 100*no_error_count(reports)/total_instance_count
-        ftp = 100*ftp_count(reports)/total_instance_count
+        success = 100*ftp_count(reports)/total_instance_count
+        ftp = 100*actual_ftp_count(reports)/total_instance_count
         ftx = 100*ftx_count(reports)/total_instance_count
         ptp = 100*ptp_count(reports)/total_instance_count
-        rows.append([name, applied, ftx, ftp, ptp])
+        rows.append([name, applied, success, ftx, ftp, ptp])
     print(tabulate(rows, headers=headers, tablefmt=format, floatfmt=".1f"))
 
 if __name__ == "__main__":
