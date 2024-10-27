@@ -22,9 +22,9 @@ def main(
     print("method,swe_total,swt_total,overlap")
     for method, swe_res, swt_res in [
         (
-            "ZSB",
-            "https://raw.githubusercontent.com/swe-bench/experiments/main/evaluation/lite/20240402_rag_gpt4/results/results.json",
-            ("gpt-4-1106-preview", "zsb__gpt-4-1106-preview__bm25_27k_cl100k__seed=0,temperature=0"),
+            "ZSP",
+            "figures/zsp_swe-lite_bm25_gpt4.json",
+            ("gpt-4-1106-preview", "zsp__gpt-4-1106-preview__bm25_27k_cl100k__seed=0,temperature=0"),
         ),
         (
             "SWEA",
@@ -33,7 +33,10 @@ def main(
         )
     ]:
 
-        raw_swe_bench_ress = requests.get(swe_res).json()
+        if swe_res.startswith("http"):
+            raw_swe_bench_ress = requests.get(swe_res).json()
+        else:
+            raw_swe_bench_ress = json.load(open(swe_res))
         swe_bench_ress = raw_swe_bench_ress["resolved"]
         swe_bench_ress = [res for res in swe_bench_ress if res not in _filter_cases()]
         swe_total = len(swe_bench_ress)
