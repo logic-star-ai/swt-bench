@@ -2,6 +2,8 @@ datasets
 evaluation_results
 inference_output
 run_instance_swt_logs
+agent_traces
+*.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

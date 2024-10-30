@@ -54,10 +54,25 @@ The final evaluation results will be stored in the `evaluation_results` director
 
 
 ## ⬇️ Downloads
+
+### Datasets
+
+The SWT-Bench and SWT-Bench-Lite datasets are published publicly accessible on huggingface and can be accessed using the following links. They already contain the 27k token capped context retrieved via BM25 in the prompt.
+
 | Prompt Format | SWT-bench                                                                     | SWT-bench_Lite                                                                     |
 |---------------|-------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
 | ZeroShotBase  | [Download](https://huggingface.co/datasets/nmuendler/SWT-bench_bm25_27k_zsb/) | [Download](https://huggingface.co/datasets/nmuendler/SWT-bench_Lite_bm25_27k_zsb/) |             
 | ZeroShotPlus  | [Download](https://huggingface.co/datasets/nmuendler/SWT-bench_bm25_27k_zsp/) | [Download](https://huggingface.co/datasets/nmuendler/SWT-bench_Lite_bm25_27k_zsp/) |             
+
+### Evaluation Results
+
+We provide the full traces of run code agents, the predicted patches by each method and setting and the logs of the evaluation harness.
+
+| Artifact          | Single Files                                                            | ZIP                                                                                |
+|-------------------|---------------------------------------------------------------------------|------------------------------------------------------------------------------------|
+| Agent Traces      | [Download](https://files.sri.inf.ethz.ch/swt-bench/agent_traces//) | [Download](https://files.sri.inf.ethz.ch/swt-bench/agent_traces/) |             
+| Predicted Patches | [Download](https://files.sri.inf.ethz.ch/swt-bench/inference_output/) | [Download](https://files.sri.inf.ethz.ch/swt-bench/inference_output.zip) |
+| Evaluation Harness Logs | [Download](https://files.sri.inf.ethz.ch/swt-bench/run_instance_swt_logs) | [Download](https://files.sri.inf.ethz.ch/swt-bench/run_instance_swt_logs.zip) |
 
 ## 🏗 Building SWT-Bench and Zero-Shot inference
 
