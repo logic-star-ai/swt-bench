@@ -74,6 +74,8 @@ We provide the full traces of run code agents, the predicted patches by each met
 | Predicted Patches | [Download](https://files.sri.inf.ethz.ch/swt-bench/inference_output/) | [Download](https://files.sri.inf.ethz.ch/swt-bench/inference_output.zip) |
 | Evaluation Harness Logs | [Download](https://files.sri.inf.ethz.ch/swt-bench/run_instance_swt_logs) | [Download](https://files.sri.inf.ethz.ch/swt-bench/run_instance_swt_logs.zip) |
 
+The full list of resolved instances per approach can be found [here](https://files.sri.inf.ethz.ch/swt-bench/resolved_per_approach.json).
+
 ## 🏗 Building SWT-Bench and Zero-Shot inference
 
 To recreate the SWT-Bench dataset or create one with your own flavoring
