@@ -2,6 +2,7 @@
 SWT-bench is a benchmark for evaluating large language models on testing generation for real world software issues collected from GitHub.
 Given a *codebase* and an *issue*, a language model is tasked with generating a *reproducing test* that fails in the original state of the code base and passes after a patch resolving the issue has been applied.
 
+> Check out our Paper for more details: [Code Agents are State of the Art Software Testers](https://arxiv.org/abs/2406.12952)
 
 ## 🚀 Set Up
 SWT-bench uses Docker for reproducible evaluations.
