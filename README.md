@@ -107,19 +107,19 @@ This repo is based on the [SWE-Bench evaluation harness](https://github.com/prin
 
 ## ✍️ Citation
 If you find our work helpful, please use the following citations.
-```
+```bib
 @inproceedings{
-m{\"u}ndler2024swtbench,
-title={{SWT}-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents},
-author={Niels M{\"u}ndler and Mark Niklas Mueller and Jingxuan He and Martin Vechev},
-booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
-year={2024},
-url={https://openreview.net/forum?id=9Y8zUO11EQ}
+  mundler2024swtbench,
+  title={{SWT}-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents},
+  author={Niels M{\"u}ndler and Mark Niklas Mueller and Jingxuan He and Martin Vechev},
+  booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+  year={2024},
+  url={https://openreview.net/forum?id=9Y8zUO11EQ}
 }
 ```
 
 Please also consider citing SWE-Bench which inspired our work and forms the basis of this code-base.
-```
+```bib
 @inproceedings{
     jimenez2024swebench,
     title={{SWE}-bench: Can Language Models Resolve Real-world Github Issues?},
