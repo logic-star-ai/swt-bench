@@ -2,7 +2,7 @@
 SWT-bench is a benchmark for evaluating large language models on testing generation for real world software issues collected from GitHub.
 Given a *codebase* and an *issue*, a language model is tasked with generating a *reproducing test* that fails in the original state of the code base and passes after a patch resolving the issue has been applied.
 
-> Check out our Paper for more details: [Code Agents are State of the Art Software Testers](https://arxiv.org/abs/2406.12952)
+> Check out our Paper for more details: [SWT-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents](https://openreview.net/pdf?id=9Y8zUO11EQ)
 
 ## 🚀 Set Up
 SWT-bench uses Docker for reproducible evaluations.
@@ -108,14 +108,13 @@ This repo is based on the [SWE-Bench evaluation harness](https://github.com/prin
 ## ✍️ Citation
 If you find our work helpful, please use the following citations.
 ```
-@misc{muendler2024codeagentsstateart,
-      title={Code Agents are State of the Art Software Testers}, 
-      author={Niels Mündler and Mark Niklas Müller and Jingxuan He and Martin Vechev},
-      year={2024},
-      eprint={2406.12952},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2406.12952}, 
+@inproceedings{
+m{\"u}ndler2024swtbench,
+title={{SWT}-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents},
+author={Niels M{\"u}ndler and Mark Niklas Mueller and Jingxuan He and Martin Vechev},
+booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+year={2024},
+url={https://openreview.net/forum?id=9Y8zUO11EQ}
 }
 ```
 
