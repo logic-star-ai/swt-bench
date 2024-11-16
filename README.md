@@ -1,4 +1,17 @@
+<div align="center">
+    <h1>SWT-Bench</h1>
+
+[![Build & Test](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml/badge.svg)](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml)
+   <a href="https://www.python.org/">
+        <img alt="Build" src="https://img.shields.io/badge/Python-3.9+-1f425f.svg?color=blue">
+    </a>
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+</div>
+
+
 ## 👋 Overview
+
 SWT-bench is a benchmark for evaluating large language models on testing generation for real world software issues collected from GitHub.
 Given a *codebase* and an *issue*, a language model is tasked with generating a *reproducing test* that fails in the original state of the code base and passes after a patch resolving the issue has been applied.
 
