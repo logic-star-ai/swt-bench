@@ -1,5 +1,6 @@
 import fire
 from datasets import load_dataset
+from venny4py.venny4py import venny4py
 
 from figures.util import *
 from figures.util import _filter_cases
@@ -38,15 +39,26 @@ def main(
         else:
             raw_swe_bench_ress = json.load(open(swe_res))
         swe_bench_ress = raw_swe_bench_ress["resolved"]
-        swe_bench_ress = [res for res in swe_bench_ress if res not in _filter_cases()]
-        swe_total = len(swe_bench_ress)
+        swe_total = {res for res in swe_bench_ress if res not in _filter_cases()}
 
         model, run_id = swt_res
 
         reports = collect_reports(model, run_id, instance_log_path, "single")
 
-        swt_total = ftp_reports(reports)
-        print(method, swe_total, len(swt_total), len(set(swt_total.keys() & swe_bench_ress)), sep=",")
+        swt_total = set(ftp_reports(reports).keys())
+        sets = {
+            "SWE-Bench": swe_total,
+            "SWT-Bench": swt_total,
+        }
+        venny4py(
+            sets,
+            f"overlap_{method}",
+            edge_color=None,
+            ext="pdf",
+            size=10,
+            font_size=30,
+        )
+        print(method, len(swe_total), len(swt_total), len(swt_total & swe_total), sep=",")
 
 
 if __name__ == '__main__':
