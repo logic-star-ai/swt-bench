@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>SWT-Bench</h1>
+    <h1>SWT-Bench 🐛🔍</h1>
 
 [![Build & Test](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml/badge.svg)](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml)
    <a href="https://www.python.org/">
