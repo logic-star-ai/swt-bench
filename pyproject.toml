@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "SWT-Bench"
-version = "0.0.1"
+version = "1.0.1"
 authors = [
     {name="Mark Mueller", email="mark@logicstar.ai"},
     {name="Niels Mündler", email="niels.muendler@inf.ethz.ch"},
@@ -24,5 +24,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-testing = ["pytest", "pytest-cov", "pytest-xdist", "git"]
+develop = ["pre-commit"]
+testing = ["pytest", "pytest-cov", "pytest-xdist"]
 figures = ["tiktoken", "numpy", "tabulate", "venny4py", "nltk"]
