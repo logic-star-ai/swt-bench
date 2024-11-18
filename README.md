@@ -41,6 +41,9 @@ python -m src.main \
 ```
 
 ## 💽 Usage
+
+## Running Evaluation
+
 > [!WARNING]
 > Running fast evaluations on SWT-bench can be resource intensive
 > We recommend running the evaluation harness on an `x86_64` machine with at least 120GB of free storage, 16GB of RAM, and 8 CPU cores.
@@ -65,7 +68,25 @@ This command will generate docker build logs (`image_build_logs`) and evaluation
 
 The final evaluation results will be stored in the `evaluation_results` directory.
 
+## Reporting results
 
+To assess the result of a single run, we provide a simple script to assess a single evaluation run.
+Pass it the path to your evaluation, including run_id and model to get a simple tabellaric overview.
+For example, to reproduce the results for SWE-Agent from Table 2 of the paper, we run the following command:
+
+```bash
+python3 report.py run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1
+# |---------------------|------------------------------------------------|
+# | Method              | run_instance_swt_logs/swea__gpt-4-1106-preview |
+# | Applicability (W)   | 87.31884057971014                              |
+# | Success Rate (S)    | 15.942028985507246                             |
+# | F->X                | 48.18840579710145                              |
+# | F->P                | 16.666666666666668                             |
+# | P->P                | 9.782608695652174                              |
+# | Coverage            | 26.488815129800212                             |
+# | Resolved Coverage   | 64.69774543638181                              |
+# | Unresolved Coverage | 19.14736127176707                              |
+```
 
 ## ⬇️ Downloads
 
