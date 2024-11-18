@@ -88,6 +88,8 @@ python3 report.py run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-bench
 # | Unresolved Coverage | 19.14736127176707                              |
 ```
 
+In order to see a coverage delta reported, you need to have the gold evaluation included in the same evaluation path, i.e. download the golden results into `run_instance_swt_logs` from the downloads section below.
+
 ## ⬇️ Downloads
 
 ### Datasets

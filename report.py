@@ -25,9 +25,9 @@ def main(
         name = instance_log_path.parent
 
     fields = (
-        [r"{$\mathcal{W}$ \up{}}", r"{$\suc$ \up{}}", r"{\ftx \up{}}", r"{\ftp \up{}}", r"{\ptp}"]
+        [r"{$\mathcal{W}$}", r"{$\suc$}", r"{\ftx}", r"{\ftp}", r"{\ptp}"]
         if format.startswith("latex") else
-        ["Applicability (W)", "Success Rate (S)", "F->X", "F->P", "P->P", "P->F"]
+        ["Applicability (W)", "Success Rate (S)", "F->X", "F->P", "P->P"]
     )
     rows = [["Method", name]]
     run_id = instance_log_path.parent.name
@@ -49,9 +49,9 @@ def main(
 
     if gold_reports:
         fields = (
-            [r"{$\dc^{\text{all}}$ }", r"{$\dc^{\ftp}$}", r"{$\dc^{\neg(\ftp)}$}"]
+            [r"{$\dc^{\text{all}}$ }", r"{$\dc^{\suc}$}", r"{$\dc^{\neg\suc}$}"]
             if format.startswith("latex") else
-            ["Coverage", "Resolved Coverage", "Unresolved Coverage"]
+            ["Coverage Delta", "Coverage Delta Resolved", "Coverage Delta Unresolved"]
         )
         total_coverage_possible = count_coverage_delta_gold(gold_reports)
         resolved_reports, unresolved_reports = filtered_by_resolved(reports)
