@@ -75,17 +75,17 @@ Pass it the path to your evaluation, including run_id and model to get a simple 
 For example, to reproduce the results for SWE-Agent from Table 2 and 3 of the paper, run the following command:
 
 ```bash
-python3 report.py run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1
-# |---------------------|------------------------------------------------|
-# | Method              | run_instance_swt_logs/swea__gpt-4-1106-preview |
-# | Applicability (W)   | 87.31884057971014                              |
-# | Success Rate (S)    | 15.942028985507246                             |
-# | F->X                | 48.18840579710145                              |
-# | F->P                | 16.666666666666668                             |
-# | P->P                | 9.782608695652174                              |
-# | Coverage            | 26.488815129800212                             |
-# | Resolved Coverage   | 64.69774543638181                              |
-# | Unresolved Coverage | 19.14736127176707                              |
+python -m src.report run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1
+# |------------------------------------|--------------------------|
+# | Method                             | swea__gpt-4-1106-preview |
+# | Applicability (W)                  | 87.31884057971014        |
+# | Success Rate (S)                   | 15.942028985507246       |
+# | F->X                               | 48.18840579710145        |
+# | F->P                               | 16.666666666666668       |
+# | P->P                               | 9.782608695652174        |
+# | Coverage Delta (Δᵃˡˡ)              | 26.488815129800212       |
+# | Coverage Delta Resolved (Δᔆ)       | 64.69774543638181        |
+# | Coverage Delta Unresolved (Δⁿᵒᵗ ᔆ) | 19.14736127176707        |
 ```
 
 In order to see a coverage delta reported, you need to have the gold evaluation included in the same evaluation path, i.e. download the golden results into `run_instance_swt_logs` from the downloads section below.

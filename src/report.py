@@ -51,7 +51,7 @@ def main(
         fields = (
             [r"{$\dc^{\text{all}}$ }", r"{$\dc^{\suc}$}", r"{$\dc^{\neg\suc}$}"]
             if format.startswith("latex") else
-            ["Coverage Delta", "Coverage Delta Resolved", "Coverage Delta Unresolved"]
+            ["Coverage Delta (Δᵃˡˡ)", "Coverage Delta Resolved (Δᔆ)", "Coverage Delta Unresolved (Δⁿᵒᵗ ᔆ)"]
         )
         total_coverage_possible = count_coverage_delta_gold(gold_reports)
         resolved_reports, unresolved_reports = filtered_by_resolved(reports)
