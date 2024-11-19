@@ -80,6 +80,7 @@ MAP_VERSION_TO_INSTALL_FLASK = {
         "packages": "requirements.txt",
         "install": "python -m pip install -e .",
         "pip_packages": [
+            "setuptools==70.0.0",
             "Werkzeug==2.3.7",
             "Jinja2==3.0.1",
             "itsdangerous==2.1.2",
@@ -447,7 +448,7 @@ MAP_VERSION_TO_INSTALL_MATPLOTLIB.update(
 MAP_VERSION_TO_INSTALL_SPHINX = {
     k: {
         "python": "3.9",
-        "pip_packages": ["tox"],
+        "pip_packages": ["tox==4.16.0", "tox-current-env==0.0.11"],
         "install": "python -m pip install -e .[test]",
         "pre_install": ["sed -i 's/pytest/pytest -rA/' tox.ini"],
     }
