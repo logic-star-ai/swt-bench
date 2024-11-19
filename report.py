@@ -22,7 +22,7 @@ def main(
     if not instance_log_path.exists():
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     if name == None:
-        name = instance_log_path.parent
+        name = instance_log_path.parent.name
 
     fields = (
         [r"{$\mathcal{W}$}", r"{$\suc$}", r"{\ftx}", r"{\ftp}", r"{\ptp}"]
