@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="72mm"
+   viewBox="0 0 210 72"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09, custom)"
+   sodipodi:docname="token_sampling.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.77949635"
+     inkscape:cx="602.95343"
+     inkscape:cy="488.1357"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="324"
+     inkscape:window-y="1467"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <rect
+       x="128.88696"
+       y="376.49698"
+       width="380.81763"
+       height="63.694218"
+       id="rect113" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,-24.502883,-70.80877)"
+       id="text111"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect113);display:inline;fill:#000000;fill-opacity:1;stroke:none"><tspan
+         x="128.88672"
+         y="411.88672"
+         id="tspan741">Today I am feeling</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#8dd35f;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="158.23058"
+       y="19.92803"
+       id="text281"><tspan
+         sodipodi:role="line"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#8dd35f;stroke-width:0.264583"
+         x="158.23058"
+         y="19.92803"
+         id="tspan283">great</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ccff00;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="158.91812"
+       y="36.736855"
+       id="text281-3"><tspan
+         sodipodi:role="line"
+         style="fill:#ccff00;stroke-width:0.264583"
+         x="158.91812"
+         y="36.736855"
+         id="tspan283-6">good</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d35f5f;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="158.94487"
+       y="53.16256"
+       id="text328"><tspan
+         sodipodi:role="line"
+         id="tspan326"
+         style="fill:#d35f5f;stroke-width:0.264583"
+         x="158.94487"
+         y="53.16256">uneasy</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';letter-spacing:0px;word-spacing:0px;fill:#8dd35f;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="125.43536"
+       y="21.458792"
+       id="text336"><tspan
+         sodipodi:role="line"
+         id="tspan334"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#8dd35f;stroke-width:0.264583"
+         x="125.43536"
+         y="21.458792">79%</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';letter-spacing:0px;word-spacing:0px;fill:#ccff00;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="125.20954"
+       y="38.336327"
+       id="text336-7"><tspan
+         sodipodi:role="line"
+         id="tspan334-5"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#ccff00;stroke-width:0.264583"
+         x="125.20954"
+         y="38.336327">15%</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d35f5f;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="131.8459"
+       y="54.610069"
+       id="text379"><tspan
+         sodipodi:role="line"
+         id="tspan377"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:sans-serif;fill:#d35f5f;stroke-width:0.264583"
+         x="131.8459"
+         y="54.610069">6%</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 118.68146,11.565335 c -13.14426,-0.0356 0.47505,22.70681 -10.2019,22.60235 10.91142,0.15578 -0.65651,23.20493 10.34946,22.85075"
+       id="path435"
+       sodipodi:nodetypes="ccc" />
+  </g>
+</svg>
