@@ -7,7 +7,6 @@ api.env
 **/api.env
 .env
 web-deploy
-index.html
 **/node_modules/*
 **/.DS_Store
 

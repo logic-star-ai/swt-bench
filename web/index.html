@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Try out ChatProtect, a tool that automatically detects and revises hallucinations from large language models. Visit our website to explore examples or interact with the tool in a live demo. Enjoy protected chatting!">
+  <meta name="keywords" content="GPT-3, language models, hallucinations, contradictions, ChatGPT, Vicuna, GPT-4, revision, chat, mitigation, removal, hallucination, lie, incorrectness, fact, llm, large language model, instruction-tuned, llama-2, llama">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  
+  <!-- Primary Meta Tags -->
+  <title>SWT-Bench: Assessing capabalities at Unit Test Generation</title>
+  <meta name="title" content="ChatProtect: Catch and Remove LLM Hallucinations">
+  <meta name="description" content="Try out ChatProtect, a tool that automatically detects and revises hallucinations from large language models. Visit our website to explore examples or interact with the tool in a live demo. Enjoy protected chatting!">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://chatprotect.ai/">
+  <meta property="og:title" content="ChatProtect: Catch and Remove LLM Hallucinations">
+  <meta property="og:description" content="Try out ChatProtect, a tool that automatically detects and revises hallucinations from large language models. Visit our website to explore examples or interact with the tool in a live demo. Enjoy protected chatting!">
+  <meta property="og:image" content="https://chatprotect.ai/static/images/social.png">
+  <meta property="og:image:alt" content="ChatProtect Logo and a robot talking to a person, where the output of the robot is revised by ChatProtect. The project is developed by SRI Lab at ETH Zürich.">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://chatprotect.ai/">
+  <meta property="twitter:title" content="ChatProtect: Catch and Remove LLM Hallucinations">
+  <meta property="twitter:description" content="Try out ChatProtect, a tool that automatically detects and revises hallucinations from large language models. Visit our website to explore examples or interact with the tool in a live demo. Enjoy protected chatting!">
+  <meta property="twitter:image" content="https://chatprotect.ai/static/images/social.png">
+  <meta property="twitter:image:alt" content="ChatProtect Logo and a robot talking to a person, where the output of the robot is revised by ChatProtect. The project is developed by SRI Lab at ETH Zürich.">
+  
+  
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+  <link rel="stylesheet" href="./static/css/val.gen.css">
+  <link rel="stylesheet" href="./static/css/chatprotect.css">
+  <link rel="stylesheet" href="./static/css/highlight.min.css">
+  <script src="https://kit.fontawesome.com/06bb68d804.js" crossorigin="anonymous"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="./static/js/highlight.min.js"></script>
+  <script src="./static/js/swtbench.js"></script>
+  <script type="text/javascript" id="MathJax-script" async
+  src="./static/js/tex-mml-svg.js">
+</script>
+
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MNMN06N76C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MNMN06N76C');
+</script>
+
+</head>
+<body>
+  <div class="topnav">
+    <a href="/">
+      <table class="logo">
+        <tr>
+          <td>
+            <div class="is-hidden-mobile">SWT-Bench</div>
+          </td>
+          <td>
+            &nbsp;
+            <img src="./static/images/emojis/1F4DC.svg" alt="🐛" class="inline-emoji">
+            <img src="./static/images/emojis/1F4DC.svg" alt="🔍" class="inline-emoji">
+          </td>
+        </tr>
+      </table>
+    </a>
+    <a href="#about">
+      <table>
+        <tr>
+          <td>
+            <img src="/static/images/emojis/2139.svg" alt="ℹ️" class="inline-emoji">
+          </td>
+          <td>
+            &nbsp; About
+          </td>
+        </tr>
+      </table>
+    </a>
+    <a href="#learn-more">
+      <table>
+        <tr>
+          <td>
+            <img src="/static/images/emojis/1F4DC.svg" alt="📜" class="inline-emoji">
+          </td>
+          <td>
+            &nbsp; Paper &amp; Code
+          </td>
+        </tr>
+      </table>
+    </a>
+    <span>&nbsp;&nbsp;</span>
+  </div>
+
+<section class="hero is-align-items-center">
+  <div class="hero-body">
+    <p class="subtitle">
+    SWT-Bench is a benchmark for software testing capabilities on real world software issues.
+    </p>
+    <p style="max-width: 750px;">
+       SWT-Bench is based on real-world GitHub repositories of popular python libraries. Given a code base and a user-reported issue, the task is to generate a reproducing test, which fails in the original state of the code base and passes after a patch resolving the issue has been applied. 
+       </p>
+    </p>
+    </div>
+    </p>
+  </div>
+</section>
+
+  <section class="section">
+    <div class="container is-max-desktop"> 
+      <div class="columns is-centered">
+        <div class="column">
+
+      <table id="leaderboard-table" class="table is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th style="width: 60%;">Model <span class="sort-arrow"></th>
+            <th><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></th>
+            <th><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></th>
+            <th>Date <span class="sort-arrow"></th>
+            <th><abbr title="Trajectories">Traj.</abbr></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SWE-Agent+</td>
+            <td>18.5</td>
+            <td>27.6</td>
+            <td><time>2024-05-22</time></td>
+            <td>🔗</td>
+          </tr>
+          <tr>
+            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Mistral Large 2)</td>
+            <td>16.3</td>
+            <td>23.0</td>
+            <td><time>2024-05-22</time></td>
+            <td>🔗</td>
+          </tr>
+          <tr>
+            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Claude 3.5 Sonnet)</td>
+            <td>12.3</td>
+            <td>30.3</td>
+            <td><time>2024-05-22</time></td>
+            <td>🔗</td>
+          </tr>
+          <tr>
+            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (GPT-4)</td>
+            <td>15.9</td>
+            <td>26.5</td>
+            <td><time>2024-05-22</time></td>
+            <td>🔗</td>
+          </tr>
+          <tr>
+            <td><a href="https://aider.chat">Aider</a> (GPT-4)</td>
+            <td>12.7</td>
+            <td>27.8</td>
+            <td><time>2024-05-22</time></td>
+            <td>🔗</td>
+          </tr>
+          <tr>
+            <td><a href="https://autocoderover.dev">AutoCodeRover</a> (GPT-4)</td>
+            <td>9.1</td>
+            <td>17.9</td>
+            <td><time>2024-05-22</time></td>
+            <td>🔗</td>
+          </tr>
+          <tr>
+            <td>LIBRO</td>
+            <td>14.1</td>
+            <td>23.8</td>
+            <td><time>2024-05-22</time></td>
+            <td>🔗</td>
+          </tr>
+          <tr>
+            <td>Zero Shot Plus</td>
+            <td>9.4</td>
+            <td>21.5</td>
+            <td><time>2024-05-22</time></td>
+            <td>🔗</td>
+          </tr>
+        </tbody>
+        </table>
+        </div>
+
+      </div>
+    </div>
+  </section>
+<section class="hero is-small is-link">
+  <div class="hero-body">
+    <p class="subtitle" style="text-align: center;font-size: small;">
+        SWT-Bench is a project by <a href="https://logicstar.ai">Logic Star AI</a> and the <a href="https://www.sri.inf.ethz.ch/">Secure, Reliable, and Intelligent Systems Lab</a> at ETH Zürich.<br/>
+        <img src="./static/images/institution-logos.svg" class="institution-logo"/>
+    </p>
+  </div>
+</section>
+<section class="section" id="about">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#about">#</a>
+            What is the task in SWT-Bench?
+          </h2>
+          <h5 class="subtitle is-5">Models should be able to generate software tests which reproduce user-reported issues and increase code coverage.</h5>
+       <p>SWT-Bench is based on popular Python repositories scraped from GitHub. Each task is based on a Pull-Request in the repository which resolves a reported user issue by applying a code patch and adding unit tests to reproduce the reported issue. Given the code base before the patch resolution and the user issue, models are instructed to generate tests that reproduce a reported user issue. Generated tests are expected to fail on original code bases for the reason described in this issue and pass after it is resolved. 
+          </p>
+        </div>
+      </div>
+</div>
+</div>
+</section>
+<section class="section">
+</div>  
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+            <img src="./static/images/overviewfig.svg" class="overviewfig">
+          </div>
+        </div>
+      </div>
+</div>
+</div>  
+</div>
+</section>
+<section>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#about">#</a>
+            What do these numbers mean?
+          </h2>
+          <h5 class="subtitle is-5">We measure how precisely generated unit tests capture user issues and whether they increase code coverage.</h5>
+       <p>Models are instructed to generate tests that reproduce a reported user issue. Generated tests are expected to fail on original code bases for the reason described in this issue and pass after it is resolved. We denote the rate of creating such Fail-to-Pass tests as success rate \( \mathcal{S}\). The test should also cover lines relevant to the issue, specificially lines changed when resolving the issue, which is denoted as Coverage Increase \(\Delta \mathcal{C}\).
+          </p>
+        </div>
+      </div>
+</div>
+</div>  
+</div>
+</section>
+<section class="section" id="findings">
+</div>  
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#findings">#</a>
+            What were the initial findings of SWT-Bench?
+          </h2>
+          <h5 class="subtitle is-5">Code Agents are highly effective at writing unit tests, even when initially designed for code repair and not specifically adapted.</h5>
+          <p>
+            We evaluated the performance of bare bone LLMs in a Zero-Shot setting, the heuristic method <a href="https://github.com/coinse/libro/tree/main">LIBRO</a> and various code agents on SWT-Bench. We found that, suprisingly, code agents are highly effective at writing unit tests and even outperformed the previous state of the art LIBRO.
+          </p>
+        </div>
+        </div>
+      </div>
+</div>
+</div>  
+</section>
+<section class="section" id="unittests">
+</div>  
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#unittests">#</a>
+            Why is it important to have powerful approaches to create unit tests?
+          </h2>
+          <h5 class="subtitle is-5">Reproduction tests comprise large parts of test suites and are tedious to create. Moreover, unit tests are powerful tools to cross-verify proposed software patches.</h5>
+          <p>
+            When users report issues, it is important to capture the reported issue and be able to confirm that a proposed patch resolves the issue. This is typically done by creating a test that reproduces the issue and fails on the original code base and passes after the patch is applied. This is a tedious and error-prone process, which can be automated by code agents. Moreover, generated tests can be used to cross-verify proposed patches and ensure that they correctly resolve the reported issue.
+          </p>
+        </div>
+        </div>
+      </div>
+</div>
+</div>  
+</section>
+<section class="section" id="swebench">
+</div>  
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#swebench">#</a>
+            What is the relationship between SWT-Bench and <a href="https://swebench.com">SWE-bench</a>?
+          </h2>
+          <h5 class="subtitle is-5">SWT-Bench and SWE-bench measure complimentary skills. Given a repository and an issue, SWT-Bench measures whether models can reproduce the given issue, while SWE-bench measures whether a model can resolve it.</h5>
+          <p>
+            SWT-Bench and SWE-bench are based on the same GitHub repositories and user-reported issues. While SWT-Bench measures the ability of models to reproduce a given issue, SWE-bench measures the ability of models to resolve it. The skill of reproducing an issue is a complementary and often useful for sucessfully resolving it.
+          </p>
+        </div>
+        </div>
+      </div>
+</div>
+</div>  
+</section>
+<section class="section" id="learn-more">
+</div>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+      <h2 class="title is-4 is-spaced">
+      <a class="bd-anchor-link" href="#learn-more">#</a>
+        Check out our paper to dive into the details!
+      </h2>
+        </div>
+      </div>
+</div>
+</div>
+</div>
+</section>
+<section class="hero" id="paper">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="content" style="text-align: center;">
+            <h2 class="title is-3">SWT-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents</h2>
+            <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/niels">Niels Mündler</a><sup>1</sup></span>,
+            <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/mark">Mark Niklas Müller</a><sup>1,2</sup></span>,
+            <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/jingxuan">Jingxuan He</a><sup>1</sup></span>,
+            <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/martin">Martin Vechev</a><sup>1</sup></span>
+            <br/>
+            <span class="institution"><sup>1</sup>ETH Zurich</span>
+            <span class="institution"><sup>2</sup>Logic Star AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-narrow">
+          <div class="content" style="text-align: center;">
+            <a href="https://arxiv.org/abs/2305.15852">
+            <img src="/static/images/emojis/1F4C4.svg" alt="📜" class="paper-code-emoji">
+            </br>
+            Paper
+    </a>
+        </div>
+        </div>
+      <div class="column is-1">
+        </div>
+      <div class="column is-narrow">
+          <div class="content" style="text-align: center;">
+    <a href="https://github.com/logic-star-ai/swt-bench"> 
+            <img src="/static/images/emojis/logo-github.a1fdb524.svg" alt="🧑‍💻" class="paper-code-emoji">
+    </br>
+            Code
+    </a>
+          </div>
+    </div>
+    </div>
+  </div>
+</div>
+</section>
+<section class="section custom-footer">
+  <div class="container is-max-desktop content">
+    <div class="columns">
+      <div class="column">
+          SWT-Bench is a project by <a href="https://logicstar.ai">Logic Star AI</a> and the <a href="https://www.sri.inf.ethz.ch/">Secure, Reliable, and Intelligent Systems Lab</a> at ETH Zürich.<br/>
+          <img src="static/images/institution-logos-black.svg"/>
+      </div>
+      <div class="column" style="text-align: left;">
+        Site template adapted from <a href="https://lmql.ai">LMQL</a> and uses <a href="https://bulma.io/">Bulma</a>.
+        All emojis designed by <a href="https://openmoji.org/">OpenMoji</a> – the open-source emoji and icon project. License: <a href="https://creativecommons.org/licenses/by-sa/4.0/#">CC BY-SA 4.0</a><br/>
+        Last updated on <date>2024-12-14</date>.<br/>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+</body>
+</html>
