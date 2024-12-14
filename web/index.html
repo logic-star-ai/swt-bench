@@ -45,9 +45,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="./static/js/highlight.min.js"></script>
   <script src="./static/js/swtbench.js"></script>
-  <script type="text/javascript" id="MathJax-script" async
-  src="./static/js/tex-mml-svg.js">
-</script>
+  <script type="text/javascript" id="MathJax-script" async src="./static/js/tex-mml-svg.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-solarizedlight.min.css"/>
 
 
 
@@ -63,6 +62,9 @@
 
 </head>
 <body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js">
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.1.0/prism-bibtex.min.js"></script>
   <div class="topnav">
     <a href="/">
       <table class="logo">
@@ -324,7 +326,7 @@
         <div class="content" style="text-align: left;">
       <h2 class="title is-4 is-spaced">
       <a class="bd-anchor-link" href="#learn-more">#</a>
-        Check out our paper to dive into the details!
+        Check out our paper for more details!
       </h2>
         </div>
       </div>
@@ -332,7 +334,7 @@
 </div>
 </div>
 </section>
-<section class="hero" id="paper">
+<section class="section" id="paper">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column">
@@ -375,6 +377,30 @@
           </div>
     </div>
     </div>
+    </div>
+</section>
+<section class="section" id="citation">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+<div class="column">
+  <div class="content">
+    <h2 class="title is-4 is-spaced">
+    <a class="bd-anchor-link" href="#citation">#</a>
+      Citation
+    </h2>
+    <p>If you use this benchmark, please cite:</p>
+  <pre>
+<code class="language-bib" id="citation-code"> @inproceedings{mundler2024swtbench,
+  title={{SWT}-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents},
+  author={Niels M{\"u}ndler and Mark Niklas Mueller and Jingxuan He and Martin Vechev},
+  booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+  year={2024},
+  url={https://openreview.net/forum?id=9Y8zUO11EQ}
+}</code>
+</pre>
+  </div>
+</div>
+</div>
   </div>
 </div>
 </section>
@@ -394,7 +420,11 @@
   </div>
 </section>
 
-
+<script>
+  document.getElementById('citation-code').addEventListener('click', function() {
+    selectElement(this);
+  });
+</script>
 
 
 

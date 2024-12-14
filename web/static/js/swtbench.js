@@ -55,3 +55,11 @@ function makeSortable(table) {
 document.addEventListener("DOMContentLoaded", () => {
   makeSortable(document.getElementById("leaderboard-table"));
 });
+
+function selectElement(element) {
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
