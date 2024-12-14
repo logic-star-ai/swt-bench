@@ -63,3 +63,16 @@ function selectElement(element) {
   selection.removeAllRanges();
   selection.addRange(range);
 }
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('table time').forEach(function(cell) {
+    const fullDate = cell.textContent;
+    const parsedDate = new Date(fullDate);
+    // display only month/year
+    const shortDate = parsedDate.toLocaleDateString('en-US', { month: 'short'}) + ' \'' + (parsedDate.getFullYear()%100);
+    const longDate = parsedDate.toLocaleDateString();
+    cell.setAttribute('data-short-date', shortDate);
+    cell.setAttribute('data-long-date', longDate);
+    cell.textContent = "";
+    cell.setAttribute('title', longDate);
+  });
+});

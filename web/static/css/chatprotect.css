@@ -1570,3 +1570,28 @@ td.line-height {
 th:hover .sort-arrow[act-column="false"]::before {
     content: "  ⏺️";
   }
+
+  
+  /* Mobile styles */
+@media (min-width: 600px) {
+ table time::before {
+    content: attr(data-long-date);
+    display: inline;
+ }
+
+}
+@media (max-width: 600px) {
+    table time {
+      white-space: nowrap;
+    }
+    table time::before {
+      content: attr(data-short-date);
+      display: inline;
+    }
+  }
+
+/* Set max height for table and make it scrollable */
+.table-container {
+    max-height: 60vh;
+    overflow-y: scroll;
+  }
