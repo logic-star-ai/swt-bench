@@ -1512,10 +1512,22 @@ input.slider {
     z-index: 20;
 }
 
+@media (max-width: 600px) {
+    
+    .bd-anchor-link {
+        left: -1.2rem;
+    }
+}
+@media (min-width: 600px) {
+    
+    .bd-anchor-link {
+        left: -1.5rem;
+    }
+}
+
 
 .bd-anchor-link {
     position: absolute;
-    left: -1.2rem;
     opacity: 0.2;
     color: black;
 }
