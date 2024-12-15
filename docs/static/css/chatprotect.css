@@ -847,7 +847,7 @@ button.next:after {
 }
 
 .topnav a {
-    margin: 15pt 10pt;
+    margin: 20pt 10pt;
     font-size: 10pt;
     font-weight: bold;
     display: inline-block;
@@ -1552,6 +1552,16 @@ img.inline-emoji {
     height: 15pt;
     width: auto;
 }
+img.large-inline-emoji {
+    height: 25pt;
+    width: auto;
+    display: block;
+    margin: 0;
+}
+.topnav td {
+  text-align: center;
+  vertical-align: middle;
+}
 
 td.line-height {
     line-height: 1px;
@@ -1560,9 +1570,9 @@ td.line-height {
 .topnav .logo {
     font-size: large;
     position: absolute;
-    top: 15pt;
-    left: 20pt;
-    height: 50px;
+    top: 10pt;
+    left: 15pt;
+    height: 40px;
     color: black;
 }
 
@@ -1607,3 +1617,7 @@ th:hover .sort-arrow[act-column="false"]::before {
     max-height: 60vh;
     overflow-y: scroll;
   }
+
+.hero.is-link {
+    background-color: #e38a2a;
+}
