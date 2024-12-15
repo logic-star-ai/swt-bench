@@ -108,7 +108,7 @@
 <section class="hero is-align-items-center is-link">
   <div class="hero-body">
     <p class="subtitle">
-    SWT-Bench is a benchmark for software testing on real-world issues.
+    SWT-Bench is a benchmark for software testing capabilities on real-world issues.
     </p>
     <p style="max-width: 750px;">
        SWT-Bench is based on real-world GitHub issues and pull-requests of popular python libraries. Given the code base and a user-reported issue, the task is to generate a reproducing test. A test is considered to be reproducing if it fails on the original code base but passes after the pull-request resolving the issue has been applied. 
@@ -213,11 +213,11 @@
       <div class="column">
         <div class="content" style="text-align: left;">
           <h2 class="title is-4 is-spaced">
-          <a class="bd-anchor-link" href="#about">#</a>
+          <a class="bd-anchor-link" href="#about"></a>
             What is the task in SWT-Bench?
           </h2>
-          <h5 class="subtitle is-5">Models should be able to generate software tests which reproduce user-reported issues and increase code coverage.</h5>
-       <p>SWT-Bench is based on popular Python repositories scraped from GitHub. Each task is based on a Pull-Request in the repository which resolves a reported user issue by applying a code patch and adding unit tests to reproduce the reported issue. Given the code base before the patch resolution and the user issue, models are instructed to generate tests that reproduce a reported user issue. Generated tests are expected to fail on original code bases for the reason described in this issue and pass after it is resolved. 
+          <h5 class="subtitle is-5">Generate software tests which reproduce user-reported issues and increase code coverage.</h5>
+       <p>Each SWT-Bench task is based on a pull-request from a GitHub repository which resolves a reported issue and contains the code patch fixing the issue and unit tests testing the fix. Given the original state of the code base and the user issue, the task is to generate tests that reproduce this issue. These generated tests are expected to fail on the original code base and pass after the issue is resolved. 
           </p>
         </div>
       </div>
@@ -245,17 +245,17 @@
       <div class="column">
         <div class="content" style="text-align: left;">
           <h2 class="title is-4 is-spaced">
-          <a class="bd-anchor-link" href="#about">#</a>
-            What do these numbers mean?
+          <a class="bd-anchor-link" href="#about"></a>
+            What metrics do you report?
           </h2>
-          <h5 class="subtitle is-5">We measure how precisely generated unit tests capture user issues and whether they increase code coverage.</h5>
-       <p>Models are instructed to generate tests that reproduce a reported user issue. Generated tests are expected to fail on original code bases for the reason described in this issue and pass after it is resolved. We denote the rate of creating such Fail-to-Pass tests as success rate \( \mathcal{S}\). The test should also cover lines relevant to the issue, specifically lines changed when resolving the issue, which is denoted as Coverage Increase \(\Delta \mathcal{C}\).
+          <h5 class="subtitle is-5">We measure whether the generated tests reproduce the user issue and increase the code coverage of the modified code.</h5>
+       <p>For a generated test to reproduce the described issue, it should fail on original code base but pass after the code patch fixing the issue is applied. We call this a Fail-to-Pass (F2P) test. An instance is successfully resolved, if at least one F2P test but no test failing on the fixed state of the codebase (F2F or P2F) is generated. We report the success rate \( \mathcal{S}\). We further measure the increase in line coverage of the liens changed when resolving the issue. We call this the Coverage Increase \(\Delta \mathcal{C}\).
           </p>
         </div>
       </div>
 </div>
 </div>  
-</div>
+<!-- </div>
 </section>
 <section class="section" id="findings">
 </div>  
@@ -264,7 +264,7 @@
       <div class="column">
         <div class="content" style="text-align: left;">
           <h2 class="title is-4 is-spaced">
-          <a class="bd-anchor-link" href="#findings">#</a>
+          <a class="bd-anchor-link" href="#findings"></a>
             What were the initial findings of SWT-Bench?
           </h2>
           <h5 class="subtitle is-5">Code Agents are highly effective at writing unit tests, even when initially designed for code repair and not specifically adapted.</h5>
@@ -274,7 +274,7 @@
         </div>
         </div>
       </div>
-</div>
+</div> -->
 </div>  
 </section>
 <section class="section" id="unittests">
@@ -284,12 +284,12 @@
       <div class="column">
         <div class="content" style="text-align: left;">
           <h2 class="title is-4 is-spaced">
-          <a class="bd-anchor-link" href="#unittests">#</a>
-            Why is it important to have powerful approaches to create unit tests?
+          <a class="bd-anchor-link" href="#unittests"></a>
+            What is the value of test generation?
           </h2>
-          <h5 class="subtitle is-5">Reproduction tests comprise large parts of test suites and are tedious to create. Moreover, unit tests are powerful tools to cross-verify proposed software patches.</h5>
+          <h5 class="subtitle is-5">Reproducing test can aide test-driven development, avoid regression, and are a powerful tool to cross-validate proposed bug fixes.</h5>
           <p>
-            When users report issues, it is important to capture the reported issue and be able to confirm that a proposed patch resolves the issue. This is typically done by creating a test that reproduces the issue and fails on the original code base and passes after the patch is applied. This is a tedious and error-prone process, which can be automated by code agents. Moreover, generated tests can be used to cross-verify proposed patches and ensure that they correctly resolve the reported issue.
+            To resolve a reported issues reliably, it is essential to first reproduce it and then confirm that a proposed bug fix actually addresses it. This is typically done by creating a reproducing test. However creating such tests is a tedious and time consuming process that we want to automate using code agents. Once a reproducing test is generated, it can be used to drive the process of fixing the issue and validate a proposed bug fix.
           </p>
         </div>
         </div>
@@ -304,12 +304,12 @@
       <div class="column">
         <div class="content" style="text-align: left;">
           <h2 class="title is-4 is-spaced">
-          <a class="bd-anchor-link" href="#swebench">#</a>
+          <a class="bd-anchor-link" href="#swebench"></a>
             What is the relationship between SWT-Bench and <a href="https://swebench.com">SWE-bench</a>?
           </h2>
-          <h5 class="subtitle is-5">SWT-Bench and SWE-bench measure complimentary skills. Given a repository and an issue, SWT-Bench measures whether models can reproduce the given issue, while SWE-bench measures whether a model can resolve it.</h5>
+          <h5 class="subtitle is-5">SWT-Bench and SWE-bench measure complimentary skills. SWT-Bench measures the capability of reproducing a reported issue, while SWE-bench measures the capability of fixing the issue.</h5>
           <p>
-            SWT-Bench and SWE-bench are based on the same GitHub repositories and user-reported issues. While SWT-Bench measures the ability of models to reproduce a given issue, SWE-bench measures the ability of models to resolve it. The skill of reproducing an issue is a complementary and often useful for successfully resolving it.
+            SWT-Bench and SWE-bench are based on the same GitHub repositories and issues. While SWT-Bench measures the ability of models or agents to reproduce a given issue, SWE-bench measures their ability to resolve it. We observe that while these tasks are complimentary, their hardness is not correlated on an instance level.
           </p>
         </div>
         </div>
@@ -323,20 +323,11 @@
     <div class="columns is-centered">
       <div class="column">
         <div class="content" style="text-align: left;">
-      <h2 class="title is-4 is-spaced">
-      <a class="bd-anchor-link" href="#learn-more">#</a>
-        Check out our paper for more details!
-      </h2>
-        </div>
+        <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#learn-more"></a>
+            Check out our paper for more details:
+        </h2>
       </div>
-</div>
-</div>
-</div>
-</section>
-<section class="section" id="paper">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column">
           <div class="content" style="text-align: center;">
             <h2 class="title is-3">SWT-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents</h2>
             <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/niels">Niels Mündler</a><sup>1</sup></span>,
@@ -352,8 +343,6 @@
     </div>
     <br/>
     <br/>
-    <br/>
-    <div class="container">
       <div class="columns is-centered">
         <div class="column is-narrow">
           <div class="content" style="text-align: center;">
@@ -361,7 +350,7 @@
             <img src="./static/images/emojis/1F4C4.svg" alt="📜" class="paper-code-emoji">
             </br>
             Paper
-    </a>
+          </a>
         </div>
         </div>
       <div class="column is-1">
@@ -384,8 +373,8 @@
 <div class="column">
   <div class="content">
     <h2 class="title is-4 is-spaced">
-    <a class="bd-anchor-link" href="#citation">#</a>
-      Citing
+    <a class="bd-anchor-link" href="#citation"></a>
+      Citing this work
     </h2>
     <p>If you use this benchmark, please cite:</p>
   <pre>
