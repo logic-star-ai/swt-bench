@@ -1558,7 +1558,7 @@ img.large-inline-emoji {
     display: block;
     margin: 0;
 }
-.topnav td {
+.topnav .logo td {
   text-align: center;
   vertical-align: middle;
 }
@@ -1621,3 +1621,8 @@ th:hover .sort-arrow[act-column="false"]::before {
 .hero.is-link {
     background-color: #e38a2a;
 }
+.small-icon {
+    width: 1em !important;
+    height: 1em !important;
+    vertical-align: -0.125em;
+  }
