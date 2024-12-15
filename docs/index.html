@@ -7,14 +7,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
   
   <!-- Primary Meta Tags -->
-  <title>SWT-Bench: Assessing capabalities at Unit Test Generation</title>
-  <meta name="title" content="SWT-Bench: Assessing capabalities at Unit Test Generation">
+  <title>SWT-Bench: Assessing capabilities at Unit Test Generation</title>
+  <meta name="title" content="SWT-Bench: Assessing capabilities at Unit Test Generation">
   <meta name="description" content="Check out the SWT-Bench leaderboard! SWT-Bench is a benchmark designed to assess the capabilities of large language models and Code Agents in generating unit tests on real-world code repositories, developed by ETH Zurich.">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://swtbench.com/">
-  <meta property="og:title" content="SWT-Bench: Assessing capabalities at Unit Test Generation">
+  <meta property="og:title" content="SWT-Bench: Assessing capabilities at Unit Test Generation">
   <meta property="og:description" content="Check out the SWT-Bench leaderboard! SWT-Bench is a benchmark designed to assess the capabilities of large language models and Code Agents in generating unit tests on real-world code repositories, developed by ETH Zurich.">
   <meta property="og:image" content="https://chatprotect.ai/static/images/social.png">
   <meta property="og:image:alt" content="ChatProtect Logo and a robot talking to a person, where the output of the robot is revised by ChatProtect. The project is developed by SRI Lab at ETH Zürich.">
@@ -24,7 +24,7 @@
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://swtbench.com/">
-  <meta property="twitter:title" content="SWT-Bench: Assessing capabalities at Unit Test Generation">
+  <meta property="twitter:title" content="SWT-Bench: Assessing capabilities at Unit Test Generation">
   <meta property="twitter:description" content="Check out the SWT-Bench leaderboard! SWT-Bench is a benchmark designed to assess the capabilities of large language models and Code Agents in generating unit tests on real-world code repositories, developed by ETH Zurich.">
   <meta property="twitter:image" content="https://chatprotect.ai/static/images/social.png">
   <meta property="twitter:image:alt" content="ChatProtect Logo and a robot talking to a person, where the output of the robot is revised by ChatProtect. The project is developed by SRI Lab at ETH Zürich.">
@@ -108,7 +108,7 @@
 <section class="hero is-align-items-center is-link">
   <div class="hero-body">
     <p class="subtitle">
-    SWT-Bench is a benchmark for software testing capabilities on real world software issues.
+    SWT-Bench is a benchmark for software testing capabilities on real-world software issues.
     </p>
     <p style="max-width: 750px;">
        SWT-Bench is based on real-world GitHub repositories of popular python libraries. Given a code base and a user-reported issue, the task is to generate a reproducing test, which fails in the original state of the code base and passes after a patch resolving the issue has been applied. 
@@ -249,7 +249,7 @@
             What do these numbers mean?
           </h2>
           <h5 class="subtitle is-5">We measure how precisely generated unit tests capture user issues and whether they increase code coverage.</h5>
-       <p>Models are instructed to generate tests that reproduce a reported user issue. Generated tests are expected to fail on original code bases for the reason described in this issue and pass after it is resolved. We denote the rate of creating such Fail-to-Pass tests as success rate \( \mathcal{S}\). The test should also cover lines relevant to the issue, specificially lines changed when resolving the issue, which is denoted as Coverage Increase \(\Delta \mathcal{C}\).
+       <p>Models are instructed to generate tests that reproduce a reported user issue. Generated tests are expected to fail on original code bases for the reason described in this issue and pass after it is resolved. We denote the rate of creating such Fail-to-Pass tests as success rate \( \mathcal{S}\). The test should also cover lines relevant to the issue, specifically lines changed when resolving the issue, which is denoted as Coverage Increase \(\Delta \mathcal{C}\).
           </p>
         </div>
       </div>
@@ -269,7 +269,7 @@
           </h2>
           <h5 class="subtitle is-5">Code Agents are highly effective at writing unit tests, even when initially designed for code repair and not specifically adapted.</h5>
           <p>
-            We evaluated the performance of bare bone LLMs in a Zero-Shot setting, the heuristic method <a href="https://github.com/coinse/libro/tree/main">LIBRO</a> and various code agents on SWT-Bench. We found that, suprisingly, code agents are highly effective at writing unit tests and even outperformed the previous state of the art LIBRO.
+            We evaluated the performance of bare bone LLMs in a Zero-Shot setting, the heuristic method <a href="https://github.com/coinse/libro/tree/main">LIBRO</a> and various code agents on SWT-Bench. We found that, surprisingly, code agents are highly effective at writing unit tests and even outperformed the previous state-of-the-art LIBRO.
           </p>
         </div>
         </div>
@@ -309,7 +309,7 @@
           </h2>
           <h5 class="subtitle is-5">SWT-Bench and SWE-bench measure complimentary skills. Given a repository and an issue, SWT-Bench measures whether models can reproduce the given issue, while SWE-bench measures whether a model can resolve it.</h5>
           <p>
-            SWT-Bench and SWE-bench are based on the same GitHub repositories and user-reported issues. While SWT-Bench measures the ability of models to reproduce a given issue, SWE-bench measures the ability of models to resolve it. The skill of reproducing an issue is a complementary and often useful for sucessfully resolving it.
+            SWT-Bench and SWE-bench are based on the same GitHub repositories and user-reported issues. While SWT-Bench measures the ability of models to reproduce a given issue, SWE-bench measures the ability of models to resolve it. The skill of reproducing an issue is a complementary and often useful for successfully resolving it.
           </p>
         </div>
         </div>
