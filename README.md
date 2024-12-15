@@ -1,5 +1,5 @@
 <div align="center">
-    <table><tr><td><h1>SWT-Bench</h1></td><td><img src="https://github.com/logic-star-ai/swt-bench/blob/feat/website/docs/static/images/color_circle.png?raw=true" style="height:70px"></td></tr></table>
+    <table><tr style="border:none;"><td style="border:none;"><h1>SWT-Bench</h1></td><td style="border:none;"><img src="https://github.com/logic-star-ai/swt-bench/blob/feat/website/docs/static/images/color_circle.png?raw=true" style="height:70px"></td></tr></table>
 
 [![Build & Test](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml/badge.svg)](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml)
    <a href="https://www.python.org/">
