@@ -90,6 +90,22 @@ python -m src.report run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-be
 
 In order to see a coverage delta reported, you need to have the gold evaluation included in the same evaluation path, i.e. download the golden results into `run_instance_swt_logs` from the downloads section below.
 
+### Submitting Results to the Leaderboard
+
+We list top performing methods for SWT-Bench on our [leaderboard](https://swtbench.com). If you want to have your results included, please [send us an email to submit@swebench.com](mailto:submit@swtbench.com?subject=SWT-Bench%20Submission&body=Hi%20there%2C%0A%0ASWT-Bench%20is%20great%21%20We%20want%20to%20submit%20our%20agent%20evaluation%20to%20the%20leaderboard.%0A%0APlease%20find%20attached%201%29%20the%20predictions%20of%20our%20cool%20agent%20as%20jsonl%20zip%2C%202%29%20the%20resulting%20evaluation%20report%2C%20and%203%29%20a%20link%20to%20the%20project%20and%20inference%20traces%3A) containing
+
+- the name of your method
+- the inference results from your method as the JSONL used to run the evaluation
+- your locally determined results
+- a link to your projects homepage and traces of your method (to verify that the predictions are legitimate)
+- a description on how to reproduce your runs if you want to have your results independently verified through us
+
+We will independently run your predictions in our dockerized environment to verify your score, contact you to confirm your results and to coordinate the publication. To ensure the accessibility of traces, we reserve the right to host your predictions on a server of ours.
+
+> The inclusion in the leaderboard will be performed on a best effort basis, but we can not guarantee inclusion or timely processing of your requests.
+
+
+
 ## ⬇️ Downloads
 
 ### Datasets
@@ -112,20 +128,6 @@ We provide the full traces of run code agents, the predicted patches by each met
 | Evaluation Harness Logs | [Download](https://files.sri.inf.ethz.ch/swt-bench/run_instance_swt_logs) | [Download](https://files.sri.inf.ethz.ch/swt-bench/run_instance_swt_logs.zip) |
 
 The full list of resolved instances per approach can be found [here](https://files.sri.inf.ethz.ch/swt-bench/resolved_per_approach.json).
-
-### Submitting Results to the Leaderboard
-
-We list top performing methods for SWT-Bench on our [leaderboard](https://swtbench.com). If you want to have your results included, please [send us an email to submit@swebench.com](mailto:submit@swtbench.com?subject=SWT-Bench%20Submission&body=Hi%20there%2C%0A%0ASWT-Bench%20is%20great%21%20We%20want%20to%20submit%20our%20agent%20evaluation%20to%20the%20leaderboard.%0A%0APlease%20find%20attached%201%29%20the%20predictions%20of%20our%20cool%20agent%20as%20jsonl%20zip%2C%202%29%20the%20resulting%20evaluation%20report%2C%20and%203%29%20a%20link%20to%20the%20project%20and%20inference%20traces%3A) containing
-
-- the name of your method
-- the inference results from your method as the JSONL used to run the evaluation
-- your locally determined results
-- a link to your projects homepage and traces of your method (to verify that the predictions are legitimate)
-- a description on how to reproduce your runs if you want to have your results independently verified through us
-
-We will independently run your predictions in our dockerized environment to verify your score, contact you to confirm your results and to coordinate the publication. To ensure the accessibility of traces, we reserve the right to host your predictions on a server of ours.
-
-> The inclusion in the leaderboard will be performed on a best effort basis, but we can not guarantee inclusion or timely processing of your requests.
 
 ## 🏗 Building SWT-Bench and Zero-Shot inference
 
