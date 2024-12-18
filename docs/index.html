@@ -357,7 +357,16 @@
       <div class="column">
         <div class="content" style="text-align: left;">
           <h2 class="title is-4 is-spaced">
-            <img src="./static/images/overviewfig.svg" class="overviewfig">
+            <picture>
+              <!-- User prefers light mode: -->
+              <source srcset="./static/images/overviewfig.svg" media="(prefers-color-scheme: light)"/>
+            
+              <!-- User prefers dark mode: -->
+              <source srcset="./static/images/overviewfig_dark.svg"  media="(prefers-color-scheme: dark)"/>
+            
+              <!-- User has no color preference: -->
+              <img src="./static/images/overviewfig.svg"/>
+            </picture>
           </div>
         </div>
       </div>
