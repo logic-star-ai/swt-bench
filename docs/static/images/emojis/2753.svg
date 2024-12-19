@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="emoji"
+   viewBox="0 0 72 72"
+   version="1.1"
+   sodipodi:docname="2753.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2397" />
+  <sodipodi:namedview
+     id="namedview2395"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="12.152778"
+     inkscape:cx="-7.6525714"
+     inkscape:cy="49.865143"
+     inkscape:window-width="2560"
+     inkscape:window-height="1365"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="emoji" />
+  <path
+     fill="#d22f27"
+     stroke-miterlimit="10"
+     d="m 50.358382,20.15 c 0.356729,9.298 -9.378326,12.75 -12.650977,19.21 v 7.565 c 0,1.39 -1.297836,2.5 -2.923054,2.5 -1.613525,0 -2.923053,-1.11 -2.923053,-2.5 V 37.06 c 4.08409,-6.142 12.136519,-7.469 12.475593,-17.06 0,-5.66 -7.650216,-6.151 -9.339741,-6.175 h -0.05846 c -6.742901,1.187 -7.173174,4.99 -8.522456,9.549 -0.779988,1.521 -1.828662,2.045 -3.390742,2.03 -1.590141,-0.2401 -2.642441,-1.54 -2.361828,-2.9 0.687152,-2.752 0.88627,-6.639 2.747671,-8.502 3.16859,-3.14 5.634478,-4.957 10.732284,-5.167 0.280613,0 0.572919,-0.01 0.853532,-0.01 0.10523,0 0.21046,0 0.31569,0.01 9.669461,0.2401 14.73219,2.992 15.04788,11.32 z"
+     id="path2381"
+     style="stroke:none;stroke-width:1.08131" />
+  <ellipse
+     cx="35.258492"
+     cy="57.498222"
+     fill="#d22f27"
+     stroke-miterlimit="10"
+     id="circle2383"
+     style="stroke:none;stroke-width:1.23521"
+     rx="3.7996271"
+     ry="3.6139512" />
+  <g
+     id="hair" />
+  <g
+     id="skin" />
+  <g
+     id="skin-shadow" />
+  <circle
+     cx="35.299999"
+     cy="58.84"
+     r="2.625"
+     fill="none"
+     stroke="#000"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     stroke-miterlimit="10"
+     stroke-width="1.75"
+     id="circle2389"
+     style="stroke:none" />
+</svg>

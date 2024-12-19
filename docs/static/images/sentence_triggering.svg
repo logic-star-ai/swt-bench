@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="585mm"
+   height="154mm"
+   viewBox="0 0 585 154"
+   version="1.1"
+   id="svg574"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09, custom)"
+   sodipodi:docname="sentence_triggering"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview576"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.55118716"
+     inkscape:cx="1491.3265"
+     inkscape:cy="534.30127"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="324"
+     inkscape:window-y="1467"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs571">
+    <rect
+       x="893.37152"
+       y="706.54492"
+       width="102.14569"
+       height="71.457535"
+       id="rect634" />
+    <rect
+       x="63.480255"
+       y="560.81787"
+       width="1205.8057"
+       height="111.2839"
+       id="rect608" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="9.4337559"
+       y="40.314137"
+       id="text580"><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="9.4337559"
+         y="40.314137"
+         id="tspan584">In 1299, <tspan
+   style="fill:#5599ff"
+   id="tspan612">Walter</tspan> <tspan
+   style="fill:#0055d4"
+   id="tspan614">was elected</tspan> Bishop of Worcester, and <tspan
+   style="fill:#00d400"
+   id="tspan622">he </tspan><tspan
+   id="tspan630"
+   style="fill:#008000">was consecrated</tspan> the following year. </tspan></text>
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,38.980221,-80.666264)"
+       id="text606"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect608);fill:#000000;fill-opacity:1;stroke:none"><tspan
+         x="63.480469"
+         y="596.20898"
+         id="tspan703"><tspan
+   style="fill:#5599ff"
+   id="tspan699">Walter</tspan><tspan
+   style="fill:#0055d4"
+   id="tspan701"> was elected</tspan> Bishop of Worcester in 1296.</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text632"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect634);fill:#000000;fill-opacity:1;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="293.49939"
+       y="106.66804"
+       id="text640"><tspan
+         sodipodi:role="line"
+         id="tspan638"
+         style="stroke-width:0.264583"
+         x="293.49939"
+         y="106.66804"><tspan
+   style="fill:#00d400"
+   id="tspan644">He</tspan> <tspan
+   style="fill:#008000"
+   id="tspan646">was consecrated</tspan> as Bishop of Worcester in 1296.</tspan><tspan
+         sodipodi:role="line"
+         style="stroke-width:0.264583"
+         x="293.49939"
+         y="119.89716"
+         id="tspan642" /></text>
+  </g>
+</svg>
