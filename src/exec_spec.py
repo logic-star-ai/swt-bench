@@ -67,13 +67,14 @@ class ExecSpec:
 
     @property
     def test_command(self):
+        self.compute_coverage = False
         # test_command = " ".join(
         #     [
         #         MAP_REPO_TO_TEST_FRAMEWORK[self.repo][self.version],
         #         *self.test_directives,
         #     ]
         # )
-        test_command = "test_patch.py"
+        test_command = "python3 test_patch.py"
         if not self.compute_coverage:
             return test_command
 
@@ -257,10 +258,11 @@ class ExecSpec:
         if "install" in install:
             eval_commands.append(install["install"])
 
+        self.compute_coverage = False
         if self.compute_coverage:
             cat_coverage_commands = ["cat coverage.cover"]
         else:
-            cat_coverage_commands = []
+            cat_coverage_commands = ["echo $?", "echo TASKDONE"]
         eval_commands += apply_patch_commands + [test_command] + cat_coverage_commands + reset_commands
 
         return eval_commands
@@ -388,4 +390,5 @@ def make_exec_spec(instance: SWEbenchInstance) -> ExecSpec:
         test_directives=test_directives,
         patch_list=patch_list,
         coverage_files=changed_files,
+        compute_coverage=False,
     )

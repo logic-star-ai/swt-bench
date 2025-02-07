@@ -242,8 +242,11 @@ MAP_REPO_TO_PARSER = {
 
 def parse_log_aegis(log: str) -> dict[str, str]:
     """
-    If there is an assertion error log a "main" test case with status "FAILED"
+    If there is a nonzero exit code log a "main" test case with status "FAILED"
     """
+    exit_code = re.findall(r"\+ echo (\d+)", log)
+    if not exit_code:
+        return {}
     name = "main"
-    status = TestStatus.FAILED.value if "Traceback" in log else TestStatus.PASSED.value
+    status = TestStatus.PASSED.value if exit_code[0] == "0" in log else TestStatus.FAILED.value
     return {name: status}

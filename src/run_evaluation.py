@@ -366,7 +366,8 @@ def make_run_report(
         predictions: dict,
         dataset: list,
         client: docker.DockerClient,
-        run_id: str
+        run_id: str,
+        force_reeval: bool = False,
     ):
     """
     Make a final evaluation and run report of the instances that have been run.
@@ -410,7 +411,7 @@ def make_run_report(
             patch_id_base,
             instance_id,
         ) / "report.json"
-        if report_file.exists():
+        if report_file.exists() and not force_reeval:
             # If report file exists, then the instance has been run and reported before
             completed_ids.add(instance_id)
             report = json.loads(report_file.read_text())

@@ -35,8 +35,9 @@ def run(
         timeout: int,
         build_mode: "BuildMode" = "api",
         skip_eval: bool = False,
-        force_rerun: bool = True,
-    ):
+        force_rerun: bool = False,
+        force_reeval: bool = False,
+):
     """
     Run evaluation harness for the given dataset and predictions.
     """
@@ -76,7 +77,7 @@ def run(
 
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
-    make_run_report(predicted_tests, full_dataset, client, run_id)
+    make_run_report(predicted_tests, full_dataset, client, run_id, force_rebuild or force_reeval)
 
 
 if __name__ == "__main__":
@@ -125,6 +126,9 @@ if __name__ == "__main__":
     # Rerun instances that have already been run
     parser.add_argument(
         "--force_rerun", type=str2bool, default=False, help="Force rerun of instances that have already been run"
+    )
+    parser.add_argument(
+        "--force_reeval", type=str2bool, default=False, help="Force reeval of instances that have already been run (i.e. re-read the logs)"
     )
     args = parser.parse_args()
 

@@ -67,9 +67,10 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
     with open(log_fp) as f:
         raw_content = f.read()
         # remove installation logs
-    content = re.split(r"\n\+ python3 [^\n]*trace.py --count -C coverage.cover [^\n]*\n", raw_content, flags=re.MULTILINE)[1]
+    content = raw_content.split("+ python3 test_patch.py") # re.split(r"\n\+ python3 [^\n]*trace.py --count -C coverage.cover [^\n]*\n", raw_content, flags=re.MULTILINE)[1]
+    content = content[1] if len(content) > 1 else content[0]
     # remove coverage dumps
-    content = content.split("\n+ cat coverage.cover")[0]
+    content = content.split("\n+ echo TASKDONE")[0]
     # TODO fix constant here
     if (
         any(
