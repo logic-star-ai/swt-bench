@@ -245,5 +245,5 @@ def parse_log_aegis(log: str) -> dict[str, str]:
     If there is an assertion error log a "main" test case with status "FAILED"
     """
     name = "main"
-    status = TestStatus.FAILED.value if "AssertionError" in log else TestStatus.PASSED.value
+    status = TestStatus.FAILED.value if "Traceback" in log else TestStatus.PASSED.value
     return {name: status}
