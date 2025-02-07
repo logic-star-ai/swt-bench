@@ -41,7 +41,8 @@ with open("inference_output/aegis_preds.json") as f:
 new_aegis_preds = []
 for pred in aegis_preds:
     new_pred = pred.copy()
-    new_pred["model_patch"] = create_git_diff("test_patch.py", pred["model_patch"])
+    patch_file = "test_patch.py"
+    new_pred["model_patch"] = create_git_diff(patch_file, pred["model_patch"])
     new_aegis_preds.append(new_pred)
 with open("inference_output/aegis_preds_diff.jsonl", "w") as f:
     for pred in new_aegis_preds:

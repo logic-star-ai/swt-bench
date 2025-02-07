@@ -19,7 +19,7 @@ from src.constants import (
     TestStatus,
 )
 from src.test_spec import TestSpec
-from src.log_parsers import MAP_REPO_TO_PARSER
+from src.log_parsers import MAP_REPO_TO_PARSER, parse_log_aegis
 from src.utils import get_log_dir, setup_logging
 
 # MARK: Utility functions
@@ -58,7 +58,8 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
     TODO(john-b-yang): Check this is working properly...
     """
     # Convert e.g. "logs/scikit-learn__scikit-learn-12421/test_output.txt" to "scikit-learn/scikit-learn"
-    log_parser = MAP_REPO_TO_PARSER[repo]
+    # log_parser = MAP_REPO_TO_PARSER[repo]
+    log_parser = parse_log_aegis
 
     if not Path(log_fp).exists():
         # likely due to a timeout

@@ -67,12 +67,13 @@ class ExecSpec:
 
     @property
     def test_command(self):
-        test_command = " ".join(
-            [
-                MAP_REPO_TO_TEST_FRAMEWORK[self.repo][self.version],
-                *self.test_directives,
-            ]
-        )
+        # test_command = " ".join(
+        #     [
+        #         MAP_REPO_TO_TEST_FRAMEWORK[self.repo][self.version],
+        #         *self.test_directives,
+        #     ]
+        # )
+        test_command = "test_patch.py"
         if not self.compute_coverage:
             return test_command
 

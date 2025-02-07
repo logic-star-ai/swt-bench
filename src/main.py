@@ -35,6 +35,7 @@ def run(
         timeout: int,
         build_mode: "BuildMode" = "api",
         skip_eval: bool = False,
+        force_rerun: bool = True,
     ):
     """
     Run evaluation harness for the given dataset and predictions.
@@ -60,10 +61,10 @@ def run(
     predicted_tests = {pred["instance_id"]: pred for pred in predicted_tests}
 
     # get dataset from predictions
-    dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, is_swt=is_swt)
+    dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, is_swt=is_swt, exclude_completed=not force_rerun)
     full_dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, False, is_swt=is_swt)
     existing_images = list_images(client)
-    print(f"Running {len(dataset)} unevaluated instances...")
+    print(f"Running {len(dataset)} {'unevaluated' if not force_rerun else 'selected'} instances...")
     if not dataset:
         print("No instances to run.")
     elif skip_eval:
@@ -120,6 +121,10 @@ if __name__ == "__main__":
     # Skip running the evaluation and just grade
     parser.add_argument(
         "--skip_eval", type=str2bool, default=False, help="Skip evaluation and only generate reports"
+    )
+    # Rerun instances that have already been run
+    parser.add_argument(
+        "--force_rerun", type=str2bool, default=False, help="Force rerun of instances that have already been run"
     )
     args = parser.parse_args()
 
