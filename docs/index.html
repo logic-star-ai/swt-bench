@@ -185,14 +185,21 @@
       <table id="leaderboard-table" class="table is-hoverable is-fullwidth">
         <thead>
           <tr>
-            <th style="width: 60%;">Model <span class="sort-arrow"></th>
-            <th><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></th>
-            <th><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></th>
-            <th>Date <span class="sort-arrow"></th>
+            <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
+            <th><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
+            <th><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
+            <th>Date <span class="sort-arrow"></span></th>
             <th><abbr title="Trajectories">Traj.</abbr></th>
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td>🆕&nbsp;<a href="https://arxiv.org/pdf/2411.18015">AEGIS</a><sup>&Dagger;</sup></td>
+            <td>47.8%</td>
+            <td>26.0%</td>
+            <td><time>2025-02-17</time></td>
+            <td><a href="https://files.sri.inf.ethz.ch/swt-bench/aegis/">🔗</a></td>
+          </tr>
           <tr>
             <td>SWE-Agent+</td>
             <td>18.5%</td>
@@ -284,7 +291,7 @@
       </div>
       <div class="columns is-max-desktop">
         <div class="column is-centered">
-          <p class="is-size-7">The results reported here are evaluation results on SWT-Bench Lite. We have independently executed submitted predictions for verification.</p>
+          <p class="is-size-7">The results reported here are evaluation results on SWT-Bench Lite. We have independently executed submitted predictions for verification. <sup>&Dagger;</sup> Generates stand-alone reproduction scripts and does not attempt integration into the test framework. </p>
         </div>
       </div>
     </div>
