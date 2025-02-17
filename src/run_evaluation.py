@@ -171,7 +171,7 @@ def remove_setup_files(model_patch: str, exec_spec: ExecSpec):
     patch = unidiff.PatchSet(model_patch)
     to_delete = []
     for i, file in enumerate(patch):
-        if file.source_file in relevant_files:
+        if any(f in file.source_file for f in relevant_files):
             to_delete.append(i)
     for i in reversed(to_delete):
         del patch[i]
