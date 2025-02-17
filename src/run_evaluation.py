@@ -169,7 +169,12 @@ def remove_setup_files(model_patch: str, exec_spec: ExecSpec):
         if any(file in install and "sed" in install for install in pre_install)
     ]
     patch = unidiff.PatchSet(model_patch)
-    patch = unidiff.PatchSet([p for p in patch if p.source_file not in relevant_files])
+    to_delete = []
+    for i, file in enumerate(patch):
+        if file.source_file in relevant_files:
+            to_delete.append(i)
+    for i in reversed(to_delete):
+        del patch[i]
     return str(patch)
 
 
