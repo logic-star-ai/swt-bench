@@ -13,8 +13,8 @@ function makeSortable(table) {
 
   function sortTableByColumn(table, columnIndex) {
     const rows = Array.from(table.querySelectorAll("tr"));
-    const isAscending = table.getAttribute("data-sort-asc") === "true";
-    const direction = isAscending ? 1 : -1;
+    const isAscending = table.getAttribute("data-sort-asc") !== "false";
+    const direction = isAscending ? -1 : 1;
 
     rows.sort((rowA, rowB) => {
       const cellA = rowA.children[columnIndex].textContent.trim();
