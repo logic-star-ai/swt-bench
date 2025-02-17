@@ -2,6 +2,7 @@ import hashlib
 from time import time
 
 import docker
+import unidiff
 from docker.models.containers import Container
 import json
 import traceback
@@ -16,7 +17,7 @@ from typing import List, Tuple, Optional
 from auxillary_src.extract_patches import remove_binary_diffs
 from src.constants import (
     APPLY_PATCH_FAIL,
-    APPLY_PATCH_PASS
+    APPLY_PATCH_PASS, MAP_VERSION_TO_INSTALL
 )
 from src.docker_utils import (
     remove_image,
@@ -158,6 +159,20 @@ def eval_in_container_with_diff(log_dir: Path, container: Container, logger: log
     return test_output_path
 
 
+def remove_setup_files(model_patch: str, exec_spec: ExecSpec):
+    """ Discard all changes that a patch applies to files changes by the pre_install script """
+    setup_files = ["setup.py", "tox.ini", "pyproject.toml"]
+    pre_install = MAP_VERSION_TO_INSTALL.get(exec_spec.repo, {}).get(exec_spec.version, {}).get("pre_install", [])
+    relevant_files = [
+        file
+        for file in setup_files
+        if any(file in install and "sed" in install for install in pre_install)
+    ]
+    patch = unidiff.PatchSet(model_patch)
+    patch = [p for p in patch if p.source_file not in relevant_files]
+    return str(patch)
+
+
 def run_instance(
         test_spec: TestSpec,
         pred: dict,
@@ -198,6 +213,8 @@ def run_instance(
         model_patch = remove_binary_diffs(pred["model_patch"])
     else:
         model_patch = extract_model_patch(exec_spec, pred["model_patch"], patch_types, build_mode=build_mode)
+    # remove changes to "setup.py", "tox.ini", "pyproject.toml"
+    model_patch = remove_setup_files(model_patch, exec_spec)
 
     if model_patch:
         caching_log_dir = [False, False, True, True, True, True]
