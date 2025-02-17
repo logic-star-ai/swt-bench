@@ -160,7 +160,7 @@ def eval_in_container_with_diff(log_dir: Path, container: Container, logger: log
 
 
 def remove_setup_files(model_patch: str, exec_spec: ExecSpec):
-    """ Discard all changes that a patch applies to files changes by the pre_install script """
+    """ Discard all changes that a patch applies to files changes by the pre_install script and that are reproduction scripts (top-level script)"""
     setup_files = ["setup.py", "tox.ini", "pyproject.toml"]
     pre_install = MAP_VERSION_TO_INSTALL.get(exec_spec.repo, {}).get(exec_spec.version, {}).get("pre_install", [])
     relevant_files = [
@@ -171,7 +171,7 @@ def remove_setup_files(model_patch: str, exec_spec: ExecSpec):
     patch = unidiff.PatchSet(model_patch)
     to_delete = []
     for i, file in enumerate(patch):
-        if any(f in file.source_file for f in relevant_files):
+        if any(f in file.source_file for f in relevant_files) or file.target_file.count("/") == 1:
             to_delete.append(i)
     for i in reversed(to_delete):
         del patch[i]
