@@ -1615,7 +1615,7 @@ th:hover .sort-arrow[act-column="false"]::before {
 /* Set max height for table and make it scrollable */
 .table-container {
     max-height: 60vh;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
 .hero.is-link {
