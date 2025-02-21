@@ -75,7 +75,7 @@ Pass it the path to your evaluation, including run_id and model to get a simple 
 For example, to reproduce the results for SWE-Agent from Table 2 and 3 of the paper, run the following command:
 
 ```bash
-python -m src.report run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1
+python -m src.report run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1 --dataset lite
 # |------------------------------------|--------------------------|
 # | Method                             | swea__gpt-4-1106-preview |
 # | Applicability (W)                  | 87.31884057971014        |

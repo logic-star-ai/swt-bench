@@ -22,6 +22,8 @@ def _filter_cases():
     return frozenset(filter_cases)
 
 total_cases_lite = 276
+total_cases_full = 1983
+total_cases_verified = 443
 
 def _collect_reports(model_name, run_id, instance_log_path: Path, filter_cases=True):
     run_path = instance_log_path / run_id / model_name
