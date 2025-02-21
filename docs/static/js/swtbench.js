@@ -76,3 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
     cell.setAttribute('title', longDate);
   });
 });
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('strong time').forEach(function(cell) {
+    const fullDate = cell.textContent;
+    const parsedDate = new Date(fullDate);
+    // display only month/year
+    const shortDate = parsedDate.toLocaleDateString('en-US', { month: 'short'}) + ' \'' + (parsedDate.getFullYear()%100);
+    const longDate = parsedDate.toLocaleDateString();
+    cell.textContent = longDate;
+  });
+});
