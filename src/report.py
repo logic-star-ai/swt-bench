@@ -10,6 +10,11 @@ TOTAL_INSTANCE_MAP = {
     "full": total_cases_full,
     "verified": total_cases_verified,
 }
+GOLD_RUN_MAP = {
+    "lite": "validate-lite-gold-1",
+    "full": "validate-full-gold",
+    "verified": "validate-verified-gold-1",
+}
 
 def main(
         path,
@@ -48,7 +53,7 @@ def main(
     ptp = 100*ptp_count(reports)/total_instance_count
     rows.extend([key, val] for key, val in zip(fields, [applied, success, ftx, ftp, ptp]))
     # compute coverage delta (if gold run is available)
-    gold_run_id = "validate-{}gold-1".format(f"{dataset}-" if dataset != "lite" else "")
+    gold_run_id = GOLD_RUN_MAP[dataset]
     try:
         gold_reports = collect_reports("gold", gold_run_id, instance_log_path.parent.parent)
     except Exception:

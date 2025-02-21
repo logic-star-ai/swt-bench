@@ -26,6 +26,11 @@ def main(instance_log_path: str = "./run_instance_swt_logs", dataset_name: str =
         methods = [
             ("gold", "validate-full-gold")
         ]
+    elif dataset_name == "princeton-nlp/SWE-bench_Verified":
+        methods = [
+            ("gold", f"validate-verified-gold-{i}")
+            for i in range(1, 6)
+        ]
     else:
         raise ValueError(f"Unknown dataset {dataset_name}")
     resolved_instances = all_instances.copy()
