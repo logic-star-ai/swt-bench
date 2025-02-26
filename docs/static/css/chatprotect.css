@@ -1621,6 +1621,12 @@ th:hover .sort-arrow[act-column="false"]::before {
 .hero.is-link {
     background-color: #e38a2a;
 }
+.button.is-link {
+    background-color: #e38a2a;
+}
+.button.is-link.is-hovered, .button.is-link:hover {
+    background-color: #e46821;
+}
 .small-icon {
     width: 1em !important;
     height: 1em !important;
