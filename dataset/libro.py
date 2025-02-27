@@ -89,7 +89,7 @@ def main(
     dataset: str = "princeton-nlp/SWE-bench_Lite",
     run_id_pattern: str = "gpt-4o-2024-11-20__SWT-bench_Verified_bm25_27k_zsp__test_{seed}",
     model: str = "gpt-4o-2024-11-20",
-    seeds: list[int] = (1,2,3,4,5),
+    seeds: list[int] = (0,1,2,3,4),
     out_dataset_prefix: str = "./datasets/libro",
     split: str = "test",
 ):
