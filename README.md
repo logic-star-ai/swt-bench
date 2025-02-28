@@ -1,7 +1,7 @@
 <div align="center">
     <h1><img height="150px" src="./docs/static/images/color_circle.png" alt="SWT-Bench 🔍🦙"><br>SWT-Bench</h1>
 
-[![Build & Test](https://github.com/logic-star-ai/swt-Bench/actions/workflows/build.yml/badge.svg)](https://github.com/logic-star-ai/swt-Bench/actions/workflows/build.yml)
+[![Build & Test](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml/badge.svg)](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml)
    <a href="https://www.python.org/">
         <img alt="Build" src="https://img.shields.io/badge/Python-3.9+-1f425f.svg?color=blue">
     </a>
@@ -12,7 +12,7 @@
 
 ## 👋 Overview
 
-SWT-Bench is a Benchmark for evaluating large language models on testing generation for real world software issues collected from GitHub.
+SWT-Bench is a benchmark for evaluating large language models on testing generation for real world software issues collected from GitHub.
 Given a *codebase* and an *issue*, a language model is tasked with generating a *reproducing test* that fails in the original state of the code base and passes after a patch resolving the issue has been applied.
 
 > Check out our Paper for more details: [SWT-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents](https://openreview.net/pdf?id=9Y8zUO11EQ)
@@ -24,8 +24,8 @@ If you're setting up on Linux, we recommend seeing the [post-installation steps]
 
 Finally, to build SWT-Bench, follow these steps:
 ```bash
-git clone git@github.com:eth-sri/swt-Bench.git
-cd swt-Bench
+git clone git@github.com:eth-sri/swt-bench.git
+cd swt-bench
 python -m venv .venv
 source .venv/bin/activate
 pip install -e .
@@ -56,7 +56,7 @@ python -m src.main \
 Evaluate model predictions on SWT-Bench Lite using the evaluation harness with the following command:
 ```bash
 python -m src.main \
-    --dataset_name princeton-nlp/SWE-Bench_Lite \
+    --dataset_name princeton-nlp/SWE-bench_Lite \
     --predictions_path <path_to_predictions> \
     --max_workers <num_workers> \
     --run_id <run_id>
@@ -75,7 +75,7 @@ Pass it the path to your evaluation, including run_id and model to get a simple 
 For example, to reproduce the results for SWE-Agent from Table 2 and 3 of the paper, run the following command:
 
 ```bash
-python -m src.report run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-Bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1 --dataset lite
+python -m src.report run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1 --dataset lite
 # |------------------------------------|--------------------------|
 # | Method                             | swea__gpt-4-1106-preview |
 # | Applicability (W)                  | 87.31884057971014        |
@@ -92,7 +92,7 @@ In order to see a coverage delta reported, you need to have the gold evaluation 
 
 ### Submitting Results to the Leaderboard
 
-We list top performing methods for SWT-Bench Lite and Verified on our [leaderboard](https://swtBench.com). If you want to have your results included, please [send us an email to submit@sweBench.com](mailto:submit@swtBench.com?subject=SWT-Bench%20Submission&body=Hi%20there%2C%0A%0ASWT-Bench%20is%20great%21%20We%20want%20to%20submit%20our%20agent%20evaluation%20to%20the%20leaderboard.%0A%0APlease%20find%20attached%201%29%20the%20predictions%20of%20our%20cool%20agent%20as%20jsonl%20zip%2C%202%29%20the%20resulting%20evaluation%20report%2C%20and%203%29%20a%20link%20to%20the%20project%20and%20inference%20traces%3A) containing
+We list top performing methods for SWT-Bench Lite and Verified on our [leaderboard](https://swtbench.com). If you want to have your results included, please [send us an email to submit@swebench.com](mailto:submit@swtbench.com?subject=SWT-Bench%20Submission&body=Hi%20there%2C%0A%0ASWT-Bench%20is%20great%21%20We%20want%20to%20submit%20our%20agent%20evaluation%20to%20the%20leaderboard.%0A%0APlease%20find%20attached%201%29%20the%20predictions%20of%20our%20cool%20agent%20as%20jsonl%20zip%2C%202%29%20the%20resulting%20evaluation%20report%2C%20and%203%29%20a%20link%20to%20the%20project%20and%20inference%20traces%3A) containing
 
 - The name of your method
 - The inference results from your method as the JSONL used to run the evaluation. The JSONL should contain a prediction for each instance in SWT-Bench Lite or Verified per line, each with the following fields
@@ -181,7 +181,7 @@ If you find our work helpful, please use the following citations.
 Please also consider citing SWE-bench which inspired our work and forms the basis of this code-base.
 ```bib
 @inproceedings{
-    jimenez2024sweBench,
+    jimenez2024swebench,
     title={{SWE}-bench: Can Language Models Resolve Real-world Github Issues?},
     author={Carlos E Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik R Narasimhan},
     booktitle={The Twelfth International Conference on Learning Representations},
