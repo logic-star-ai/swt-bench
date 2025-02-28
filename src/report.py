@@ -35,7 +35,7 @@ def main(
         raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     else:
         for seed in seeds:
-            seed_path = Path(str(instance_log_path).format(seed))
+            seed_path = Path(str(instance_log_path).format(seed=seed))
             if not seed_path.exists():
                 raise FileNotFoundError(f"Instance log directory not found at {seed_path}")
     if name == None:
