@@ -31,8 +31,9 @@ def main(
     """
     total_instance_count = TOTAL_INSTANCE_MAP[dataset]
     instance_log_path = Path(path)
-    if not instance_log_path.exists() and mode == "single":
-        raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
+    if mode == "single":
+        if not instance_log_path.exists():
+            raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
     else:
         for seed in seeds:
             seed_path = Path(str(instance_log_path).format(seed=seed))
