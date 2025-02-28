@@ -10,18 +10,31 @@ import numpy as np
 from constants import FAIL_TO_PASS, FAIL_TO_FAIL, PASS_TO_PASS
 import difflib
 
-FILTER_FILE = "dataset/filter_cases_lite.txt"
+FILTER_FILE_LITE = "dataset/filter_cases_lite.txt"
 FILTER_FILE_FULL = "dataset/filter_cases_full.txt"
+FILTER_FILE_VERIFIED = "dataset/filter_cases_verified.txt"
 
 @functools.lru_cache(maxsize=1)
-def _filter_cases():
+def _filter_cases(dataset="all"):
     filter_cases = set()
-    for file in [FILTER_FILE, FILTER_FILE_FULL]:
+    if dataset == "all":
+        files = [FILTER_FILE_LITE, FILTER_FILE_FULL, FILTER_FILE_VERIFIED]
+    elif dataset == "lite":
+        files = [FILTER_FILE_LITE]
+    elif dataset == "full":
+        files = [FILTER_FILE_FULL]
+    elif dataset == "verified":
+        files = [FILTER_FILE_VERIFIED]
+    else:
+        raise ValueError(f"Unknown dataset: {dataset}")
+    for file in files:
         with open(file) as f:
             filter_cases.update(f.read().splitlines(keepends=False))
     return frozenset(filter_cases)
 
-total_cases_lite = 276
+total_cases_lite = 300 - len(_filter_cases("lite"))
+total_cases_full = 2294 - len(_filter_cases("full"))
+total_cases_verified = 500 - len(_filter_cases("verified"))
 
 def _collect_reports(model_name, run_id, instance_log_path: Path, filter_cases=True):
     run_path = instance_log_path / run_id / model_name

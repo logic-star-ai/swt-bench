@@ -85,4 +85,29 @@ document.addEventListener("DOMContentLoaded", () => {
     const longDate = parsedDate.toLocaleDateString();
     cell.textContent = longDate;
   });
+  document.getElementById('lite-button').addEventListener('click', function() {
+    document.getElementById('leaderboard-table').parentElement.style.display = 'block';
+    document.getElementById('verified-leaderboard').style.display = 'none';
+    document.getElementById('lite-button').classList.add('is-link');
+    document.getElementById('verified-button').classList.remove('is-link');
+    urlParams.set('results', 'lite');
+    window.history.replaceState({}, '', `${location.pathname}?${urlParams}`);
+  });
+
+  document.getElementById('verified-button').addEventListener('click', function() {
+    document.getElementById('leaderboard-table').parentElement.style.display = 'none';
+    document.getElementById('verified-leaderboard').style.display = 'block';
+    document.getElementById('lite-button').classList.remove('is-link');
+    document.getElementById('verified-button').classList.add('is-link');
+    urlParams.set('results', 'verified');
+    window.history.replaceState({}, '', `${location.pathname}?${urlParams}`);
+  });
+  const urlParams = new URLSearchParams(window.location.search);
+  const resultsParam = urlParams.get('results');
+
+  if (resultsParam === 'verified') {
+    document.getElementById('verified-button').click();
+  } else if (resultsParam === 'lite') {
+    document.getElementById('lite-button').click();
+  }
 });
