@@ -138,13 +138,10 @@
       <tr>
     <td>
     <p class="subtitle">
-    SWT-Bench is a benchmark for software testing capabilities on real-world code bases.
+    TLDR; Can your model write reproduction tests for real-world issues?
     </p>
     <p style="max-width: 750px;">
-       SWT-Bench is based on real-world GitHub issues and pull-requests of popular Python libraries. Given the code base and a user-reported issue, the task is to generate a reproducing test. A test is considered to be reproducing if it fails on the original code base but passes after the pull-request resolving the issue has been applied. 
-       </p>
-       <p style="margin-top: 0.5em;">
-       SWT-Bench is a project by <a href="https://logicstar.ai">LogicStar AI</a> and the <a href="https://www.sri.inf.ethz.ch/">Secure, Reliable, and Intelligent Systems Lab</a> at ETH Zürich.<br/>
+       The task of SWT-Bench is to reproduce a reported issue by adding an appropriate test case to the projects' test suite. The test should fail on the original code base and pass after the issue is resolved. 
        </p>
        <div class="container" style="margin-top: 0.5em;">
         <div class="columns is-centered is-vcentered is-mobile"">
@@ -165,7 +162,7 @@
     </td>
         <td class="is-hidden-mobile">
           <p>
-    <img src="./static/images/color_transparent.png" alt="Logo" class="centered-logo" style="max-height: 13em;">
+    <img src="./static/images/color_transparent.png" alt="Logo" class="centered-logo" style="max-height: 8em;">
     </p>
     </td>
     </tr>
@@ -395,7 +392,7 @@
             What is the task in SWT-Bench?
           </h2>
           <h5 class="subtitle is-5">Generate software tests which reproduce user-reported issues and increase code coverage.</h5>
-       <p>Each SWT-Bench task is based on a pull-request from a GitHub repository which resolves a reported issue and contains the code patch fixing the issue and unit tests testing the fix. Given the original state of the code base and the user issue, the task is to generate tests that reproduce this issue. These generated tests are expected to fail on the original code base and pass after the issue is resolved. 
+       <p>Each SWT-Bench task is based on a real-world pull-request from a GitHub repository which resolves a user-reported issue and contains the code patch fixing the issue and unit tests testing the fix. Given the original state of the code base and the user issue, the task is to generate tests that reproduce this issue. These generated tests are expected to fail on the original code base and pass after the issue is resolved. 
           </p>
         </div>
       </div>
