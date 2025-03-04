@@ -372,7 +372,8 @@ def make_run_report(
         predictions: dict,
         dataset: list,
         client: docker.DockerClient,
-        run_id: str
+        run_id: str,
+        exec_mode: ExecMode,
     ):
     """
     Make a final evaluation and run report of the instances that have been run.
@@ -439,7 +440,15 @@ def make_run_report(
                         patch_id, directive_path in zip(patch_ids[2:], directive_paths)
                     ]
             )
-            report = report_results(patch_id_base, run_id, instance["golden_code_patch"], output_paths, instance_id, instance["repo"])
+            report = report_results(
+                patch_id_base,
+                run_id,
+                instance["golden_code_patch"],
+                output_paths,
+                instance_id,
+                instance["repo"],
+                exec_mode,
+            )
 
         if report[instance_id]["resolved"]:
             # Record if the instance was resolved

@@ -80,7 +80,7 @@ def run(
 
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
-    make_run_report(predicted_tests, full_dataset, client, run_id)
+    make_run_report(predicted_tests, full_dataset, client, run_id, exec_mode)
 
 
 if __name__ == "__main__":
