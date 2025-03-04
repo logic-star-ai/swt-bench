@@ -33,7 +33,6 @@ from src.grading import (
     get_eval_report,
     get_pred_report,
     get_resolution_success,
-    ResolvedStatus,
     TestStatus,
 )
 
