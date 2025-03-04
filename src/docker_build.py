@@ -52,6 +52,7 @@ class BuildImageError(Exception):
         )
 
 BuildMode = Literal["cli", "api"]
+ExecMode = Literal["unit_test", "reproduction_script"]
 
 def docker_build_cli(
     build_dir: Path,

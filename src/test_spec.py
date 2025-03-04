@@ -1,30 +1,11 @@
-import hashlib
-import json
-import platform
-import re
-
 from dataclasses import dataclass
-from typing import Union
+from typing import Optional
 
 from src.constants import (
     SWEbenchInstance,
-    MAP_REPO_TO_INSTALL,
-    MAP_VERSION_TO_INSTALL,
-    MAP_REPO_TO_TEST_FRAMEWORK,
-    USE_X86,
-)
-from src.dockerfiles import (
-    get_dockerfile_base,
-    get_dockerfile_env,
-    get_dockerfile_instance,
-)
-from src.utils import (
-    get_requirements,
-    get_environment_yml,
-    get_test_directives,
 )
 
-from src.exec_spec import ExecSpec, make_exec_spec
+from src.exec_spec import ExecSpec, make_exec_spec, ExecMode
 
 DIFF_MODIFIED_FILE_REGEX = r"--- a/(.*)"
 
@@ -40,32 +21,18 @@ class TestSpec:
     exec_spec: ExecSpec
 
 
-def get_test_specs_from_dataset(dataset: Union[list[SWEbenchInstance], list[TestSpec]]) -> list[TestSpec]:
-    """
-    Idempotent function that converts a list of SWEbenchInstance objects to a list of TestSpec objects.
-    """
-    if isinstance(dataset[0], TestSpec):
-        return dataset
-    return list(map(make_test_spec, dataset))
+def make_test_spec(
+        instance: SWEbenchInstance,
+        exec_mode: ExecMode = "unit_test",
+        reproduction_script_name: Optional[str] = None,
 
-
-def get_exec_specs_from_dataset(dataset: Union[list[SWEbenchInstance], list[TestSpec]]) -> list[ExecSpec]:
-    """
-    Idempotent function that converts a list of SWEbenchInstance objects to a list of TestSpec objects.
-    """
-    if not isinstance(dataset[0], TestSpec):
-        # return dataset
-        dataset = list(map(make_test_spec, dataset))
-    return [x.exec_spec for x in dataset]
-
-
-def make_test_spec(instance: SWEbenchInstance) -> TestSpec:
+) -> TestSpec:
     if isinstance(instance, TestSpec):
         return instance
     instance_id = instance["instance_id"]
     golden_code_patch = instance["golden_code_patch"]
     golden_test_patch = instance["golden_test_patch"]
-    exec_spec = make_exec_spec(instance)
+    exec_spec = make_exec_spec(instance, exec_mode, reproduction_script_name)
 
     return TestSpec(
         instance_id=instance_id,
