@@ -14,7 +14,7 @@ from pathlib import Path
 from tqdm import tqdm
 from typing import List, Tuple, Optional
 
-from auxillary_src.extract_patches import remove_binary_diffs
+from src.auxillary_src.extract_patches import remove_binary_diffs
 from src.constants import (
     APPLY_PATCH_FAIL,
     APPLY_PATCH_PASS

@@ -4,10 +4,9 @@ from typing import Any, Dict, Tuple, List, Optional
 import json
 from unidiff import PatchSet
 
-from exec_spec import ExecMode
+from src.exec_spec import ExecMode
 from src.constants import (
     APPLY_PATCH_FAIL,
-    APPLY_PATCH_PASS,
     FAIL_TO_FAIL,
     FAIL_TO_PASS,
     PASS_TO_FAIL,
@@ -16,10 +15,8 @@ from src.constants import (
     RESET_FAILED,
     TESTS_ERROR,
     TESTS_TIMEOUT,
-    ResolvedStatus,
     TestStatus,
 )
-from src.test_spec import TestSpec
 from src.log_parsers import MAP_REPO_TO_PARSER, parse_log_reproduction_script
 from src.utils import get_log_dir, setup_logging
 
