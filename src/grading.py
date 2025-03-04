@@ -4,9 +4,9 @@ from typing import Any, Dict, Tuple, List, Optional
 import json
 from unidiff import PatchSet
 
+from src.exec_spec import ExecMode
 from src.constants import (
     APPLY_PATCH_FAIL,
-    APPLY_PATCH_PASS,
     FAIL_TO_FAIL,
     FAIL_TO_PASS,
     PASS_TO_FAIL,
@@ -15,11 +15,9 @@ from src.constants import (
     RESET_FAILED,
     TESTS_ERROR,
     TESTS_TIMEOUT,
-    ResolvedStatus,
     TestStatus,
 )
-from src.test_spec import TestSpec
-from src.log_parsers import MAP_REPO_TO_PARSER
+from src.log_parsers import MAP_REPO_TO_PARSER, parse_log_reproduction_script
 from src.utils import get_log_dir, setup_logging
 
 # MARK: Utility functions
@@ -45,12 +43,19 @@ def test_failed(case: str, sm: dict[str, str]) -> bool:
     )
 
 
-def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
+def get_logs_eval(
+        log_fp: str,
+        repo: str,
+        exec_mode: ExecMode,
+) -> tuple[dict[str, str], bool]:
     """
     Retrieve evaluation results for a task instance from its corresponding log file
 
     Args:
         log_fp (str): path to log file
+        repo (str): repository name
+        exec_mode (ExecMode): execution mode
+        reproduction_script_name (str): name of reproduction script
     Returns:
         bool: whether the patch applied successfully
         dict: status map
@@ -58,7 +63,7 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
     TODO(john-b-yang): Check this is working properly...
     """
     # Convert e.g. "logs/scikit-learn__scikit-learn-12421/test_output.txt" to "scikit-learn/scikit-learn"
-    log_parser = MAP_REPO_TO_PARSER[repo]
+    log_parser = MAP_REPO_TO_PARSER[repo] if exec_mode != "reproduction_script" else parse_log_reproduction_script
 
     if not Path(log_fp).exists():
         # likely due to a timeout
@@ -66,6 +71,7 @@ def get_logs_eval(log_fp: str, repo: str) -> tuple[dict[str, str], bool]:
     with open(log_fp) as f:
         raw_content = f.read()
         # remove installation logs
+    # NOTE: does not work when not computing coverage
     content = re.split(r"\n\+ python3 [^\n]*trace.py --count -C coverage.cover [^\n]*\n", raw_content, flags=re.MULTILINE)[1]
     # remove coverage dumps
     content = content.split("\n+ cat coverage.cover")[0]
@@ -383,7 +389,15 @@ def get_pred_report(
     return report_map
 
 
-def report_results(patch_id: str, run_id: str, golden_code_patch, output_paths: Optional[List[str]], instance_id: str, repo: str) -> dict[str, dict[str, bool]]:
+def report_results(
+        patch_id: str,
+        run_id: str,
+        golden_code_patch,
+        output_paths: Optional[List[str]],
+        instance_id: str,
+        repo: str,
+        exec_mode: ExecMode,
+) -> dict[str, dict[str, bool]]:
     log_dir = get_log_dir(run_id, patch_id, instance_id)
     logger, report_path = setup_logging(log_dir, instance_id)
 
@@ -395,7 +409,7 @@ def report_results(patch_id: str, run_id: str, golden_code_patch, output_paths: 
     patch_applied = []
     if output_paths is not None:
         for output_path in output_paths:
-            test_result, patch_applied_ = get_logs_eval(output_path, repo)
+            test_result, patch_applied_ = get_logs_eval(output_path, repo, exec_mode)
             patch_applied.append(patch_applied_)
             coverage_result = get_coverage_eval(output_path)
             test_results.append(test_result)

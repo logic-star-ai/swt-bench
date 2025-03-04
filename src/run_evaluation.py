@@ -1,4 +1,5 @@
 import hashlib
+from functools import partial
 from time import time
 
 import docker
@@ -13,7 +14,7 @@ from pathlib import Path
 from tqdm import tqdm
 from typing import List, Tuple, Optional
 
-from auxillary_src.extract_patches import remove_binary_diffs
+from src.auxillary_src.extract_patches import remove_binary_diffs
 from src.constants import (
     APPLY_PATCH_FAIL,
     APPLY_PATCH_PASS
@@ -30,7 +31,7 @@ from src.docker_utils import (
 from src.docker_build import start_container, BuildMode
 from src.test_spec import make_test_spec, TestSpec
 from src.utils import get_log_dir, get_test_directives, log_git_diff, setup_logging, link_image_build_dir, close_logger
-from src.exec_spec import ExecSpec, make_exec_spec
+from src.exec_spec import ExecSpec, make_exec_spec, ExecMode
 from src.grading import report_results
 
 
@@ -279,6 +280,8 @@ def run_instances(
         timeout: int,
         client: docker.DockerClient,
         build_mode: BuildMode,
+        exec_mode: ExecMode,
+        reproduction_script_name: Optional[str] = None,
     ):
     """
     Run all instances for the given predictions in parallel.
@@ -293,8 +296,11 @@ def run_instances(
         run_id (str): Run ID
         timeout (int): Timeout for running tests
         client (docker.DockerClient): Docker client
+        build_mode (BuildMode): Build mode
+        exec_mode (ExecMode): Execution mode
+        reproduction_script_name (Optional[str]): Name of the reproduction script
     """
-    test_specs = list(map(make_test_spec, instances))
+    test_specs = list(map(partial(make_test_spec, exec_mode=exec_mode, reproduction_script_name=reproduction_script_name), instances))
 
     # print number of existing instance images
     instance_image_ids = {x.exec_spec.instance_image_key for x in test_specs}
@@ -366,7 +372,8 @@ def make_run_report(
         predictions: dict,
         dataset: list,
         client: docker.DockerClient,
-        run_id: str
+        run_id: str,
+        exec_mode: ExecMode,
     ):
     """
     Make a final evaluation and run report of the instances that have been run.
@@ -433,7 +440,15 @@ def make_run_report(
                         patch_id, directive_path in zip(patch_ids[2:], directive_paths)
                     ]
             )
-            report = report_results(patch_id_base, run_id, instance["golden_code_patch"], output_paths, instance_id, instance["repo"])
+            report = report_results(
+                patch_id_base,
+                run_id,
+                instance["golden_code_patch"],
+                output_paths,
+                instance_id,
+                instance["repo"],
+                exec_mode,
+            )
 
         if report[instance_id]["resolved"]:
             # Record if the instance was resolved

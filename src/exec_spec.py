@@ -4,7 +4,7 @@ import platform
 import re
 
 from dataclasses import dataclass, asdict
-from typing import Union, List, Optional
+from typing import Union, List, Optional, Literal
 
 from src.constants import (
     SWEbenchInstance,
@@ -24,6 +24,8 @@ from src.utils import (
 )
 
 DIFF_MODIFIED_FILE_REGEX = r"--- a/(.*)"
+
+ExecMode = Literal["unit_test", "reproduction_script"]
 
 
 @dataclass
@@ -50,6 +52,8 @@ class ExecSpec:
     rm_image: bool = False
     force_rebuild: bool = False
 
+    exec_mode: ExecMode = "unit_test"
+    reproduction_script_name: Optional[str] = None
     compute_coverage: bool = False
 
     @property
@@ -67,6 +71,20 @@ class ExecSpec:
 
     @property
     def test_command(self):
+        trace_path = "/root/trace.py"
+        changed_files_pattern = "({})".format("|".join(re.escape(x) for x in self.coverage_files))
+        trace_pattern = f"python3 {trace_path} --count -C coverage.cover --include-pattern '/testbed/{changed_files_pattern}'"
+
+        if self.exec_mode == "reproduction_script":
+            reproduction_script_path = f"/testbed/{self.reproduction_script_name}"
+            # executes just the reproduction script to determine the exit status
+            test_command = f"python3 {reproduction_script_path}"
+            if not self.compute_coverage:
+                return test_command
+            # executes the coverage script first to compute coverage, then the reproduction script to determine the exit status
+            return f"{trace_pattern} {reproduction_script_path} && {test_command}"
+
+        # otherwise execute the test suite command
         test_command = " ".join(
             [
                 MAP_REPO_TO_TEST_FRAMEWORK[self.repo][self.version],
@@ -75,10 +93,6 @@ class ExecSpec:
         )
         if not self.compute_coverage:
             return test_command
-
-        trace_path = "/root/trace.py"
-        changed_files_pattern = "({})".format("|".join(re.escape(x) for x in self.coverage_files))
-        trace_pattern = f"python3 {trace_path} --count -C coverage.cover --include-pattern '/testbed/{changed_files_pattern}'"
 
         cleaned_test_cmd = test_command.replace("--tb=no", "")
 
@@ -255,12 +269,16 @@ class ExecSpec:
 
         if "install" in install:
             eval_commands.append(install["install"])
+        if self.exec_mode == "reproduction_script":
+            exit_mode_command = ["echo $?"]
+        else:
+            exit_mode_command = []
 
         if self.compute_coverage:
             cat_coverage_commands = ["cat coverage.cover"]
         else:
             cat_coverage_commands = []
-        eval_commands += apply_patch_commands + [test_command] + cat_coverage_commands + reset_commands
+        eval_commands += apply_patch_commands + [test_command] + exit_mode_command + cat_coverage_commands + reset_commands
 
         return eval_commands
 
@@ -352,7 +370,11 @@ def get_exec_specs_from_dataset(dataset: Union[list[SWEbenchInstance], list[Exec
     return list(map(make_exec_spec, dataset))
 
 
-def make_exec_spec(instance: SWEbenchInstance) -> ExecSpec:
+def make_exec_spec(
+        instance: SWEbenchInstance,
+        exec_mode: ExecMode = "unit_test",
+        reproduction_script_name: Optional[str] = None,
+) -> ExecSpec:
     if isinstance(instance, ExecSpec):
         return instance
     instance_id = instance["instance_id"]
@@ -387,4 +409,6 @@ def make_exec_spec(instance: SWEbenchInstance) -> ExecSpec:
         test_directives=test_directives,
         patch_list=patch_list,
         coverage_files=changed_files,
+        exec_mode=exec_mode,
+        reproduction_script_name=reproduction_script_name,
     )

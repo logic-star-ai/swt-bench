@@ -1,4 +1,4 @@
-__version__ = "2.0.2"
+__version__ = "1.2.0"
 
 from src.constants import (
     KEY_INSTANCE_ID,
@@ -6,6 +6,7 @@ from src.constants import (
     KEY_PREDICTION,
     MAP_REPO_TO_TEST_FRAMEWORK,
     MAP_VERSION_TO_INSTALL,
+    ResolvedStatus
 )
 
 from src.docker_build import (
@@ -33,7 +34,6 @@ from src.grading import (
     get_eval_report,
     get_pred_report,
     get_resolution_success,
-    ResolvedStatus,
     TestStatus,
 )
 

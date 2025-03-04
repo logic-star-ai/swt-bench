@@ -1,7 +1,5 @@
-
 from tabulate import tabulate
 import fire
-from pathlib import Path
 
 from figures.util import *
 
