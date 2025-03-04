@@ -70,15 +70,10 @@ The final evaluation results will be stored in the `evaluation_results` director
 
 ### Unit Test mode vs. Reproduction Script mode
 
-By default, SWT-Bench evaluates in unit test mode.
-In unit test mode the model prediction is considered as a unit test to be integrated into the existing test suite.
-The evaluation harness executes the parts of the test suite that were modified by the model prediction and reports all changes to the test suite for computing the success rate.
-Successful patches add a pass->fail test to the test suite without causing any failures among existing tests.
+By default, SWT-Bench operates in unit test mode, where model predictions are treated as unit tests to be integrated into the existing test suite. The evaluation harness runs the modified parts of the test suite and reports changes to compute the success rate. Successful patches add a pass-to-fail test without causing existing tests to fail.
 
-An easier setting is reproduction script mode.
-In reproduction script mode, the model prediction is considered as a standalone script that reproduces the issue.
-The evaluation harness executes the script on the codebase and reports the success rate based on the script's exit code, where 0 counts as passing and 1 as failing.
-The test suite of the codebase is not executed in this mode.
+In the simpler reproduction script mode, model predictions are considered standalone scripts that reproduce issues. The evaluation harness runs the script on the codebase and determines success based on the script's exit code: 0 for pass and 1 for fail. The test suite is not executed in this mode.
+
 
 ## Reporting results
 
