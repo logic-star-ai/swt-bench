@@ -39,7 +39,7 @@ def extract_execution_trace_from_log(log: str) -> List[str]:
     log = log.splitlines()
     start_line = 0
     for i, line in enumerate(log[start_line:], start=start_line):
-        if i < len(log)-1 and "coverage.cover" in log[i + 1]:
+        if i < len(log)-1 and "trace.py --count -C coverage.cover" in log[i + 1]:
             break
     if i >= len(log) - 1:
         return None
@@ -87,9 +87,9 @@ def load_pre_post_logs(eval_output_dir: str, run_id, model) -> dict:
 def main(
     eval_output_dir: str = "./run_instance_swt_logs",
     dataset: str = "princeton-nlp/SWE-bench_Lite",
-    run_id_pattern: str = "libro_gpt-4-1106-preview__bm25_27k_cl100k__seed={seed},temperature=0.7.jsonl",
-    model: str = "gpt-4-1106-preview",
-    seeds: list[int] = (1,2,3,4,5),
+    run_id_pattern: str = "gpt-4o-2024-11-20__SWT-bench_Verified_bm25_27k_zsp__test_{seed}",
+    model: str = "gpt-4o-2024-11-20",
+    seeds: list[int] = (0,1,2,3,4),
     out_dataset_prefix: str = "./datasets/libro",
     split: str = "test",
 ):

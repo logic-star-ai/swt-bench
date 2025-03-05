@@ -4,6 +4,7 @@ Convert an SWE-Bench style dataset to SWT-Bench
 import pathlib
 from typing import Literal
 
+import fire
 from datasets import load_dataset, Dataset, DatasetDict, load_from_disk
 
 PLUS_PROMPT = """
@@ -187,7 +188,10 @@ def main(
     filter_cases: str = pathlib.Path(__file__).parent / "filter_cases_lite.txt",
 ):
     # Load the dataset
-    dataset = load_dataset(dataset_path)
+    if pathlib.Path(dataset_path).is_dir():
+        dataset = load_from_disk(dataset_path)
+    else:
+        dataset = load_dataset(dataset_path)
 
     # load the filter cases
     if filter_cases:
@@ -222,3 +226,5 @@ def main(
     ds = DatasetDict(splits)
     ds.save_to_disk(output_path)
 
+if __name__ == '__main__':
+    fire.Fire(main)

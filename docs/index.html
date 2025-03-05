@@ -138,13 +138,10 @@
       <tr>
     <td>
     <p class="subtitle">
-    SWT-Bench is a benchmark for software testing capabilities on real-world code bases.
+    TLDR; Can your model write reproduction tests for real-world issues?
     </p>
     <p style="max-width: 750px;">
-       SWT-Bench is based on real-world GitHub issues and pull-requests of popular Python libraries. Given the code base and a user-reported issue, the task is to generate a reproducing test. A test is considered to be reproducing if it fails on the original code base but passes after the pull-request resolving the issue has been applied. 
-       </p>
-       <p style="margin-top: 0.5em;">
-       SWT-Bench is a project by <a href="https://logicstar.ai">LogicStar AI</a> and the <a href="https://www.sri.inf.ethz.ch/">Secure, Reliable, and Intelligent Systems Lab</a> at ETH Zürich.<br/>
+       The task of SWT-Bench is to reproduce a reported issue by adding an appropriate test case to the projects' test suite. The test should fail on the original code base and pass after the issue is resolved. 
        </p>
        <div class="container" style="margin-top: 0.5em;">
         <div class="columns is-centered is-vcentered is-mobile"">
@@ -165,13 +162,14 @@
     </td>
         <td class="is-hidden-mobile">
           <p>
-    <img src="./static/images/color_transparent.png" alt="Logo" class="centered-logo" style="max-height: 13em;">
+    <img src="./static/images/color_transparent.png" alt="Logo" class="centered-logo" style="max-height: 8em;">
     </p>
     </td>
     </tr>
     </table>
   </div>
 </section>
+
 
 <section class="section">
   <div class="container is-max-desktop">
@@ -180,148 +178,185 @@
         <div class="content">
           <h2 class="title is-4 is-spaced">News</h2>
           <ul>
-            <li><strong><time>2025-02-18</time></strong> We evaluated <a href="https://docs.all-hands.dev/">OpenHands</a> on SWT-Bench, achieving 22.8% success rate with vanilla setup. We <a href="https://x.com/nielstron/status/1891831467908432223">discover</a> that setting up the CI environment for the agent significantly improves the results to 28.3%.</li>
-            <li><strong><time>2025-02-17</time></strong> We evaluated <a href="https://arxiv.org/pdf/2411.18015">AEGIS</a> on SWT-Bench, achieving 47.8% success rate and 26.0% coverage increase. AEGIS is the first submitted agent specifically tailored for the task of software testing and achieves state-of-the-art results.</li>
+            <li><strong><time>2025-02-18</time></strong> We evaluated <a href="https://docs.all-hands.dev/">OpenHands</a> on SWT-Bench, achieving 22.8% success rate on Lite with vanilla setup. We <a href="https://x.com/nielstron/status/1891831467908432223">discover</a> that setting up the CI environment for the agent significantly improves the results to 28.3% on Lite and 27.7% on Verified.</li>
+            <li><strong><time>2025-02-17</time></strong> We evaluated <a href="https://arxiv.org/pdf/2411.18015">AEGIS</a> on SWT-Bench Lite, achieving 47.8% success rate and 26.0% coverage increase. AEGIS is the first submitted agent specifically tailored for the task of software testing and achieves state-of-the-art results.</li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-</section>
-
-  <section class="section">
-    <div class="container is-max-desktop"> 
+  <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column">
+          <br/>
+          <div class="buttons is-centered">
+            <button id="lite-button" class="button is-small is-rounded is-link">Lite</button>
+            <button id="verified-button" class="button is-small is-rounded">Verified</button>
+          </div>
+          <div class="table-container">
+      <table id="leaderboard-table" class="table is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
+                  <th><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
+                  <th><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
+                  <th>Date <span class="sort-arrow"></span></th>
+                  <th><abbr title="Trajectories">Traj.</abbr></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>🆕&nbsp;<a href="https://arxiv.org/pdf/2411.18015">AEGIS</a><sup>&Dagger;</sup></td>
+                  <td>47.8%</td>
+                  <td>26.0%</td>
+                  <td><time>2025-02-17</time></td>
+                  <td><a href="https://files.sri.inf.ethz.ch/swt-bench/aegis/">🔗</a></td>
+                </tr>
+                <tr>
+                  <td>🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
+                  <td>28.3%</td>
+                  <td>52.4%</td>
+                  <td><time>2025-02-18</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td>🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (vanilla)</td>
+                  <td>22.8%</td>
+                  <td>43.6%</td>
+                  <td><time>2025-02-18</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td>SWE-Agent+</td>
+                  <td>18.5%</td>
+                  <td>27.6%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Mistral Large 2)</td>
+                  <td>16.3%</td>
+                  <td>23.0%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Claude 3.5 Sonnet)</td>
+                  <td>12.3%</td>
+                  <td>30.3%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (GPT-4o mini)</td>
+                  <td>9.8%</td>
+                  <td>20.9%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Claude 3 Haiku)</td>
+                  <td>2.5%</td>
+                  <td>3.0%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Mixtral 8x22B)</td>
+                  <td>0.7%</td>
+                  <td>0.9%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (GPT-4)</td>
+                  <td>15.9%</td>
+                  <td>26.5%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://aider.chat">Aider</a> (GPT-4)</td>
+                  <td>12.7%</td>
+                  <td>27.8%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://autocoderover.dev">AutoCodeRover</a> (GPT-4)</td>
+                  <td>9.1%</td>
+                  <td>17.9%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td>LIBRO<sup>#</sup></td>
+                  <td>14.1%</td>
+                  <td>23.8%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td>GPT-4 + BM25 (ZSP)</td>
+                  <td>9.4%</td>
+                  <td>21.5%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td>GPT-4 + BM25 (ZSB)</td>
+                  <td>3.6%</td>
+                  <td>7.6%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="verified-leaderboard" class="table-container" style="display: none;">
+            <table id="verified-leaderboard-table" class="table is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
+                  <th><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
+                  <th><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
+                  <th>Date <span class="sort-arrow"></span></th>
+                  <th><abbr title="Trajectories">Traj.</abbr></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
+                  <td>27.7%</td>
+                  <td>52.9%</td>
+                  <td><time>2025-02-28</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td>🆕&nbsp;LIBRO (GPT-4o) <sup>#</sup></td>
+                  <td>17.8%</td>
+                  <td>38.0%</td>
+                  <td><time>2025-02-28</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr>
+                  <td>🆕&nbsp;GPT-4o + BM25 (ZSP)</td>
+                  <td>14.3%</td>
+                  <td>34.0%</td>
+                  <td><time>2025-02-28</time></td>
+                  <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <p>
             We report the percentage of issues reproduced by the generated tests (\(\mathcal{S}\)) and their mean line coverage of the resolving patch (\(\Delta\mathcal{C}\)).
           </p>
-          <br/>
-          <div class="table-container">
-      <table id="leaderboard-table" class="table is-hoverable is-fullwidth">
-        <thead>
-          <tr>
-            <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
-            <th><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
-            <th><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
-            <th>Date <span class="sort-arrow"></span></th>
-            <th><abbr title="Trajectories">Traj.</abbr></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>🆕&nbsp;<a href="https://arxiv.org/pdf/2411.18015">AEGIS</a><sup>&Dagger;</sup></td>
-            <td>47.8%</td>
-            <td>26.0%</td>
-            <td><time>2025-02-17</time></td>
-            <td><a href="https://files.sri.inf.ethz.ch/swt-bench/aegis/">🔗</a></td>
-          </tr>
-          <tr>
-            <td>🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
-            <td>28.3%</td>
-            <td>52.4%</td>
-            <td><time>2025-02-18</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td>🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (vanilla)</td>
-            <td>22.8%</td>
-            <td>43.6%</td>
-            <td><time>2025-02-18</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td>SWE-Agent+</td>
-            <td>18.5%</td>
-            <td>27.6%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Mistral Large 2)</td>
-            <td>16.3%</td>
-            <td>23.0%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Claude 3.5 Sonnet)</td>
-            <td>12.3%</td>
-            <td>30.3%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (GPT-4o mini)</td>
-            <td>9.8%</td>
-            <td>20.9%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Claude 3 Haiku)</td>
-            <td>2.5%</td>
-            <td>3.0%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (Mixtral 8x22B)</td>
-            <td>0.7%</td>
-            <td>0.9%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> (GPT-4)</td>
-            <td>15.9%</td>
-            <td>26.5%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td><a href="https://aider.chat">Aider</a> (GPT-4)</td>
-            <td>12.7%</td>
-            <td>27.8%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td><a href="https://autocoderover.dev">AutoCodeRover</a> (GPT-4)</td>
-            <td>9.1%</td>
-            <td>17.9%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td>LIBRO<sup>#</sup></td>
-            <td>14.1%</td>
-            <td>23.8%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td>GPT-4 + BM25 (ZSP)</td>
-            <td>9.4%</td>
-            <td>21.5%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-          <tr>
-            <td>GPT-4 + BM25 (ZSB)</td>
-            <td>3.6%</td>
-            <td>7.6%</td>
-            <td><time>2024-05-22</time></td>
-            <td><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
-          </tr>
-        </tbody>
-        </table>
-        </div></div>
-
+        </div>
       </div>
       <div class="columns is-max-desktop">
         <div class="column is-centered">
-          <p class="is-size-7">The results reported here are evaluation results on SWT-Bench Lite. We have independently executed submitted predictions for verification. <sup>&Dagger;</sup> Generates stand-alone reproduction scripts and does not attempt integration into the test framework. <sup>#</sup> This approach leverages execution feedback from a correctly set-up <a title="Continuous Integration" href="https://en.wikipedia.org/wiki/Continuous_integration">CI</a> environment. </p>
+          <p class="is-size-7">The results reported here are evaluation results on SWT-Bench Lite and Verified. We have independently executed submitted predictions for verification. <sup>&Dagger;</sup> Generates stand-alone reproduction scripts and does not attempt integration into the test framework. <sup>#</sup> This approach leverages execution feedback from a correctly set-up <a title="Continuous Integration" href="https://en.wikipedia.org/wiki/Continuous_integration">CI</a> environment. </p>
         </div>
       </div>
     </div>
@@ -357,7 +392,7 @@
             What is the task in SWT-Bench?
           </h2>
           <h5 class="subtitle is-5">Generate software tests which reproduce user-reported issues and increase code coverage.</h5>
-       <p>Each SWT-Bench task is based on a pull-request from a GitHub repository which resolves a reported issue and contains the code patch fixing the issue and unit tests testing the fix. Given the original state of the code base and the user issue, the task is to generate tests that reproduce this issue. These generated tests are expected to fail on the original code base and pass after the issue is resolved. 
+       <p>Each SWT-Bench task is based on a real-world pull-request from a GitHub repository which resolves a user-reported issue and contains the code patch fixing the issue and unit tests testing the fix. Given the original state of the code base and the user issue, the task is to generate tests that reproduce this issue. These generated tests are expected to fail on the original code base and pass after the issue is resolved. 
           </p>
         </div>
       </div>

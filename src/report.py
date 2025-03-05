@@ -5,22 +5,40 @@ from pathlib import Path
 
 from figures.util import *
 
+TOTAL_INSTANCE_MAP = {
+    "lite": total_cases_lite,
+    "full": total_cases_full,
+    "verified": total_cases_verified,
+}
+GOLD_RUN_MAP = {
+    "lite": "validate-lite-gold-1",
+    "full": "validate-full-gold",
+    "verified": "validate-verified-gold-1",
+}
+
 def main(
         path,
         name=None,
-        total_instance_count: int = total_cases_lite,
         format="github",
         mode: Literal["single", "libro", "p@k"] = "single",
         seeds: Tuple[int] = None,
         libro_decision_file: Path = None,
+        dataset: Literal["lite", "full", "verified"] = "lite",
     ):
     """
     Generic script to report results for a single run
     Pass as path parameter the path to the exact model run, e.g. "run_instance_swt_logs/swea__gpt-4-1106-preview/gpt4__SWE-bench_Lite__default_test_demo3__t-0.00__p-0.95__c-3.00__install-1"
     """
+    total_instance_count = TOTAL_INSTANCE_MAP[dataset]
     instance_log_path = Path(path)
-    if not instance_log_path.exists():
-        raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
+    if mode == "single":
+        if not instance_log_path.exists():
+            raise FileNotFoundError(f"Instance log directory not found at {instance_log_path}")
+    else:
+        for seed in seeds:
+            seed_path = Path(str(instance_log_path).format(seed=seed))
+            if not seed_path.exists():
+                raise FileNotFoundError(f"Instance log directory not found at {seed_path}")
     if name == None:
         name = instance_log_path.parent.name
 
@@ -41,8 +59,9 @@ def main(
     ptp = 100*ptp_count(reports)/total_instance_count
     rows.extend([key, val] for key, val in zip(fields, [applied, success, ftx, ftp, ptp]))
     # compute coverage delta (if gold run is available)
+    gold_run_id = GOLD_RUN_MAP[dataset]
     try:
-        gold_reports = collect_reports("gold", "validate-gold-1", instance_log_path.parent.parent)
+        gold_reports = collect_reports("gold", gold_run_id, instance_log_path.parent.parent)
     except Exception:
         print("Warning: No gold run found, skipping report of coverage delta")
         gold_reports = None
