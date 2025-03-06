@@ -1,5 +1,8 @@
 from typing import TYPE_CHECKING
+
+
 if TYPE_CHECKING:
+    from exec_spec import ExecMode
     from docker_build import BuildMode
 
 import docker
@@ -35,6 +38,8 @@ def run(
         timeout: int,
         build_mode: "BuildMode" = "api",
         skip_eval: bool = False,
+        exec_mode: "ExecMode" = "unit_test",
+        reproduction_script_name: Optional[str] = None,
     ):
     """
     Run evaluation harness for the given dataset and predictions.
@@ -71,11 +76,11 @@ def run(
     else:
         # build environment images + run instances
         # build_env_images(client, dataset, force_rebuild, max_workers)
-        run_instances(predicted_tests, dataset, compute_coverage, cache_level, clean, force_rebuild, max_workers, run_id, patch_types, timeout, client, build_mode)
+        run_instances(predicted_tests, dataset, compute_coverage, cache_level, clean, force_rebuild, max_workers, run_id, patch_types, timeout, client, build_mode, exec_mode, reproduction_script_name)
 
     # clean images + make final report
     clean_images(client, existing_images, cache_level, clean)
-    make_run_report(predicted_tests, full_dataset, client, run_id)
+    make_run_report(predicted_tests, full_dataset, client, run_id, exec_mode)
 
 
 if __name__ == "__main__":
@@ -120,6 +125,12 @@ if __name__ == "__main__":
     # Skip running the evaluation and just grade
     parser.add_argument(
         "--skip_eval", type=str2bool, default=False, help="Skip evaluation and only generate reports"
+    )
+    parser.add_argument(
+        "--exec_mode", type=str, choices=["unit_test", "reproduction_script"], default="unit_test", help="Choose execution mode of generated patches. unit_test: run patch as part of test suite. parses test logs for deciding pass/fail.  reproduction_script: run patch as a separate script. return status of script decides pass/fail"
+    )
+    parser.add_argument(
+        "--reproduction_script_name", type=str, default=None, help="Name of the reproduction script to run in exec_mode reproduction_script"
     )
     args = parser.parse_args()
 
