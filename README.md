@@ -145,12 +145,13 @@ Moreover, for the evaluation of the agent in the correct environment, we discard
 To find the exact setup used for OpenHands, check out the branch [`feat/CI`](https://github.com/logic-star-ai/swt-bench/tree/feat/CI).
 AEGIS was evaluated in reproduction script mode.
 
-For reference, the results of our gold validation runs are below for SWT-Bench Lite and Verified (Applicability, Success Rate, F->X and F->P rate are 100% each).
+For reference, the results of our gold validation runs are below (Applicability, Success Rate, F->X and F->P rate are 100% each).
 
-| Metric                             | Gold Lite | Gold Verified |
-|------------------------------------|-----------|---------------|
-| P->P                               | 10.86     | 15.01         |
-| Coverage Delta (Δᵃˡˡ)              | 71.84     | 69.12         |
+| Metric                             | Lite  | Verified | Full  |  
+|------------------------------------|-------|----------|-------|
+| # Instances                        | 276   | 433      | 2294  |
+| P->P (Gold)                        | 10.86 | 15.01    | 17.65 |
+| Coverage Delta (Δᵃˡˡ)  (Gold)      | 71.84 | 69.12    | 65.13 |
 
 
 
