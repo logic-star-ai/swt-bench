@@ -1,20 +1,22 @@
 // making specific table sortable
 function makeSortable(table) {
-  const headers = table.querySelectorAll("th");
 
-  tbody = table.querySelector("tbody");
-  function sortByIndex(index) {
-      sortTableByColumn(tbody, index);
-      updateArrows(headers, index);
- };
-  headers.forEach((header, index) => {
-    header.addEventListener("click", () => sortByIndex(index));
-  });
+  const headers = table.querySelectorAll("th");
+  const tbody = table.querySelector("tbody");
+  tbody.setAttribute("data-sort-asc", false);
+  tbody.setAttribute("data-sort-index", -1);
 
   function sortTableByColumn(table, columnIndex) {
     const rows = Array.from(table.querySelectorAll("tr"));
-    const isAscending = table.getAttribute("data-sort-asc") !== "false";
-    const direction = isAscending ? -1 : 1;
+    let isAscending = table.getAttribute("data-sort-asc") !== "false";
+    const sortedIndex = parseInt(table.getAttribute("data-sort-index"));
+    if(sortedIndex === columnIndex) {
+      // Flip the sort direction if we're sorting the same column
+      isAscending = !isAscending;
+    }
+    table.setAttribute("data-sort-index", columnIndex);
+    const direction = isAscending ? 1 : -1;
+    table.setAttribute("data-sort-asc", isAscending.toString());
 
     rows.sort((rowA, rowB) => {
       const cellA = rowA.children[columnIndex].textContent.trim();
@@ -31,18 +33,17 @@ function makeSortable(table) {
     });
 
     rows.forEach(row => table.appendChild(row));
-    table.setAttribute("data-sort-asc", !isAscending);
   }
 
   function updateArrows(headers, sortedColumnIndex) {
     headers.forEach((header, index) => {
       const arrow = header.querySelector(".sort-arrow");
-      arrow.setAttribute("act-column", index == sortedColumnIndex);
       if (!arrow) {
         return;
       }
+      arrow.setAttribute("act-column", index == sortedColumnIndex);
       if (index === sortedColumnIndex) {
-        const isAscending = tbody.getAttribute("data-sort-asc") === "true";
+        const isAscending = tbody.getAttribute("data-sort-asc") !== "false";
         arrow.textContent = isAscending ? "\xa0\xa0🔼" : "\xa0\xa0🔽";
       } else {
 
@@ -50,10 +51,20 @@ function makeSortable(table) {
       }
     });
   }
-  sortByIndex(1);
+
+  function sortByIndex(index) {
+      sortTableByColumn(tbody, index);
+      updateArrows(headers, index);
+  };
+  headers.forEach((header, index) => {
+    header.addEventListener("click", () => sortByIndex(index));
+  });
+
+  sortByIndex(2);
 }
 document.addEventListener("DOMContentLoaded", () => {
   makeSortable(document.getElementById("leaderboard-table"));
+  makeSortable(document.getElementById("verified-leaderboard-table"));
 });
 
 function selectElement(element) {

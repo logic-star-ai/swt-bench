@@ -1632,3 +1632,9 @@ th:hover .sort-arrow[act-column="false"]::before {
     height: 1em !important;
     vertical-align: -0.125em;
   }
+.org-icon {
+    width: 20px !important;
+}
+.center-image {
+    text-align: center;
+}
