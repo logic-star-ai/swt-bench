@@ -19,8 +19,13 @@ function makeSortable(table) {
     table.setAttribute("data-sort-asc", isAscending.toString());
 
     rows.sort((rowA, rowB) => {
-      const cellA = rowA.children[columnIndex].textContent.trim();
-      const cellB = rowB.children[columnIndex].textContent.trim();
+      let cellA = rowA.children[columnIndex].textContent.trim();
+      let cellB = rowB.children[columnIndex].textContent.trim();
+      if (!cellA && !cellB) {
+        // check if its a date
+        cellA = new Date(rowA.children[columnIndex].querySelector('time').getAttribute('data-long-date')).getTime();
+        cellB = new Date(rowB.children[columnIndex].querySelector('time').getAttribute('data-long-date')).getTime();
+      }
 
       const cellANum = parseFloat(cellA);
       const cellBNum = parseFloat(cellB);
