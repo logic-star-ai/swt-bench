@@ -1624,9 +1624,19 @@ th:hover .sort-arrow[act-column="false"]::before {
 .button.is-link {
     background-color: #e38a2a;
 }
+.message.is-link .message-header{
+    background-color: #e38a2a;
+}
+.message.is-link .message-body {
+    border-color: #e38a2a;
+    color: #000000;
+  }
 .button.is-link.is-hovered, .button.is-link:hover {
     background-color: #e46821;
 }
+.message.is-link {
+    background-color: #ffe3c5;
+  }
 .small-icon {
     width: 1em !important;
     height: 1em !important;

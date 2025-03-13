@@ -91,7 +91,7 @@
       <table>
         <tr>
           <td>
-            ℹ️
+            <img src="./static/images/emojis/2139.svg" alt="i" style="height: 20px;">
           </td>
           <td>
             &nbsp; About
@@ -99,14 +99,26 @@
         </tr>
       </table>
     </a>
-    <a href="#learn-more">
+    <a href="https://arxiv.org/abs/2406.12952">
       <table>
         <tr>
           <td>
-            📜
+            <img src="./static/images/emojis/1F4C4.svg" alt="p" style="height: 20px;">
           </td>
           <td>
-            &nbsp; Paper &amp; Code
+            &nbsp; Paper
+          </td>
+        </tr>
+      </table>
+    </a>
+    <a href="https://github.com/logic-star-ai/swt-bench">
+      <table>
+        <tr>
+          <td>
+            <img src="./static/images/emojis/logo-github.a1fdb524.svg" alt="g" style="height: 20px;">
+          </td>
+          <td>
+            &nbsp; Code
           </td>
         </tr>
       </table>
@@ -138,7 +150,7 @@
       <tr>
     <td>
     <p class="subtitle">
-    TLDR; Can your model write reproduction tests for real-world issues?
+    <b>SWT-Bench:</b> Can your model write reproduction tests for real-world issues?
     </p>
     <p style="max-width: 750px;">
        The task of SWT-Bench is to reproduce a reported issue by adding an appropriate test case to the projects' test suite. The test should fail on the original code base and pass after the issue is resolved. 
@@ -173,26 +185,12 @@
 
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-4 is-spaced">News</h2>
-          <ul>
-            <li><strong><time>2025-02-28</time></strong> We release SWT-Bench <it>Verified</it>, a set of 433 human-verified solvable issues, matching <a href="https://openai.com/index/introducing-swe-bench-verified/">SWE-Bench Verified</a>. The specialized testing agent <a href="https://openai.com/index/introducing-swe-bench-verified/">Otter</a> achieves SOTA performance.</li>
-            <li><strong><time>2025-02-18</time></strong> We evaluated <a href="https://docs.all-hands.dev/">OpenHands</a> on SWT-Bench, achieving 22.8% success rate on Lite with vanilla setup. We <a href="https://x.com/nielstron/status/1891831467908432223">discover</a> that setting up the CI environment for the agent significantly improves the results to 28.3% on Lite and 27.7% on Verified.</li>
-            <li><strong><time>2025-02-17</time></strong> We evaluated <a href="https://arxiv.org/pdf/2411.18015">AEGIS</a> on SWT-Bench Lite, achieving 47.8% success rate and 26.0% coverage increase. AEGIS is the first submitted agent specifically tailored for the task of software testing and achieves state-of-the-art results.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column">
           <br/>
           <div class="buttons is-centered">
             <button id="lite-button" class="button is-small is-rounded is-link">Lite</button>
-            <button id="verified-button" class="button is-small is-rounded">Verified</button>
+            <button id="verified-button" class="button is-small is-rounded">🆕&nbsp;Verified</button>
           </div>
           <div class="table-container">
       <table id="leaderboard-table" class="table is-hoverable is-fullwidth">
@@ -208,7 +206,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>🆕&nbsp;<a href="https://arxiv.org/pdf/2411.18015">AEGIS</a><sup>&Dagger;</sup></td>
+                  <td><a href="https://arxiv.org/pdf/2411.18015">AEGIS</a><sup>&Dagger;</sup></td>
                   <td class="has-text-centered"><a href="https://se-research.bytedance.com/"><img src="./static/images/logos/bytedance-seeklogo.svg" class="org-icon"></a></td>
                   <td>47.8%</td>
                   <td>26.0%</td>
@@ -368,7 +366,7 @@
                   <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
                 </tr>
                 <tr>
-                  <td>🆕&nbsp;LIBRO (GPT-4o) <sup>#</sup></td>
+                  <td>LIBRO (GPT-4o) <sup>#</sup></td>
                   <td class="has-text-centered"><a href="https://github.com/coinse/libro"><img src="./static/images/logos/KAIST.svg" class="org-icon"></a></td>
                   <td>17.8%</td>
                   <td>38.0%</td>
@@ -376,7 +374,7 @@
                   <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
                 </tr>
                 <tr>
-                  <td>🆕&nbsp;GPT-4o + BM25 (ZSP)</td>
+                  <td>GPT-4o + BM25 (ZSP)</td>
                   <td class="has-text-centered"><a href="https://openai.com"><img src="./static/images/logos/openai.svg" class="org-icon"></a></td>
                   <td>14.3%</td>
                   <td>34.0%</td>
@@ -420,6 +418,26 @@
     </div>
 </section>
 <section class="section" id="about">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <article class="message is-link">
+            <div class="message-header">
+              <p>News</p>
+            </div>
+            <div class="message-body">
+          <p><strong><time>2025-02-28</time></strong> We release SWT-Bench <it>Verified</it>, a set of 433 human-verified solvable issues, matching <a href="https://openai.com/index/introducing-swe-bench-verified/">SWE-Bench Verified</a>. The specialized testing agent <a href="https://openai.com/index/introducing-swe-bench-verified/">Otter</a> achieves SOTA performance.</p>
+          <p><strong><time>2025-02-18</time></strong> We evaluated <a href="https://docs.all-hands.dev/">OpenHands</a> on SWT-Bench, achieving 22.8% success rate on Lite with vanilla setup. We <a href="https://x.com/nielstron/status/1891831467908432223">discover</a> that setting up the CI environment for the agent significantly improves the results to 28.3% on Lite and 27.7% on Verified.</p>
+          <p><strong><time>2025-02-17</time></strong> We evaluated <a href="https://arxiv.org/pdf/2411.18015">AEGIS</a> on SWT-Bench Lite, achieving 47.8% success rate and 26.0% coverage increase. AEGIS is the first submitted agent specifically tailored for the task of software testing and achieves state-of-the-art results.</p>
+          </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section">
   <div class="container is-max-desktop">
     <div class="columns is-centered is-narrow">
       <div class="column">
@@ -524,11 +542,15 @@
         <div class="content" style="text-align: left;">
           <h2 class="title is-4 is-spaced">
           <a class="bd-anchor-link" href="#swebench"></a>
-            What is the relationship between SWT-Bench and <a href="https://swebench.com">SWE-bench</a>?
+            Are there other relevant benchmarks about code generation and testing?
           </h2>
-          <h5 class="subtitle is-5">SWT-Bench and SWE-bench measure complementary skills. SWT-Bench measures the capability of reproducing a reported issue, while SWE-bench measures the capability of fixing the issue.</h5>
+          <h5 class="subtitle is-5"><a href="https://swebench.com">SWE-bench</a> measures the capability of fixing reported user issues. <a href="https://baxbench.com">BaxBench</a> measures capabilities at writing correct and secure web backends. </h5>
           <p>
-            SWT-Bench and SWE-bench are based on the same GitHub repositories and issues. While SWT-Bench measures the ability of models or agents to reproduce a given issue, SWE-bench measures their ability to resolve it. We observe that while these tasks are complementary, their hardness is not correlated on an instance level.
+            <b>SWE-bench</b>: SWT-Bench and <a href="https://swebench.com">SWE-bench</a> are based on the same GitHub repositories and issues. While SWT-Bench measures the ability of models or agents to reproduce a given issue, SWE-bench measures their ability to resolve it. We observe that while these tasks are complementary, their hardness is not correlated on an instance level.
+
+              <br/>
+              <br/>
+            <b>BaxBench</b>: <a href="https://baxbench.com">BaxBench</a> provides the model with a description of a web application backend and measures the correctness of the generated code. Additionally, BaxBench tests for common security vulnerabilities in the generated code.
           </p>
         </div>
         </div>
