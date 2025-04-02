@@ -54,9 +54,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-solarizedlight.min.css"/>
 
   <!-- Syntax highlighting for citation -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js">
-</script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.1.0/prism-bibtex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"> </script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.1.0/prism-bibtex.min.js"></script>
 
 
 <!-- Google tag (gtag.js) -->
@@ -187,35 +186,42 @@
 <section class="section">
   <div class="container is-max-desktop">
       <div class="columns is-centered">
+        <div class="column is-one-third is-hidden-mobile"> </div>
         <div class="column">
-          <br/>
-          <div class="buttons is-centered">
+          <div class="buttons" style="margin-bottom: 0; justify-content: center;">
             <button id="lite-button" class="button is-small is-rounded is-link">Lite</button>
             <button id="verified-button" class="button is-small is-rounded">🆕&nbsp;Verified</button>
           </div>
-          <div class="buttons is-centered">
-            <label class="checkbox">
-              <input type="checkbox" id="reproduction-mode-checkbox"> Reproduction Mode
+        </div>
+        <div class="column is-one-third" style="text-align: right;">
+          <div style="margin-left: 20px;">
+            <label class="checkbox is-small" style="font-size: 0.8rem;">
+              <input type="checkbox" id="reproduction-mode-checkbox"> Script Mode <sup>&Dagger;</sup>
             </label>
-            <label class="checkbox">
+            &nbsp;
+            <label class="checkbox is-small" style="font-size: 0.8rem;">
               <input type="checkbox" id="unittest-mode-checkbox" checked> Unit Test Mode
             </label>
           </div>
+        </div>
+      </div>
+      <div class="columns is-centered">
+        <div class="column">
           <div class="table-container">
-          <table id="leaderboard-table" class="table is-hoverable is-fullwidth">
+            <table id="leaderboard-table" class="table is-hoverable is-fullwidth" style="table-layout: fixed; width: 150%;">
               <thead>
-                <tr>
-                  <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
-                  <th class="has-text-centered"><abbr title="Affiliation / Organization">Org.</abbr></th>
-                  <th><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
-                  <th><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
-                  <th>Date <span class="sort-arrow"></span></th>
-                  <th class="has-text-centered"><abbr title="Trajectories">Traj.</abbr></th>
-                </tr>
+              <tr>
+                <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
+                <th style="width: 10%;" class="has-text-centered"><abbr title="Affiliation / Organization">Org.</abbr></th>
+                <th style="width: 15%;"><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
+                <th style="width: 15%;"><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
+                <th style="width: 20%;">Date <span class="sort-arrow"></span></th>
+                <th style="width: 10%;" class="has-text-centered"><abbr title="Trajectories">Traj.</abbr></th>
+              </tr>
               </thead>
               <tbody>
                 <tr data-mode="reproduction">
-                  <td><a href="https://arxiv.org/pdf/2411.18015">AEGIS</a><sup>&Dagger;</sup></td>
+                  <td>🥇&nbsp;<a href="https://arxiv.org/pdf/2411.18015">AEGIS</a><sup>&Dagger;</sup></td>
                   <td class="has-text-centered"><a href="https://se-research.bytedance.com/"><img src="./static/images/logos/bytedance-seeklogo.svg" class="org-icon"></a></td>
                   <td>47.8%</td>
                   <td>26.0%</td>
@@ -223,7 +229,7 @@
                   <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/aegis/">🔗</a></td>
                 </tr>
                 <tr data-mode="unittest">
-                  <td>🆕&nbsp;<a hef="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
+                  <td>🥇🆕&nbsp;<a hef="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
                   <td class="has-text-centered"><a href="https://all-hands.dev/"><img src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
                   <td>28.3%</td>
                   <td>52.4%</td>
@@ -231,7 +237,7 @@
                   <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
                 </tr>
                 <tr>
-                  <td>🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (vanilla)</td>
+                  <td>🥈🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (vanilla)</td>
                   <td class="has-text-centered"><a href="https://all-hands.dev/"><img src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
                   <td>22.8%</td>
                   <td>43.6%</td>
@@ -239,7 +245,7 @@
                   <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
                 </tr>
                 <tr>
-                  <td>SWE-Agent+</td>
+                  <td>🥉&nbsp;SWE-Agent+</td>
                   <td class="has-text-centered"><a href="https://swe-agent.com/"><img src="./static/images/logos/swe-agent.svg" class="org-icon"></a></td>
                   <td>18.5%</td>
                   <td>27.6%</td>
@@ -351,7 +357,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>🆕&nbsp;<a href="https://arxiv.org/abs/2502.05368v1">Otter++ (GPT-4o)</a></td>
+                  <td>🥇🆕&nbsp;<a href="https://arxiv.org/abs/2502.05368v1">Otter++ (GPT-4o)</a></td>
                   <td class="has-text-centered"><a href="https://www.ibm.com/"><img src="./static/images/logos/IBM.svg" class="org-icon"></a></td>
                   <td>37.0%</td>
                   <td>42.8%</td>
@@ -359,7 +365,7 @@
                   <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/otter/">🔗</a></td>
                 </tr>
                 <tr>
-                  <td>🆕&nbsp;<a href="https://arxiv.org/abs/2502.05368v1">Otter (GPT-4o)</a></td>
+                  <td>🥈🆕&nbsp;<a href="https://arxiv.org/abs/2502.05368v1">Otter (GPT-4o)</a></td>
                   <td class="has-text-centered"><a href="https://www.ibm.com/"><img src="./static/images/logos/IBM.svg" class="org-icon"></a></td>
                   <td>31.4%</td>
                   <td>37.6%</td>
@@ -367,7 +373,7 @@
                   <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/otter/">🔗</a></td>
                 </tr>
                 <tr>
-                  <td>🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
+                  <td>🥉🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
                   <td class="has-text-centered"><a href="https://all-hands.dev/"><img src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
                   <td>27.7%</td>
                   <td>52.9%</td>
@@ -416,7 +422,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z" " fill="currentColor"/></svg>
           </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact</a></br>
           <a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#Submitting-Results-to-the-Leaderboard" class="button is-link is-small is-rounded is-hidden-tablet is-hidden-desktop" type="submit" style="background-color: black; margin-top: 0.5em;"><span class="icon small-icon">
-            svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 109.3L288 352c
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M288 109.3L288 352c
 0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0
 c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" fill="currentColor"/></svg> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submit</a>
         </td>

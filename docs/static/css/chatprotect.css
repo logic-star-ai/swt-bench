@@ -1650,3 +1650,8 @@ td.line-height {
 .center-image {
     text-align: center;
 }
+
+/* color the rows that have attribute mode=reproduction */
+tr[data-mode="reproduction"] {
+    background-color: #ffe7d0;
+}

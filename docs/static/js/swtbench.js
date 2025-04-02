@@ -141,9 +141,11 @@ document.addEventListener('DOMContentLoaded', function () {
         (mode === 'reproduction' && !reproductionCheckbox.checked) ||
         (mode !== 'reproduction' && !nonReproductionCheckbox.checked)
       ) {
-        row.style.backgroundColor = '#f0f0f0';
+        // Hide the row
+        row.style.display = 'none';
       } else {
-        row.style.backgroundColor = '';
+        // Show the row
+        row.style.display = '';
       }
     });
   }
@@ -194,4 +196,25 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('citation-code').addEventListener('click', function() {
     selectElement(this);
   });
+});
+
+// reset the table layout from fixed to auto on non-mobile devices
+document.addEventListener('DOMContentLoaded', function () {
+  function updateTable(table){
+    const windowWidth = window.innerWidth;
+
+    if (windowWidth > 700) {
+      table.style.tableLayout = 'auto';
+      table.style.width = '100%';
+    } else {
+      table.style.tableLayout = 'fixed';
+      table.style.width = '150%';
+    }
+  }
+  // update upon resizing the window
+  window.addEventListener('resize', () => {updateTable(document.getElementById('leaderboard-table'))});
+  window.addEventListener('resize', () => {updateTable(document.getElementById('verified-leaderboard'))});
+  // update upon loading the page
+  updateTable(document.getElementById('leaderboard-table'));
+  updateTable(document.getElementById('verified-leaderboard'));
 });
