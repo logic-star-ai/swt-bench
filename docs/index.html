@@ -208,7 +208,7 @@
       <div class="columns is-centered">
         <div class="column">
           <div class="table-container">
-            <table id="leaderboard-table" class="table is-hoverable is-fullwidth" style="table-layout: fixed; width: 150%;">
+            <table id="leaderboard-table" class="table is-hoverable is-fullwidth">
               <thead>
               <tr>
                 <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
@@ -345,16 +345,14 @@
           </div>
           <div id="verified-leaderboard" class="table-container" style="display: none;">
             <table id="verified-leaderboard-table" class="table is-hoverable is-fullwidth">
-              <thead>
-                <tr>
-                  <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
-                  <th class="has-text-centered"><abbr title="Affiliation / Organization">Org.</abbr></th>
-                  <th><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
-                  <th><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
-                  <th>Date <span class="sort-arrow"></span></th>
-                  <th><abbr title="Trajectories">Traj.</abbr></th>
-                </tr>
-              </thead>
+              <tr>
+                <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
+                <th style="width: 10%;" class="has-text-centered"><abbr title="Affiliation / Organization">Org.</abbr></th>
+                <th style="width: 15%;"><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
+                <th style="width: 15%;"><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
+                <th style="width: 20%;">Date <span class="sort-arrow"></span></th>
+                <th style="width: 10%;" class="has-text-centered"><abbr title="Trajectories">Traj.</abbr></th>
+              </tr>
               <tbody>
                 <tr>
                   <td>🥇🆕&nbsp;<a href="https://arxiv.org/abs/2502.05368v1">Otter++ (GPT-4o)</a></td>

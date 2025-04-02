@@ -213,8 +213,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   // update upon resizing the window
   window.addEventListener('resize', () => {updateTable(document.getElementById('leaderboard-table'))});
-  window.addEventListener('resize', () => {updateTable(document.getElementById('verified-leaderboard'))});
+  window.addEventListener('resize', () => {updateTable(document.getElementById('verified-leaderboard-table'))});
   // update upon loading the page
   updateTable(document.getElementById('leaderboard-table'));
-  updateTable(document.getElementById('verified-leaderboard'));
+  updateTable(document.getElementById('verified-leaderboard-table'));
 });
