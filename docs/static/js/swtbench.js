@@ -49,7 +49,7 @@ function makeSortable(table) {
       arrow.setAttribute("act-column", index == sortedColumnIndex);
       if (index === sortedColumnIndex) {
         const isAscending = tbody.getAttribute("data-sort-asc") !== "false";
-        arrow.textContent = isAscending ? "\xa0\xa0🔼" : "\xa0\xa0🔽";
+        arrow.textContent = isAscending ? "\xa0\xa0⬆️" : "\xa0\xa0⬇️";
       } else {
 
         arrow.textContent = "️\xa0\xa0\xa0";
@@ -126,4 +126,28 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (resultsParam === 'lite') {
     document.getElementById('lite-button').click();
   }
+});
+document.addEventListener('DOMContentLoaded', function () {
+  const reproductionCheckbox = document.getElementById('reproduction-mode-checkbox');
+  const nonReproductionCheckbox = document.getElementById('unittest-mode-checkbox');
+  const rows = document.querySelectorAll('#leaderboard-table tbody tr');
+
+  function updateRowVisibility() {
+    rows.forEach(row => {
+      const mode = row.getAttribute('data-mode');
+      if (
+        (mode === 'reproduction' && !reproductionCheckbox.checked) ||
+        (mode === 'unittest' && !nonReproductionCheckbox.checked)
+      ) {
+        row.style.backgroundColor = '#f0f0f0';
+      } else {
+        row.style.backgroundColor = '';
+      }
+    });
+  }
+
+  reproductionCheckbox.addEventListener('change', updateRowVisibility);
+  nonReproductionCheckbox.addEventListener('change', updateRowVisibility);
+
+  updateRowVisibility(); // Initialize visibility
 });
