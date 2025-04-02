@@ -1589,9 +1589,11 @@ td.line-height {
     color: gray;
     font-size: small;
 }
-th:hover .sort-arrow[act-column="false"]::before {
-    content: "  ⏺️";
-  }
+
+/* replaced by js for typesetting
+ th:hover .sort-arrow[act-column="false"]::before {
+     content: "  \\((-)\\)";
+ } */
 
   
   /* Mobile styles */

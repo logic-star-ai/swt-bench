@@ -47,12 +47,16 @@
   <link rel="stylesheet" href="./static/css/highlight.min.css">
   <script src="https://kit.fontawesome.com/06bb68d804.js" crossorigin="anonymous"></script>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script async src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" id="MathJax-script" src="./static/js/tex-mml-svg.js"></script>
   <script src="./static/js/highlight.min.js"></script>
   <script src="./static/js/swtbench.js"></script>
-  <script type="text/javascript" id="MathJax-script" async src="./static/js/tex-mml-svg.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-solarizedlight.min.css"/>
 
+  <!-- Syntax highlighting for citation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js">
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.1.0/prism-bibtex.min.js"></script>
 
 
 <!-- Google tag (gtag.js) -->
@@ -67,9 +71,6 @@
 
 </head>
 <body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js">
-</script>
-  <script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.1.0/prism-bibtex.min.js"></script>
   <div class="topnav">
     <a href="./">
       <table class="logo">
@@ -222,7 +223,7 @@
                   <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/aegis/">🔗</a></td>
                 </tr>
                 <tr data-mode="unittest">
-                  <td>🆕&unbsp;<a hef="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
+                  <td>🆕&nbsp;<a hef="https://docs.all-hands.dev/">OpenHands</a> (CI setup)<sup>#</sup></td>
                   <td class="has-text-centered"><a href="https://all-hands.dev/"><img src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
                   <td>28.3%</td>
                   <td>52.4%</td>
@@ -669,13 +670,6 @@ c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-3
     </div>
   </div>
 </section>
-
-<script>
-  document.getElementById('citation-code').addEventListener('click', function() {
-    selectElement(this);
-  });
-
-</script>
 
 
 
