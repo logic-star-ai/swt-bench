@@ -99,7 +99,7 @@ In order to see a coverage delta reported, you need to have the gold evaluation 
 
 ### Submitting Results to the Leaderboard
 
-We list top performing methods for SWT-Bench Lite and Verified on our [leaderboard](https://swtbench.com). If you want to have your results included, please [send us an email to submit@swebench.com](mailto:submit@swtbench.com?subject=SWT-Bench%20Submission&body=Hi%20there%2C%0A%0ASWT-Bench%20is%20great%21%20We%20want%20to%20submit%20our%20agent%20evaluation%20to%20the%20leaderboard.%0A%0APlease%20find%20attached%201%29%20the%20predictions%20of%20our%20cool%20agent%20as%20jsonl%20zip%2C%202%29%20the%20resulting%20evaluation%20report%2C%20and%203%29%20a%20link%20to%20the%20project%20and%20inference%20traces%3A) containing
+We list top performing methods for SWT-Bench Lite and Verified on our [leaderboard](https://swtbench.com). If you want to have your results included, please [send us an email to submit@swtbench.com](mailto:submit@swtbench.com?subject=SWT-Bench%20Submission&body=Hi%20there%2C%0A%0ASWT-Bench%20is%20great%21%20We%20want%20to%20submit%20our%20agent%20evaluation%20to%20the%20leaderboard.%0A%0APlease%20find%20attached%201%29%20the%20predictions%20of%20our%20cool%20agent%20as%20jsonl%20zip%2C%202%29%20the%20resulting%20evaluation%20report%2C%20and%203%29%20a%20link%20to%20the%20project%20and%20inference%20traces%3A) containing
 
 - The name of your method
 - The inference results from your method as the JSONL used to run the evaluation. The JSONL should contain a prediction for each instance in SWT-Bench Lite or Verified per line, each with the following fields
