@@ -1589,9 +1589,11 @@ td.line-height {
     color: gray;
     font-size: small;
 }
-th:hover .sort-arrow[act-column="false"]::before {
-    content: "  ⏺️";
-  }
+
+/* replaced by js for typesetting
+ th:hover .sort-arrow[act-column="false"]::before {
+     content: "  \\((-)\\)";
+ } */
 
   
   /* Mobile styles */
@@ -1647,4 +1649,9 @@ th:hover .sort-arrow[act-column="false"]::before {
 }
 .center-image {
     text-align: center;
+}
+
+/* color the rows that have attribute mode=reproduction */
+tr[data-mode="reproduction"] {
+    background-color: #ffe7d0;
 }

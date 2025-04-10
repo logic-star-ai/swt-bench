@@ -49,12 +49,13 @@ function makeSortable(table) {
       arrow.setAttribute("act-column", index == sortedColumnIndex);
       if (index === sortedColumnIndex) {
         const isAscending = tbody.getAttribute("data-sort-asc") !== "false";
-        arrow.textContent = isAscending ? "\xa0\xa0🔼" : "\xa0\xa0🔽";
+        arrow.textContent = isAscending ? "\xa0\xa0\\((\\uparrow)\\)" : "\xa0\xa0\\((\\downarrow)\\)";
       } else {
 
         arrow.textContent = "️\xa0\xa0\xa0";
       }
     });
+    MathJax.typeset();
   }
 
   function sortByIndex(index) {
@@ -72,13 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
   makeSortable(document.getElementById("verified-leaderboard-table"));
 });
 
-function selectElement(element) {
-  const range = document.createRange();
-  range.selectNodeContents(element);
-  const selection = window.getSelection();
-  selection.removeAllRanges();
-  selection.addRange(range);
-}
+
+// Rewrite the displayed time to locale time
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll('table time').forEach(function(cell) {
     const fullDate = cell.textContent;
@@ -101,6 +97,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const longDate = parsedDate.toLocaleDateString();
     cell.textContent = longDate;
   });
+});
+
+// Add function to swap leaderboards
+document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('lite-button').addEventListener('click', function() {
     document.getElementById('leaderboard-table').parentElement.style.display = 'block';
     document.getElementById('verified-leaderboard').style.display = 'none';
@@ -126,4 +126,95 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (resultsParam === 'lite') {
     document.getElementById('lite-button').click();
   }
+});
+
+// add function to not display the reproduction mode
+document.addEventListener('DOMContentLoaded', function () {
+  const reproductionCheckbox = document.getElementById('reproduction-mode-checkbox');
+  const nonReproductionCheckbox = document.getElementById('unittest-mode-checkbox');
+  const rows = document.querySelectorAll('#leaderboard-table tbody tr');
+
+  function updateRowVisibility() {
+    rows.forEach(row => {
+      const mode = row.getAttribute('data-mode');
+      if (
+        (mode === 'reproduction' && !reproductionCheckbox.checked) ||
+        (mode !== 'reproduction' && !nonReproductionCheckbox.checked)
+      ) {
+        // Hide the row
+        row.style.display = 'none';
+      } else {
+        // Show the row
+        row.style.display = '';
+      }
+    });
+  }
+
+  reproductionCheckbox.addEventListener('change', updateRowVisibility);
+  nonReproductionCheckbox.addEventListener('change', updateRowVisibility);
+
+  updateRowVisibility(); // Initialize visibility
+});
+// add hover effect to table headers
+document.addEventListener('DOMContentLoaded', function () {
+  // add hover effect to the headers
+  function showDash(e) {
+    const arrows = e.currentTarget.querySelectorAll(".sort-arrow");
+    arrows.forEach(arrow => {
+      if (arrow.getAttribute("act-column") !== "true") {
+        arrow.textContent = "\xa0\xa0\\((-)\\)";
+      }
+      MathJax.typeset();
+    });
+  }
+ function hideDash(e) {
+    const arrows = e.currentTarget.querySelectorAll(".sort-arrow");
+    arrows.forEach(arrow => {
+      if (arrow.getAttribute("act-column") !== "true") {
+        arrow.textContent = "\xa0\xa0\xa0";
+      }
+    });
+  }
+  function addHoverEffect(headers) {
+    headers.forEach(header => {
+      header.addEventListener("mouseenter", showDash);
+      header.addEventListener("mouseleave", hideDash); 
+    });
+  }
+  addHoverEffect(document.querySelectorAll("th"));
+});
+
+// add function to copy the citation code
+function selectElement(element) {
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('citation-code').addEventListener('click', function() {
+    selectElement(this);
+  });
+});
+
+// reset the table layout from fixed to auto on non-mobile devices
+document.addEventListener('DOMContentLoaded', function () {
+  function updateTable(table){
+    const windowWidth = window.innerWidth;
+
+    if (windowWidth > 700) {
+      table.style.tableLayout = 'auto';
+      table.style.width = '100%';
+    } else {
+      table.style.tableLayout = 'fixed';
+      table.style.width = '150%';
+    }
+  }
+  // update upon resizing the window
+  window.addEventListener('resize', () => {updateTable(document.getElementById('leaderboard-table'))});
+  window.addEventListener('resize', () => {updateTable(document.getElementById('verified-leaderboard-table'))});
+  // update upon loading the page
+  updateTable(document.getElementById('leaderboard-table'));
+  updateTable(document.getElementById('verified-leaderboard-table'));
 });
