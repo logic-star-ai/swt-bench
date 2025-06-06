@@ -1,6 +1,7 @@
 <div align="center">
     <h1><img height="150px" src="./docs/static/images/color_circle.png" alt="SWT-Bench 🔍🦙"><br>SWT-Bench</h1>
 
+[![arXiv](https://img.shields.io/badge/arXiv-2406.12952-b31b1b.svg)](https://arxiv.org/abs/2406.12952)
 [![Build & Test](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml/badge.svg)](https://github.com/logic-star-ai/swt-bench/actions/workflows/build.yml)
    <a href="https://www.python.org/">
         <img alt="Build" src="https://img.shields.io/badge/Python-3.9+-1f425f.svg?color=blue">
@@ -15,7 +16,7 @@
 SWT-Bench is a benchmark for evaluating large language models on testing generation for real world software issues collected from GitHub.
 Given a *codebase* and an *issue*, a language model is tasked with generating a *reproducing test* that fails in the original state of the code base and passes after a patch resolving the issue has been applied.
 
-> Check out our Paper for more details: [SWT-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents](https://openreview.net/pdf?id=9Y8zUO11EQ)
+> Check out our Paper for more details: [SWT-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents](https://arxiv.org/abs/2406.12952)
 
 ## 🚀 Set Up
 SWT-Bench uses Docker for reproducible evaluations.
