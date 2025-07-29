@@ -52,7 +52,7 @@ function makeSortable(table) {
         arrow.textContent = isAscending ? "\xa0\xa0\\((\\uparrow)\\)" : "\xa0\xa0\\((\\downarrow)\\)";
       } else {
 
-        arrow.textContent = "️\xa0\xa0\xa0";
+        arrow.textContent = "\xa0\xa0\xa0";
       }
     });
     MathJax.typeset();
