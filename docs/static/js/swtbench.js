@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const resultsParam = urlParams.get('results');
 
-  if (resultsParam === 'verified') {
+  if (resultsParam !== 'lite') {
     document.getElementById('verified-button').click();
   } else if (resultsParam === 'lite') {
     document.getElementById('lite-button').click();
