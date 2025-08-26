@@ -29,7 +29,7 @@ def load_models(models_file):
     return models
 
 
-def create_model_row(model, providers):
+def create_model_row(model, providers, rank):
     """Create an HTML table row for a model."""
     # Get provider info
     provider = providers.get(model['org_key'], {})
@@ -38,7 +38,15 @@ def create_model_row(model, providers):
     logo_path = provider.get('logo_path', '')
     
     # Build model name cell
-    model_cell = model['ranking']
+    model_cell = ""
+    if rank == 0:
+        model_cell += '🥇'
+    elif rank == 1:
+        model_cell += '🥈'
+    elif rank == 2:
+        model_cell += '🥉'
+    if "new" in model["ranking"]:
+        model_cell += '🆕'
     if model['ranking']:
         model_cell += '&nbsp;'
     
@@ -95,8 +103,8 @@ def create_model_row(model, providers):
     row = f'''                <tr{data_mode_attr}>
                   <td>{model_cell}</td>
                   <td class="has-text-centered">{org_cell}</td>
-                  <td>{model["success_rate"]}</td>
-                  <td>{model["coverage_increase"]}</td>
+                  <td>{model["success_rate"]}%</td>
+                  <td>{model["coverage_increase"]}%</td>
                   <td><time>{model["date"]}</time></td>
                   <td class="has-text-centered">{traj_cell}</td>
                 </tr>'''
@@ -110,18 +118,23 @@ def generate_html(template_file, models_file, providers_file, output_file):
     providers = load_providers(providers_file)
     models = load_models(models_file)
     
-    # Separate models by table type
-    lite_models = [m for m in models if m['table_type'] == 'lite']
-    verified_models = [m for m in models if m['table_type'] == 'verified']
-    
-    # Generate table rows
     lite_rows = []
-    for model in lite_models:
-        lite_rows.append(create_model_row(model, providers))
-    
     verified_rows = []
-    for model in verified_models:
-        verified_rows.append(create_model_row(model, providers))
+    for data_mode in ["reproduction", "unittest"]:
+        # Separate models by table type
+        lite_models = [m for m in models if m['table_type'] == 'lite' and m['data_mode'] == data_mode]
+        verified_models = [m for m in models if m['table_type'] == 'verified' and m['data_mode'] == data_mode]
+
+        # determine top 3 for success rate across
+        lite_models = sorted(lite_models, key=lambda x: float(x['success_rate']), reverse=True)
+        verified_models = sorted(verified_models, key=lambda x: float(x['success_rate']), reverse=True)
+
+        # Generate table rows
+        for i, model in enumerate(lite_models):
+            lite_rows.append(create_model_row(model, providers, i))
+        
+        for i, model in enumerate(verified_models):
+            verified_rows.append(create_model_row(model, providers, i))
     
     # Read template
     with open(template_file, 'r', encoding='utf-8') as f:

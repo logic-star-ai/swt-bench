@@ -1,29 +1,29 @@
 table_type,ranking,model_name,model_details,org_key,success_rate,coverage_increase,date,trajectory_link,data_mode
-lite,🥇,AEGIS,,bytedance,47.8%,26.0%,2025-02-17,https://files.sri.inf.ethz.ch/swt-bench/aegis/,reproduction
-lite,🥇🆕,e-Otter++,Claude 3.7 Sonnet,ibm,50.7%,56.4%,2025-08-11,https://files.sri.inf.ethz.ch/swt-bench/e-otter/,unittest
-lite,🥈,Amazon Q Developer Agent,v20250405-dev,aws,37.7%,52.7%,2025-04-10,https://files.sri.inf.ethz.ch/swt-bench/amazon_q_developer_agent/,unittest
-lite,🥉🆕,AssertFlip,GPT-4o,uw,35.1%,44.2%,2025-07-28,https://files.sri.inf.ethz.ch/swt-bench/assertflip/,
-lite,,OpenHands,Cl. Sonnet 3.5 CI setup,allhands,28.3%,52.4%,2025-02-18,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
-lite,,OpenHands,Cl. Sonnet 3.5 vanilla,allhands,22.8%,43.6%,2025-02-18,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,SWE-Agent+,GPT-4,logicstar,18.5%,27.6%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,SWE-Agent,Mistral Large 2,swe-agent,16.3%,23.0%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,SWE-Agent,Cl. 3.5 Sonnet,swe-agent,12.3%,30.3%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,SWE-Agent,GPT-4o mini,swe-agent,9.8%,20.9%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,SWE-Agent,Claude 3 Haiku,swe-agent,2.5%,3.0%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,SWE-Agent,Mixtral 8x22B,swe-agent,0.7%,0.9%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,SWE-Agent,GPT-4,swe-agent,15.9%,26.5%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,Aider,GPT-4,aider,12.7%,27.8%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,AutoCodeRover,GPT-4,autocoderover,9.1%,17.9%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,LIBRO,GPT-4,kaist,14.1%,23.8%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,Zero-Shot plus,GPT-4 + BM25,openai,9.4%,21.5%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-lite,,Zero-Shot Base,GPT-4 + BM25,openai,3.6%,7.6%,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-verified,🥇🆕,OpenHands,GPT-5,allhands,75.8%,66.3%,2025-08-22,https://files.sri.inf.ethz.ch/swt-bench/openhands_gpt5/,unittest
-verified,🥈🆕,e-Otter++,Claude 3.7 Sonnet,ibm,60.7%,62.3%,2025-08-11,https://files.sri.inf.ethz.ch/swt-bench/e-otter/,
-verified,🥉🆕,OpenHands,GPT-5-mini,allhands,56.8%,60.4%,2025-08-22,https://files.sri.inf.ethz.ch/swt-bench/openhands_gpt5/,
-verified,,Amazon Q Developer Agent,v20250405-dev,aws,49.0%,57.4%,2025-04-10,https://files.sri.inf.ethz.ch/swt-bench/amazon_q_developer_agent/,unittest
-verified,🆕,AssertFlip,GPT-4o,uw,43.4%,47.4%,2025-07-28,https://files.sri.inf.ethz.ch/swt-bench/assertflip/,
-verified,,Otter++,GPT-4o,ibm,37.0%,42.8%,2025-03-10,https://files.sri.inf.ethz.ch/swt-bench/otter/,
-verified,,Otter,GPT-4o,ibm,31.4%,37.6%,2025-03-10,https://files.sri.inf.ethz.ch/swt-bench/otter/,
-verified,,OpenHands,Cl. Sonnet 3.5,allhands,27.7%,52.9%,2025-02-28,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-verified,,LIBRO,GPT-4o,kaist,17.8%,38.0%,2025-02-28,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
-verified,,Zero-Shot Plus,GPT-4o + BM25,openai,14.3%,34.0%,2025-02-28,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
+lite,,AEGIS,,bytedance,47.8,26.0,2025-02-17,https://files.sri.inf.ethz.ch/swt-bench/aegis/,reproduction
+lite,new,e-Otter++,Claude 3.7 Sonnet,ibm,50.7,56.4,2025-08-11,https://files.sri.inf.ethz.ch/swt-bench/e-otter/,unittest
+lite,,Amazon Q Developer Agent,v20250405-dev,aws,37.7,52.7,2025-04-10,https://files.sri.inf.ethz.ch/swt-bench/amazon_q_developer_agent/,unittest
+lite,new,AssertFlip,GPT-4o,uw,35.1,44.2,2025-07-28,https://files.sri.inf.ethz.ch/swt-bench/assertflip/,unittest
+lite,,OpenHands,Cl. Sonnet 3.5 CI setup,allhands,28.3,52.4,2025-02-18,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,OpenHands,Cl. Sonnet 3.5 vanilla,allhands,22.8,43.6,2025-02-18,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,
+lite,,SWE-Agent+,GPT-4,logicstar,18.5,27.6,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,SWE-Agent,Mistral Large 2,swe-agent,16.3,23.0,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,SWE-Agent,Cl. 3.5 Sonnet,swe-agent,12.3,30.3,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,SWE-Agent,GPT-4o mini,swe-agent,9.8,20.9,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,SWE-Agent,Claude 3 Haiku,swe-agent,2.5,3.0,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,SWE-Agent,Mixtral 8x22B,swe-agent,0.7,0.9,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,SWE-Agent,GPT-4,swe-agent,15.9,26.5,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,Aider,GPT-4,aider,12.7,27.8,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,AutoCodeRover,GPT-4,autocoderover,9.1,17.9,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,LIBRO,GPT-4,kaist,14.1,23.8,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,Zero-Shot plus,GPT-4 + BM25,openai,9.4,21.5,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,Zero-Shot Base,GPT-4 + BM25,openai,3.6,7.6,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+verified,new,OpenHands,GPT-5,allhands,75.8,66.3,2025-08-22,https://files.sri.inf.ethz.ch/swt-bench/openhands_gpt5/,unittest
+verified,new,e-Otter++,Claude 3.7 Sonnet,ibm,60.7,62.3,2025-08-11,https://files.sri.inf.ethz.ch/swt-bench/e-otter/,unittest
+verified,new,OpenHands,GPT-5-mini,allhands,56.8,60.4,2025-08-22,https://files.sri.inf.ethz.ch/swt-bench/openhands_gpt5/,unittest
+verified,,Amazon Q Developer Agent,v20250405-dev,aws,49.0,57.4,2025-04-10,https://files.sri.inf.ethz.ch/swt-bench/amazon_q_developer_agent/,unittest
+verified,new,AssertFlip,GPT-4o,uw,43.4,47.4,2025-07-28,https://files.sri.inf.ethz.ch/swt-bench/assertflip/,unittest
+verified,,Otter++,GPT-4o,ibm,37.0,42.8,2025-03-10,https://files.sri.inf.ethz.ch/swt-bench/otter/,unittest
+verified,,Otter,GPT-4o,ibm,31.4,37.6,2025-03-10,https://files.sri.inf.ethz.ch/swt-bench/otter/,unittest
+verified,,OpenHands,Cl. Sonnet 3.5,allhands,27.7,52.9,2025-02-28,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+verified,,LIBRO,GPT-4o,kaist,17.8,38.0,2025-02-28,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+verified,,Zero-Shot Plus,GPT-4o + BM25,openai,14.3,34.0,2025-02-28,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
