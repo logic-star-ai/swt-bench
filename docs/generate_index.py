@@ -77,9 +77,9 @@ def create_model_row(model, providers, approaches, rank):
         model_cell += '🥈'
     elif rank == 2:
         model_cell += '🥉'
-    if "new" in model["ranking"]:
+    if "new" in model["emojis"]:
         model_cell += '🆕'
-    if model['ranking']:
+    if model['emojis']:
         model_cell += '&nbsp;'
     
     # Add model name with link from approaches mapping
@@ -162,8 +162,8 @@ def main():
     # Set file paths
     script_dir = Path(__file__).parent
     template_file = script_dir / 'index.template.html'
-    models_file = script_dir / 'models.csv'
-    providers_file = script_dir / 'providers.csv'
+    models_file = script_dir / 'runs.csv'
+    providers_file = script_dir / 'orgs.csv'
     approaches_file = script_dir / 'approaches.csv'
     output_file = script_dir / 'index.html'
     

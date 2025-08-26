@@ -1,4 +1,4 @@
-table_type,ranking,model_name,model_details,success_rate,coverage_increase,date,data_mode
+table_type,emojis,model_name,model_details,success_rate,coverage_increase,date,data_mode
 lite,,AEGIS,,47.8,26.0,2025-02-17,reproduction
 lite,new,e-Otter++,Claude 3.7 Sonnet,50.7,56.4,2025-08-11,unittest
 lite,,Amazon Q Developer Agent,v20250405-dev,37.7,52.7,2025-04-10,unittest
