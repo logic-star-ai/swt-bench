@@ -25,7 +25,11 @@ def load_approaches(approaches_file):
     with open(approaches_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            approaches[row['model_name']] = row['paper_url']
+            approaches[row['model_name']] = {
+                'paper_url': row['paper_url'],
+                'org_key': row['org_key'],
+                'trajectory_link': row['trajectory_link']
+            }
     return approaches
 
 
@@ -41,8 +45,26 @@ def load_models(models_file):
 
 def create_model_row(model, providers, approaches, rank):
     """Create an HTML table row for a model."""
+    # Get approach info first, fall back to model data
+    approach_info = None
+    model_name = model['model_name']
+    
+    # Look for exact match first, then partial matches
+    if model_name in approaches:
+        approach_info = approaches[model_name]
+    else:
+        # Check for partial matches
+        for approach_name in approaches:
+            if approach_name in model_name:
+                approach_info = approaches[approach_name]
+                break
+    
+    # Use org_key and trajectory_link from approach if available, otherwise from model
+    org_key = approach_info['org_key'] if approach_info else model['org_key']
+    trajectory_link = approach_info['trajectory_link'] if approach_info else model['trajectory_link']
+    
     # Get provider info
-    provider = providers.get(model['org_key'], {})
+    provider = providers.get(org_key, {})
     org_name = provider.get('org_name', 'Unknown')
     org_url = provider.get('org_url', '#')
     logo_path = provider.get('logo_path', '')
@@ -61,21 +83,8 @@ def create_model_row(model, providers, approaches, rank):
         model_cell += '&nbsp;'
     
     # Add model name with link from approaches mapping
-    model_name = model['model_name']
-    
-    # Look for exact match first, then partial matches
-    paper_url = None
-    if model_name in approaches:
-        paper_url = approaches[model_name]
-    else:
-        # Check for partial matches
-        for approach_name in approaches:
-            if approach_name in model_name:
-                paper_url = approaches[approach_name]
-                break
-    
-    if paper_url:
-        model_cell += f'<a href="{paper_url}">{model_name}</a>'
+    if approach_info and approach_info['paper_url']:
+        model_cell += f'<a href="{approach_info["paper_url"]}">{model_name}</a>'
     else:
         model_cell += model_name
     
@@ -91,7 +100,7 @@ def create_model_row(model, providers, approaches, rank):
     org_cell = f'<a href="{org_url}"><img alt="{org_name}" title="{org_name}" src="{logo_path}" class="org-icon"></a>'
     
     # Build trajectory cell
-    traj_cell = f'<a href="{model["trajectory_link"]}">🔗</a>'
+    traj_cell = f'<a href="{trajectory_link}">🔗</a>'
     
     # Build the complete row
     data_mode_attr = f' data-mode="{model["data_mode"]}"' if model['data_mode'] else ''

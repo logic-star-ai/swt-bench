@@ -1,15 +1,15 @@
-model_name,paper_url
-AEGIS,https://arxiv.org/pdf/2411.18015
-e-Otter++,https://arxiv.org/abs/2508.06365
-Amazon Q Developer Agent,https://aws.amazon.com/q/
-AssertFlip,https://arxiv.org/abs/2507.17542
-OpenHands,https://docs.all-hands.dev/
-SWE-Agent+,https://arxiv.org/abs/2406.12952
-Zero-Shot Base,https://arxiv.org/abs/2406.12952
-Zero-Shot Plus,https://arxiv.org/abs/2406.12952
-SWE-Agent,https://swe-agent.com/latest/
-Aider,https://aider.chat
-AutoCodeRover,https://autocoderover.dev
-LIBRO,https://arxiv.org/abs/2209.11515
-Otter++,https://arxiv.org/abs/2502.05368v1
-Otter,https://arxiv.org/abs/2502.05368v1
+model_name,paper_url,org_key,trajectory_link
+AEGIS,https://arxiv.org/pdf/2411.18015,bytedance,https://files.sri.inf.ethz.ch/swt-bench/aegis/
+e-Otter++,https://arxiv.org/abs/2508.06365,ibm,https://files.sri.inf.ethz.ch/swt-bench/e-otter/
+Amazon Q Developer Agent,https://aws.amazon.com/q/,aws,https://files.sri.inf.ethz.ch/swt-bench/amazon_q_developer_agent/
+AssertFlip,https://arxiv.org/abs/2507.17542,uw,https://files.sri.inf.ethz.ch/swt-bench/assertflip/
+OpenHands,https://docs.all-hands.dev/,allhands,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+SWE-Agent+,https://arxiv.org/abs/2406.12952,logicstar,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+Zero-Shot Base,https://arxiv.org/abs/2406.12952,openai,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+Zero-Shot Plus,https://arxiv.org/abs/2406.12952,openai,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+SWE-Agent,https://swe-agent.com/latest/,swe-agent,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+Aider,https://aider.chat,aider,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+AutoCodeRover,https://autocoderover.dev,autocoderover,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+LIBRO,https://arxiv.org/abs/2209.11515,kaist,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+Otter++,https://arxiv.org/abs/2502.05368v1,ibm,https://files.sri.inf.ethz.ch/swt-bench/otter/
+Otter,https://arxiv.org/abs/2502.05368v1,ibm,https://files.sri.inf.ethz.ch/swt-bench/otter/
