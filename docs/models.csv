@@ -15,7 +15,7 @@ lite,,SWE-Agent,GPT-4,swe-agent,15.9,26.5,2024-05-22,https://github.com/logic-st
 lite,,Aider,GPT-4,aider,12.7,27.8,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
 lite,,AutoCodeRover,GPT-4,autocoderover,9.1,17.9,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
 lite,,LIBRO,GPT-4,kaist,14.1,23.8,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
-lite,,Zero-Shot plus,GPT-4 + BM25,openai,9.4,21.5,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
+lite,,Zero-Shot Plus,GPT-4 + BM25,openai,9.4,21.5,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
 lite,,Zero-Shot Base,GPT-4 + BM25,openai,3.6,7.6,2024-05-22,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results,unittest
 verified,new,OpenHands,GPT-5,allhands,75.8,66.3,2025-08-22,https://files.sri.inf.ethz.ch/swt-bench/openhands_gpt5/,unittest
 verified,new,e-Otter++,Claude 3.7 Sonnet,ibm,60.7,62.3,2025-08-11,https://files.sri.inf.ethz.ch/swt-bench/e-otter/,unittest

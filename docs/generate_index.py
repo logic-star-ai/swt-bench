@@ -19,6 +19,16 @@ def load_providers(providers_file):
     return providers
 
 
+def load_approaches(approaches_file):
+    """Load approach/paper mapping data from CSV."""
+    approaches = {}
+    with open(approaches_file, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            approaches[row['model_name']] = row['paper_url']
+    return approaches
+
+
 def load_models(models_file):
     """Load model data from CSV."""
     models = []
@@ -29,7 +39,7 @@ def load_models(models_file):
     return models
 
 
-def create_model_row(model, providers, rank):
+def create_model_row(model, providers, approaches, rank):
     """Create an HTML table row for a model."""
     # Get provider info
     provider = providers.get(model['org_key'], {})
@@ -50,36 +60,22 @@ def create_model_row(model, providers, rank):
     if model['ranking']:
         model_cell += '&nbsp;'
     
-    # Add model name with link if it contains URL patterns
+    # Add model name with link from approaches mapping
     model_name = model['model_name']
-    if 'arxiv.org' in model_name or 'github.com' in model_name or 'docs.all-hands.dev' in model_name:
-        # Extract URL from model name - this is a simplified approach
-        if 'AEGIS' in model_name:
-            model_cell += f'<a href="https://arxiv.org/pdf/2411.18015">{model_name}</a>'
-        elif 'e-Otter++' in model_name:
-            model_cell += f'<a href="https://arxiv.org/abs/2508.06365">{model_name}</a>'
-        elif 'Amazon Q Developer Agent' in model_name:
-            model_cell += f'<a href="https://aws.amazon.com/q/">{model_name}</a>'
-        elif 'AssertFlip' in model_name:
-            model_cell += f'<a href="https://arxiv.org/abs/2507.17542">{model_name}</a>'
-        elif 'OpenHands' in model_name:
-            model_cell += f'<a href="https://docs.all-hands.dev/">{model_name}</a>'
-        elif 'SWE-Agent+' in model_name:
-            model_cell += f'<a href="https://arxiv.org/abs/2406.12952">{model_name}</a>'
-        elif 'SWE-Agent' in model_name:
-            model_cell += f'<a href="https://swe-agent.com/latest/">{model_name}</a>'
-        elif 'Aider' in model_name:
-            model_cell += f'<a href="https://aider.chat">{model_name}</a>'
-        elif 'AutoCodeRover' in model_name:
-            model_cell += f'<a href="https://autocoderover.dev">{model_name}</a>'
-        elif 'LIBRO' in model_name:
-            model_cell += f'<a href="https://arxiv.org/abs/2209.11515">{model_name}</a>'
-        elif 'Otter++' in model_name:
-            model_cell += f'<a href="https://arxiv.org/abs/2502.05368v1">{model_name}</a>'
-        elif 'Otter' in model_name and 'Otter++' not in model_name:
-            model_cell += f'<a href="https://arxiv.org/abs/2502.05368v1">{model_name}</a>'
-        else:
-            model_cell += model_name
+    
+    # Look for exact match first, then partial matches
+    paper_url = None
+    if model_name in approaches:
+        paper_url = approaches[model_name]
+    else:
+        # Check for partial matches
+        for approach_name in approaches:
+            if approach_name in model_name:
+                paper_url = approaches[approach_name]
+                break
+    
+    if paper_url:
+        model_cell += f'<a href="{paper_url}">{model_name}</a>'
     else:
         model_cell += model_name
     
@@ -112,10 +108,11 @@ def create_model_row(model, providers, rank):
     return row
 
 
-def generate_html(template_file, models_file, providers_file, output_file):
+def generate_html(template_file, models_file, providers_file, approaches_file, output_file):
     """Generate the final HTML file."""
     # Load data
     providers = load_providers(providers_file)
+    approaches = load_approaches(approaches_file)
     models = load_models(models_file)
     
     lite_rows = []
@@ -131,10 +128,10 @@ def generate_html(template_file, models_file, providers_file, output_file):
 
         # Generate table rows
         for i, model in enumerate(lite_models):
-            lite_rows.append(create_model_row(model, providers, i))
+            lite_rows.append(create_model_row(model, providers, approaches, i))
         
         for i, model in enumerate(verified_models):
-            verified_rows.append(create_model_row(model, providers, i))
+            verified_rows.append(create_model_row(model, providers, approaches, i))
     
     # Read template
     with open(template_file, 'r', encoding='utf-8') as f:
@@ -158,6 +155,7 @@ def main():
     template_file = script_dir / 'index.template.html'
     models_file = script_dir / 'models.csv'
     providers_file = script_dir / 'providers.csv'
+    approaches_file = script_dir / 'approaches.csv'
     output_file = script_dir / 'index.html'
     
     # Check if files exist
@@ -173,8 +171,12 @@ def main():
         print(f"Error: Providers file {providers_file} not found!")
         sys.exit(1)
     
+    if not approaches_file.exists():
+        print(f"Error: Approaches file {approaches_file} not found!")
+        sys.exit(1)
+    
     # Generate HTML
-    generate_html(template_file, models_file, providers_file, output_file)
+    generate_html(template_file, models_file, providers_file, approaches_file, output_file)
 
 
 if __name__ == '__main__':
