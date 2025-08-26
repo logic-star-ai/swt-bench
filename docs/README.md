@@ -1,19 +1,43 @@
-## Running
+# SWT-Bench Documentation Site
 
-To generate the website, run the following command.
-```bash
-python3 generate_index.py
-``` 
+This directory contains the source files for the SWT-Bench leaderboard website that is automatically deployed to GitHub Pages.
 
-Then serve it using the following command.
+## Files
+
+- `generate_index.py` - Python script that generates the final `index.html` from the template and CSV data
+- `index.template.html` - HTML template for the leaderboard page
+- `runs.csv` - Model performance data
+- `orgs.csv` - Organization/provider information
+- `approaches.csv` - Approach/paper mapping data
+- `static/` - Static assets (CSS, JS, images)
+
+## Automatic Deployment
+
+The site is automatically built and deployed to GitHub Pages via the `.github/workflows/deploy-pages.yml` workflow:
+
+1. **Triggers**: Runs on pushes to the `main` branch, pull requests, or manual dispatch
+2. **Build Process**: 
+   - Checks out the repository
+   - Sets up Python 3.11
+   - Runs `generate_index.py` to create the final HTML
+   - Uploads the entire `docs/` directory as a Pages artifact
+3. **Deployment**: Deploys to GitHub Pages (only on pushes to `main`)
+
+## Manual Generation
+
+To generate the site locally:
+
 ```bash
-$ python3 -m http.server 8080
+cd docs
+python generate_index.py
 ```
 
-## Adding a new approach
+This will create/update the `index.html` file based on the current CSV data and template.
 
-To add a new approach, do the following:
+## GitHub Pages Configuration
 
-1) Add the approach to `approaches.csv`
-2) Add the organization to `orgs.csv`
-3) Add the specific run(s) to `runs.csv` (i.e., verified and lite if applicable)
+Make sure GitHub Pages is configured in your repository settings:
+1. Go to Settings → Pages
+2. Set Source to "GitHub Actions"
+3. The workflow will handle the rest automatically
+
