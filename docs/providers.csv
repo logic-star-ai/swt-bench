@@ -1,0 +1,12 @@
+org_key,org_name,org_url,logo_path,emoji
+bytedance,Bytedance (SE Lab),https://se-research.bytedance.com/,./static/images/logos/bytedance-seeklogo.svg,
+ibm,IBM,https://www.ibm.com/,./static/images/logos/IBM.svg,
+aws,Amazon Web Services,https://aws.amazon.com/q/,./static/images/logos/Amazon_Web_Services_Logo.svg,
+uw,University of Waterloo (SWAG Lab),https://github.com/uw-swag/AssertFlip,./static/images/logos/uw.svg,
+allhands,All Hands AI,https://all-hands.dev/,./static/images/logos/allhands.svg,
+logicstar,LogicStar,https://logicstar.ai/,./static/images/logos/logicstar.png,
+swe-agent,SWE-agent,https://swe-agent.com/,./static/images/logos/swe-agent.svg,
+aider,Aider,https://aider.chat/,./static/images/logos/aider.png,
+autocoderover,AutoCodeRover,https://autocoderover.net,./static/images/logos/autocoderover.svg,
+kaist,KAIST,https://github.com/coinse/libro,./static/images/logos/KAIST.svg,
+openai,OpenAI,https://openai.com,./static/images/logos/openai.svg,
