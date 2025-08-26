@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+    <meta name="description" content="Check out the SWT-Bench leaderboard! SWT-Bench assess the capabilities of LLMs and Code Agents to generate unit tests for real-world issues, developed by ETH Zurich and LogicStar AI.">
+  <meta name="keywords" content="language models, unit test, software testing, repository, swebench, software engineering, benchmark, agents, code agents, code models, AI, artificial intelligence, machine learning, NLP, natural language processing, automated testing, test generation, LLM, large language models, hallucination detection, ETH Zürich, SRI Lab, LogicStar">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  
+  <!-- Primary Meta Tags -->
+  <title>SWT-Bench: Assessing capabilities at Unit Test Generation</title>
+  <meta name="title" content="SWT-Bench: Assessing capabilities at Unit Test Generation">
+  <meta name="description" content="Check out the SWT-Bench leaderboard! SWT-Bench is a benchmark designed to assess the capabilities of large language models and Code Agents in generating unit tests on real-world code repositories, developed by LogicStar AI and ETH Zurich.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://swtbench.com/">
+  <meta property="og:title" content="SWT-Bench: Assessing capabilities at Unit Test Generation">
+  <meta property="og:description" content="Check out the SWT-Bench leaderboard! SWT-Bench is a benchmark designed to assess the capabilities of large language models and Code Agents in generating unit tests on real-world code repositories, developed by LogicStar AI and ETH Zurich.">
+  <meta property="og:image" content="https://swtbench.com/static/images/social.png">
+  <meta property="og:image:alt" content="A GitHub issue, a robot generating code, and test case passing indications. The project is developed by LogicStar AI and SRI Lab at ETH Zürich.">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://swtbench.com/">
+  <meta property="twitter:title" content="SWT-Bench: Assessing capabilities at Unit Test Generation">
+  <meta property="twitter:description" content="Check out the SWT-Bench leaderboard! SWT-Bench is a benchmark designed to assess the capabilities of large language models and Code Agents in generating unit tests on real-world code repositories, developed by LogicStar AI and ETH Zurich.">
+  <meta property="twitter:image" content="https://swtbench.com/static/images/social.png">
+  <meta property="twitter:image:alt" content="A GitHub issue, a robot generating code, and test case passing indications. The project is developed by LogicStar AI and SRI Lab at ETH Zürich.">
+  
+  
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" 
+          href= 
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+<link rel="stylesheet" 
+          href= 
+"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/color_circle.png">
+  <link rel="stylesheet" href="./static/css/val.gen.css">
+  <link rel="stylesheet" href="./static/css/chatprotect.css">
+  <link rel="stylesheet" href="./static/css/highlight.min.css">
+  <script src="https://kit.fontawesome.com/06bb68d804.js" crossorigin="anonymous"></script>
+
+  <script async src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" id="MathJax-script" src="./static/js/tex-mml-svg.js"></script>
+  <script src="./static/js/highlight.min.js"></script>
+  <script src="./static/js/swtbench.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-solarizedlight.min.css"/>
+
+  <!-- Syntax highlighting for citation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"> </script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs-bibtex@2.1.0/prism-bibtex.min.js"></script>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MNMN06N76C"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MNMN06N76C');
+</script>
+
+</head>
+<body>
+  <div class="topnav">
+    <a href="./">
+      <table class="logo">
+        <tr>
+          <td>
+            <div class="is-hidden-mobile">SWT-Bench</div>
+          </td>
+          <td>
+            &nbsp;
+            &nbsp;
+          </td>
+          <td>
+            <img src="./static/images/color_circle.png" alt="🔍🦙" class="large-inline-emoji">
+          </td>
+        </tr>
+      </table>
+    </a>
+    <a href="#about">
+      <table>
+        <tr>
+          <td>
+            <img src="./static/images/emojis/2139.svg" alt="i" style="height: 20px;">
+          </td>
+          <td>
+            &nbsp; About
+          </td>
+        </tr>
+      </table>
+    </a>
+    <a href="https://arxiv.org/abs/2406.12952">
+      <table>
+        <tr>
+          <td>
+            <img src="./static/images/emojis/1F4C4.svg" alt="p" style="height: 20px;">
+          </td>
+          <td>
+            &nbsp; Paper
+          </td>
+        </tr>
+      </table>
+    </a>
+    <a href="https://github.com/logic-star-ai/swt-bench">
+      <table>
+        <tr>
+          <td>
+            <img src="./static/images/emojis/logo-github.a1fdb524.svg" alt="g" style="height: 20px;">
+          </td>
+          <td>
+            &nbsp; Code
+          </td>
+        </tr>
+      </table>
+    </a>
+    <!-- <a href="https://logicstar.ai/">
+      <table style="height: 100%; vertical-align: middle; display: inline-block;">
+        <tr>
+          <td>
+            <img src="./static/images/logo_logicstar_black.png" alt="LogicStarAI logo" style="height: 24px;">
+          </td>
+        </tr>
+      </table>
+    </a>
+    <a href="https://www.sri.inf.ethz.ch/">
+      <table style="height: 100%; vertical-align: middle; display: inline-block;">
+        <tr>
+          <td>
+            <img src="./static/images/sri-logo.svg" alt="SRI logo" style="height: 24px;">
+          </td>
+        </tr>
+      </table>
+    </a> -->
+    <span>&nbsp;&nbsp;</span>
+  </div>
+
+<section class="hero is-align-items-center is-link">
+  <div class="hero-body" style="padding-bottom: 1.25rem;">
+    <table>
+      <tr>
+    <td>
+    <p class="subtitle">
+    <b>SWT-Bench:</b> Can your model write reproduction tests for real-world issues?
+    </p>
+    <p style="max-width: 750px;">
+       The task of SWT-Bench is to reproduce a reported issue by adding an appropriate test case to the projects' test suite. The test should fail on the original code base and pass after the issue is resolved. 
+       </p>
+       <div class="container" style="margin-top: 0.5em;">
+        <div class="columns is-centered is-vcentered is-mobile"">
+          <div class="column is-narrow" style="text-align: center;">
+            <a href="https://logicstar.ai"><img src="./static/images/logo_logicstar_neg.png" class="institution-logo" style="height: 20px; "/></a>
+          </div>
+          <div class="column is-narrow" style="text-align: center;">
+            <a href="https://www.sri.inf.ethz.ch/"><img src="./static/images/sri-logo_neg.png" class="institution-logo" style="height: 15px;"/></a>
+          </div>
+          <div class="column is-narrow" style="text-align: center;">
+              <a href="https://ethz.ch"><img src="./static/images/eth_logo_kurz_neg.png" class="institution-logo" style="height: 15px;"/></a>
+          </div>
+        </div>
+    </div>
+        </td>
+    <td style="width: 30px;" class="is-hidden-mobile">
+      &nbsp;
+    </td>
+        <td class="is-hidden-mobile">
+          <p>
+    <img src="./static/images/color_transparent.png" alt="Logo" class="centered-logo" style="max-height: 8em;">
+    </p>
+    </td>
+    </tr>
+    </table>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-one-third is-hidden-mobile"> </div>
+        <div class="column">
+          <div class="buttons" style="margin-bottom: 0; justify-content: center;">
+            <button id="lite-button" class="button is-small is-rounded is-link">Lite</button>
+            <button id="verified-button" class="button is-small is-rounded">Verified</button>
+          </div>
+        </div>
+        <div class="column is-one-third" style="text-align: right;">
+          <div style="margin-left: 20px;">
+            <label class="checkbox is-small" style="font-size: 0.8rem;">
+              <input type="checkbox" id="reproduction-mode-checkbox"> Script Mode <sup>&Dagger;</sup>
+            </label>
+            &nbsp;
+            <label class="checkbox is-small" style="font-size: 0.8rem;">
+              <input type="checkbox" id="unittest-mode-checkbox" checked> Unit Test Mode
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="table-container">
+            <table id="leaderboard-table" class="table is-hoverable is-fullwidth">
+              <thead>
+              <tr>
+                <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
+                <th style="width: 10%;" class="has-text-centered"><abbr title="Affiliation / Organization">Org.</abbr></th>
+                <th style="width: 15%;"><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
+                <th style="width: 15%;"><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
+                <th style="width: 20%;">Date <span class="sort-arrow"></span></th>
+                <th style="width: 10%;" class="has-text-centered"><abbr title="Trajectories">Traj.</abbr></th>
+              </tr>
+              </thead>
+              <tbody>
+                                <tr data-mode="reproduction">
+                  <td>🥇<a href="https://arxiv.org/pdf/2411.18015">AEGIS</a><sup>&Dagger;</sup></td>
+                  <td class="has-text-centered"><a href="https://se-research.bytedance.com/"><img alt="Bytedance (SE Lab)" title="Bytedance (SE Lab)" src="./static/images/logos/bytedance-seeklogo.svg" class="org-icon"></a></td>
+                  <td>47.8%</td>
+                  <td>26.0%</td>
+                  <td><time>2025-02-17</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/aegis/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td>🥇🆕&nbsp;<a href="https://arxiv.org/abs/2508.06365">e-Otter++</a> <small>Claude 3.7 Sonnet</small></td>
+                  <td class="has-text-centered"><a href="https://www.ibm.com/"><img alt="IBM" title="IBM" src="./static/images/logos/IBM.svg" class="org-icon"></a></td>
+                  <td>50.7%</td>
+                  <td>56.4%</td>
+                  <td><time>2025-08-11</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/e-otter/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td>🥈<a href="https://aws.amazon.com/q/">Amazon Q Developer Agent</a> <small>v20250405-dev</small></td>
+                  <td class="has-text-centered"><a href="https://aws.amazon.com/q/"><img alt="Amazon Web Services" title="Amazon Web Services" src="./static/images/logos/Amazon_Web_Services_Logo.svg" class="org-icon"></a></td>
+                  <td>37.7%</td>
+                  <td>52.7%</td>
+                  <td><time>2025-04-10</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/amazon_q_developer_agent/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td>🥉🆕&nbsp;<a href="https://arxiv.org/abs/2507.17542">AssertFlip</a> <small>GPT-4o</small></td>
+                  <td class="has-text-centered"><a href="https://github.com/uw-swag/AssertFlip"><img alt="University of Waterloo (SWAG Lab)" title="University of Waterloo (SWAG Lab)" src="./static/images/logos/uw.svg" class="org-icon"></a></td>
+                  <td>35.1%</td>
+                  <td>44.2%</td>
+                  <td><time>2025-07-28</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/assertflip/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://docs.all-hands.dev/">OpenHands</a> <small>Cl. Sonnet 3.5, CI setup</small></td>
+                  <td class="has-text-centered"><a href="https://all-hands.dev/"><img alt="All Hands AI" title="All Hands AI" src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
+                  <td>28.3%</td>
+                  <td>52.4%</td>
+                  <td><time>2025-02-18</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://docs.all-hands.dev/">OpenHands</a> <small>Cl. Sonnet 3.5, vanilla</small></td>
+                  <td class="has-text-centered"><a href="https://all-hands.dev/"><img alt="All Hands AI" title="All Hands AI" src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
+                  <td>22.8%</td>
+                  <td>43.6%</td>
+                  <td><time>2025-02-18</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://arxiv.org/abs/2406.12952">SWE-Agent+</a> <small>GPT-4</small></td>
+                  <td class="has-text-centered"><a href="https://logicstar.ai/"><img alt="LogicStar" title="LogicStar" src="./static/images/logos/logicstar.png" class="org-icon"></a></td>
+                  <td>18.5%</td>
+                  <td>27.6%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> <small>Mistral Large 2</small></td>
+                  <td class="has-text-centered"><a href="https://swe-agent.com/"><img alt="SWE-agent" title="SWE-agent" src="./static/images/logos/swe-agent.svg" class="org-icon"></a></td>
+                  <td>16.3%</td>
+                  <td>23.0%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> <small>GPT-4</small></td>
+                  <td class="has-text-centered"><a href="https://swe-agent.com/"><img alt="SWE-agent" title="SWE-agent" src="./static/images/logos/swe-agent.svg" class="org-icon"></a></td>
+                  <td>15.9%</td>
+                  <td>26.5%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://arxiv.org/abs/2209.11515">LIBRO</a> <small>GPT-4</small></td>
+                  <td class="has-text-centered"><a href="https://github.com/coinse/libro"><img alt="KAIST" title="KAIST" src="./static/images/logos/KAIST.svg" class="org-icon"></a></td>
+                  <td>14.1%</td>
+                  <td>23.8%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://aider.chat">Aider</a> <small>GPT-4</small></td>
+                  <td class="has-text-centered"><a href="https://aider.chat/"><img alt="Aider" title="Aider" src="./static/images/logos/aider.png" class="org-icon"></a></td>
+                  <td>12.7%</td>
+                  <td>27.8%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> <small>Cl. 3.5 Sonnet</small></td>
+                  <td class="has-text-centered"><a href="https://swe-agent.com/"><img alt="SWE-agent" title="SWE-agent" src="./static/images/logos/swe-agent.svg" class="org-icon"></a></td>
+                  <td>12.3%</td>
+                  <td>30.3%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> <small>GPT-4o mini</small></td>
+                  <td class="has-text-centered"><a href="https://swe-agent.com/"><img alt="SWE-agent" title="SWE-agent" src="./static/images/logos/swe-agent.svg" class="org-icon"></a></td>
+                  <td>9.8%</td>
+                  <td>20.9%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://arxiv.org/abs/2406.12952">Zero-Shot Plus</a> <small>GPT-4 + BM25</small></td>
+                  <td class="has-text-centered"><a href="https://openai.com"><img alt="OpenAI" title="OpenAI" src="./static/images/logos/openai.svg" class="org-icon"></a></td>
+                  <td>9.4%</td>
+                  <td>21.5%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://autocoderover.dev">AutoCodeRover</a> <small>GPT-4</small></td>
+                  <td class="has-text-centered"><a href="https://autocoderover.net"><img alt="AutoCodeRover" title="AutoCodeRover" src="./static/images/logos/autocoderover.svg" class="org-icon"></a></td>
+                  <td>9.1%</td>
+                  <td>17.9%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://arxiv.org/abs/2406.12952">Zero-Shot Base</a> <small>GPT-4 + BM25</small></td>
+                  <td class="has-text-centered"><a href="https://openai.com"><img alt="OpenAI" title="OpenAI" src="./static/images/logos/openai.svg" class="org-icon"></a></td>
+                  <td>3.6%</td>
+                  <td>7.6%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> <small>Claude 3 Haiku</small></td>
+                  <td class="has-text-centered"><a href="https://swe-agent.com/"><img alt="SWE-agent" title="SWE-agent" src="./static/images/logos/swe-agent.svg" class="org-icon"></a></td>
+                  <td>2.5%</td>
+                  <td>3.0%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://swe-agent.com/latest/">SWE-Agent</a> <small>Mixtral 8x22B</small></td>
+                  <td class="has-text-centered"><a href="https://swe-agent.com/"><img alt="SWE-agent" title="SWE-agent" src="./static/images/logos/swe-agent.svg" class="org-icon"></a></td>
+                  <td>0.7%</td>
+                  <td>0.9%</td>
+                  <td><time>2024-05-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                </tbody>
+              </table>
+              </div>
+              <div id="verified-leaderboard" class="table-container" style="display: none;">
+              <table id="verified-leaderboard-table" class="table is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                <th style="width: 60%;">Model <span class="sort-arrow"></span></th>
+                <th style="width: 10%;" class="has-text-centered"><abbr title="Affiliation / Organization">Org.</abbr></th>
+                <th style="width: 15%;"><abbr title="Success Rate">\(\mathcal{S}\)</abbr><span class="sort-arrow"></span></th>
+                <th style="width: 15%;"><abbr title="Coverage Increase">\(\Delta\mathcal{C}\)</abbr><span class="sort-arrow"></span></th>
+                <th style="width: 20%;">Date <span class="sort-arrow"></span></th>
+                <th style="width: 10%;" class="has-text-centered"><abbr title="Trajectories">Traj.</abbr></th>
+                </tr>
+                </thead>
+                <tbody>
+                                <tr data-mode="unittest">
+                  <td>🥇🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> <small>GPT-5</small></td>
+                  <td class="has-text-centered"><a href="https://all-hands.dev/"><img alt="All Hands AI" title="All Hands AI" src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
+                  <td>75.8%</td>
+                  <td>66.3%</td>
+                  <td><time>2025-08-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td>🥈🆕&nbsp;<a href="https://arxiv.org/abs/2508.06365">e-Otter++</a> <small>Claude 3.7 Sonnet</small></td>
+                  <td class="has-text-centered"><a href="https://www.ibm.com/"><img alt="IBM" title="IBM" src="./static/images/logos/IBM.svg" class="org-icon"></a></td>
+                  <td>60.7%</td>
+                  <td>62.3%</td>
+                  <td><time>2025-08-11</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/e-otter/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td>🥉🆕&nbsp;<a href="https://docs.all-hands.dev/">OpenHands</a> <small>GPT-5-mini</small></td>
+                  <td class="has-text-centered"><a href="https://all-hands.dev/"><img alt="All Hands AI" title="All Hands AI" src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
+                  <td>56.8%</td>
+                  <td>60.4%</td>
+                  <td><time>2025-08-22</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://aws.amazon.com/q/">Amazon Q Developer Agent</a> <small>v20250405-dev</small></td>
+                  <td class="has-text-centered"><a href="https://aws.amazon.com/q/"><img alt="Amazon Web Services" title="Amazon Web Services" src="./static/images/logos/Amazon_Web_Services_Logo.svg" class="org-icon"></a></td>
+                  <td>49.0%</td>
+                  <td>57.4%</td>
+                  <td><time>2025-04-10</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/amazon_q_developer_agent/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td>🆕&nbsp;<a href="https://arxiv.org/abs/2507.17542">AssertFlip</a> <small>GPT-4o</small></td>
+                  <td class="has-text-centered"><a href="https://github.com/uw-swag/AssertFlip"><img alt="University of Waterloo (SWAG Lab)" title="University of Waterloo (SWAG Lab)" src="./static/images/logos/uw.svg" class="org-icon"></a></td>
+                  <td>43.4%</td>
+                  <td>47.4%</td>
+                  <td><time>2025-07-28</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/assertflip/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://arxiv.org/abs/2502.05368v1">Otter++</a> <small>GPT-4o</small></td>
+                  <td class="has-text-centered"><a href="https://www.ibm.com/"><img alt="IBM" title="IBM" src="./static/images/logos/IBM.svg" class="org-icon"></a></td>
+                  <td>37.0%</td>
+                  <td>42.8%</td>
+                  <td><time>2025-03-10</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/otter/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://arxiv.org/abs/2502.05368v1">Otter</a> <small>GPT-4o</small></td>
+                  <td class="has-text-centered"><a href="https://www.ibm.com/"><img alt="IBM" title="IBM" src="./static/images/logos/IBM.svg" class="org-icon"></a></td>
+                  <td>31.4%</td>
+                  <td>37.6%</td>
+                  <td><time>2025-03-10</time></td>
+                  <td class="has-text-centered"><a href="https://files.sri.inf.ethz.ch/swt-bench/otter/">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://docs.all-hands.dev/">OpenHands</a> <small>Cl. Sonnet 3.5</small></td>
+                  <td class="has-text-centered"><a href="https://all-hands.dev/"><img alt="All Hands AI" title="All Hands AI" src="./static/images/logos/allhands.svg" class="org-icon"></a></td>
+                  <td>27.7%</td>
+                  <td>52.9%</td>
+                  <td><time>2025-02-28</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://arxiv.org/abs/2209.11515">LIBRO</a> <small>GPT-4o</small></td>
+                  <td class="has-text-centered"><a href="https://github.com/coinse/libro"><img alt="KAIST" title="KAIST" src="./static/images/logos/KAIST.svg" class="org-icon"></a></td>
+                  <td>17.8%</td>
+                  <td>38.0%</td>
+                  <td><time>2025-02-28</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+                <tr data-mode="unittest">
+                  <td><a href="https://arxiv.org/abs/2406.12952">Zero-Shot Plus</a> <small>GPT-4o + BM25</small></td>
+                  <td class="has-text-centered"><a href="https://openai.com"><img alt="OpenAI" title="OpenAI" src="./static/images/logos/openai.svg" class="org-icon"></a></td>
+                  <td>14.3%</td>
+                  <td>34.0%</td>
+                  <td><time>2025-02-28</time></td>
+                  <td class="has-text-centered"><a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results">🔗</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            We report the percentage of issues reproduced by the generated tests (\(\mathcal{S}\)) and their mean line coverage of the resolving patch (\(\Delta\mathcal{C}\)).
+          </p>
+        </div>
+      </div>
+      <div class="columns is-max-desktop">
+        <div class="column is-centered">
+          <p class="is-size-7">The results reported here are evaluation results on SWT-Bench Lite and Verified. We have independently executed submitted predictions for verification. <sup>&Dagger;</sup> Generates stand-alone reproduction scripts and does not attempt integration into the test framework. </p>
+        </div>
+      </div>
+    </div>
+  </section>
+<section class="hero is-small is-link is-align-items-center">
+    <div class="hero-body">
+      <table>
+        <td style="vertical-align: middle;">
+          Is your model or agent up to the challenge? Submit your results here!&nbsp;&nbsp;
+        </td>
+        <td  style="vertical-align: middle;">
+          <a href="mailto:contact@swtbench.com" class="button is-link is-small is-rounded" type="submit" style="background-color: black;"><span class="icon small-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z" " fill="currentColor"/></svg>
+          </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Contact</a></br>
+          <a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#Submitting-Results-to-the-Leaderboard" class="button is-link is-small is-rounded is-hidden-tablet is-hidden-desktop" type="submit" style="background-color: black; margin-top: 0.5em;"><span class="icon small-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><path d="M288 109.3L288 352c
+0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0
+c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" fill="currentColor"/></svg> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submit</a>
+        </td>
+        <td class="is-hidden-mobile is-hidden-mobile">&nbsp;</td>
+        <td  style="vertical-align: middle;" class="is-hidden-mobile">
+          <a href="https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#Submitting-Results-to-the-Leaderboard" class="button is-link is-small is-rounded" type="submit" style="background-color: black;"><span class="icon small-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. --><path d="M288 109.3L288 352c
+              0 17.7-14.3 32-32 32s-32-14.3-32-32l0-242.7-73.4 73.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l128-128c12.5-12.5 32.8-12.5 45.3 0l128 128c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L288 109.3zM64 352l128 0c0 35.3 28.7 64 64 64s64-28.7 64-64l128 0
+              c35.3 0 64 28.7 64 64l0 32c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64l0-32c0-35.3 28.7-64 64-64zM432 456a24 24 0 1 0 0-48 24 24 0 1 0 0 48z" fill="currentColor"/></svg> </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Submit</a>
+        </td>
+        </table>
+    </div>
+</section>
+<section class="section" id="about">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <article class="message is-link">
+            <div class="message-header">
+              <p>News</p>
+            </div>
+            <div class="message-body">
+            <p><strong><time>2025-08-22</time></strong> The 1st and 3rd place on SWT-Verified are reclaimed by the latest release of <a href="https://all-hands.dev">OpenHands</a>, equipped with the newly released <a href="https://openai.com/index/introducing-gpt-5/">GPT-5</a> and <a href="https://openai.com/index/introducing-gpt-5/">GPT-5-mini</a>, respectively.</p>
+            <p><strong><time>2025-08-11</time></strong> <a href="https://arxiv.org/abs/2508.06365">e-Otter++</a> claims the first position on the leaderboard with 50.7% and 60.7% on Lite and Verified respectively. They improve upon prior <a href="https://arxiv.org/abs/2502.05368v2">Otter</a> by more deeply integrating execution feedback and heterogeneous prompts in the generation loop.</p>
+            <p><strong><time>2025-07-28</time></strong> <a href="https://github.com/uw-swag/AssertFlip">AssertFlip</a> demonstrates a method to generate test cases by flipping the semantics of generated passing tests, achieving superior performance with a success rate of 35.1% on SWT-Bench Lite and 43.4% on Verified.</p>
+            <p><strong><time>2025-04-10</time></strong> The <a href="https://aws.amazon.com/q/">Amazon Q Developer Agent</a> is evaluated on SWT-Bench and achieves SOTA unit test generation results on both SWT-Bench Lite (37.3%) and Verified (48.7%).</p>
+          <p><strong><time>2025-02-28</time></strong> We release SWT-Bench <it>Verified</it>, a set of 433 human-verified solvable issues, matching <a href="https://openai.com/index/introducing-swe-bench-verified/">SWE-Bench Verified</a>. The specialized testing agent <a href="https://arxiv.org/abs/2502.05368v2/">Otter</a> achieves SOTA performance.</p>
+          <p><strong><time>2025-02-18</time></strong> We evaluated <a href="https://docs.all-hands.dev/">OpenHands</a> on SWT-Bench, achieving 22.8% success rate on Lite with vanilla setup. We <a href="https://x.com/nielstron/status/1891831467908432223">discover</a> that setting up the CI environment for the agent significantly improves the results to 28.3% on Lite and 27.7% on Verified.</p>
+          <p><strong><time>2025-02-17</time></strong> We evaluated <a href="https://arxiv.org/pdf/2411.18015">AEGIS</a> on SWT-Bench Lite, achieving 47.8% success rate and 26.0% coverage increase. AEGIS is the first submitted agent specifically tailored for the task of software testing and achieves state-of-the-art results.</p>
+          </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered is-narrow">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#about"></a>
+            What is the task in SWT-Bench?
+          </h2>
+          <h5 class="subtitle is-5">Generate software tests which reproduce user-reported issues and increase code coverage.</h5>
+       <p>Each SWT-Bench task is based on a real-world pull-request from a GitHub repository which resolves a user-reported issue and contains the code patch fixing the issue and unit tests testing the fix. Given the original state of the code base and the user issue, the task is to generate tests that reproduce this issue. These generated tests are expected to fail on the original code base and pass after the issue is resolved. 
+          </p>
+        </div>
+      </div>
+</div>
+</div>
+</section>
+<section class="section">
+</div>  
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+            <picture>
+              <!-- User prefers dark mode: -->
+              <!-- <source srcset="./static/images/overviewfig_dark.svg"  media="(prefers-color-scheme: dark)"/> -->
+              <!-- Light mode image -->
+              <!-- <source srcset="./static/images/overviewfig.svg" media="(prefers-color-scheme: light)"/> -->
+              <!-- User has no color preference: -->
+              <img src="./static/images/overviewfig.svg"/>
+            </picture>
+          </div>
+        </div>
+      </div>
+</div>
+</div>  
+</div>
+</section>
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#about"></a>
+            What metrics do you measure?
+          </h2>
+          <h5 class="subtitle is-5">We measure whether the generated tests reproduce the user issue and increase the code coverage of the modified code.</h5>
+       <p>For a generated test to reproduce the described issue, it should fail on original code base but pass after the code patch fixing the issue is applied. We call this a Fail-to-Pass (F2P) test. An instance is successfully resolved, if at least one F2P test but no test failing on the fixed state of the codebase (F2F or P2F) is generated. We report the success rate \( \mathcal{S}\). We further measure the increase in line coverage of the lines changed when resolving the issue. We call this the Coverage Increase \(\Delta \mathcal{C}\).
+          </p>
+        </div>
+      </div>
+</div>
+</div>  
+<!-- </div>
+</section>
+<section class="section" id="findings">
+</div>  
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#findings"></a>
+            What were the initial findings of SWT-Bench?
+          </h2>
+          <h5 class="subtitle is-5">Code Agents are highly effective at writing unit tests, even when initially designed for code repair and not specifically adapted.</h5>
+          <p>
+            We evaluated the performance of bare bone LLMs in a Zero-Shot setting, the heuristic method <a href="https://github.com/coinse/libro/tree/main">LIBRO</a> and various code agents on SWT-Bench. We found that, surprisingly, code agents are highly effective at writing unit tests and even outperformed the previous state-of-the-art LIBRO.
+          </p>
+        </div>
+        </div>
+      </div>
+</div> -->
+</div>  
+</section>
+<section class="section" id="unittests">
+</div>  
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#unittests"></a>
+            What is the value of test generation?
+          </h2>
+          <h5 class="subtitle is-5">Reproducing test can aide test-driven development, avoid regression, and are a powerful tool to cross-validate proposed bug fixes.</h5>
+          <p>
+            To resolve a reported issues reliably, it is essential to first reproduce it and then confirm that a proposed bug fix actually addresses it. This is typically done by creating a reproducing test. However creating such tests is a tedious and time consuming process that we want to automate using code agents. Once a reproducing test is generated, it can be used to drive the process of fixing the issue and validate a proposed bug fix.
+          </p>
+        </div>
+        </div>
+      </div>
+</div>
+</div>  
+</section>
+<section class="section" id="swebench">
+</div>  
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+          <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#swebench"></a>
+            Are there other relevant benchmarks about code generation and testing?
+          </h2>
+          <h5 class="subtitle is-5"><a href="https://swebench.com">SWE-bench</a> measures the capability of fixing reported user issues. <a href="https://baxbench.com">BaxBench</a> measures capabilities at writing correct and secure web backends. </h5>
+          <p>
+            <b>SWE-bench</b>: SWT-Bench and <a href="https://swebench.com">SWE-bench</a> are based on the same GitHub repositories and issues. While SWT-Bench measures the ability of models or agents to reproduce a given issue, SWE-bench measures their ability to resolve it. We observe that while these tasks are complementary, their hardness is not correlated on an instance level.
+
+              <br/>
+              <br/>
+            <b>BaxBench</b>: <a href="https://baxbench.com">BaxBench</a> provides the model with a description of a web application backend and measures the correctness of the generated code. Additionally, BaxBench tests for common security vulnerabilities in the generated code.
+          </p>
+        </div>
+        </div>
+      </div>
+</div>
+</div>  
+</section>
+<section class="section" id="learn-more">
+</div>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content" style="text-align: left;">
+        <h2 class="title is-4 is-spaced">
+          <a class="bd-anchor-link" href="#learn-more"></a>
+            Check out our paper for more details!
+        </h2>
+      </div>
+          <div class="content" style="text-align: center;">
+            <h2 class="title is-3">SWT-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents</h2>
+            <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/niels">Niels Mündler</a><sup>1</sup></span>,
+            <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/mark">Mark Niklas Müller</a><sup>1,2</sup></span>,
+            <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/jingxuan">Jingxuan He</a><sup>1</sup></span>,
+            <span class="team-name"><a href="https://www.sri.inf.ethz.ch/people/martin">Martin Vechev</a><sup>1</sup></span>
+            <br/>
+            <span class="institution"><sup>1</sup>ETH Zurich</span>
+            <span class="institution"><sup>2</sup>LogicStar AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <br/>
+      <div class="columns is-centered is-mobile">
+        <div class="column is-narrow">
+          <div class="content" style="text-align: center;">
+            <a href="https://arxiv.org/abs/2406.12952">
+            <img src="./static/images/emojis/1F4C4.svg" alt="📜" class="paper-code-emoji">
+            </br>
+            Paper
+          </a>
+        </div>
+        </div>
+      <div class="column is-1">
+        </div>
+      <div class="column is-narrow">
+          <div class="content" style="text-align: center;">
+    <a href="https://github.com/logic-star-ai/swt-bench"> 
+            <img src="./static/images/emojis/logo-github.a1fdb524.svg" alt="🧑‍💻" class="paper-code-emoji">
+    </br>
+            Code
+    </a>
+          </div>
+    </div>
+    </div>
+    <div class="columns is-centered is-mobile">
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="content" style="text-align: center;">
+            <p>If you have any remaining questions, please feel free to contact us at <a href="mailto:contact@swtbench.com">contact@swtbench.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+</section>
+<section class="section" id="citation">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+<div class="column">
+  <div class="content">
+    <h2 class="title is-4 is-spaced">
+    <a class="bd-anchor-link" href="#citation"></a>
+      Citing this work
+    </h2>
+    <p>If you use this benchmark, please cite:</p>
+  <pre>
+<code class="language-bib" id="citation-code"> @inproceedings{mundler2024swtbench,
+  title={{SWT}-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents},
+  author={Niels M{\"u}ndler and Mark Niklas Mueller and Jingxuan He and Martin Vechev},
+  booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
+  year={2024},
+  url={https://openreview.net/forum?id=9Y8zUO11EQ}
+}</code>
+</pre>
+  </div>
+</div>
+</div>
+  </div>
+</div>
+</section>
+<section class="section custom-footer">
+  <div class="container is-max-desktop content">
+    <div class="columns">
+      <div class="column">
+          SWT-Bench is a project by <a href="https://logicstar.ai">LogicStar AI</a> and the <a href="https://www.sri.inf.ethz.ch/">Secure, Reliable, and Intelligent Systems Lab</a> at ETH Zürich.<br/>
+          <img src="static/images/institution-logos-black.svg"/>
+      </div>
+      <div class="column" style="text-align: left;">
+        Site template adapted from <a href="https://lmql.ai">LMQL</a> and uses <a href="https://bulma.io/">Bulma</a>.
+        All emojis designed by <a href="https://openmoji.org/">OpenMoji</a> – the open-source emoji and icon project. License: <a href="https://creativecommons.org/licenses/by-sa/4.0/#">CC BY-SA 4.0</a><br/>
+        Last updated on <time>2025-04-10</time>.<br/>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+</body>
+</html>
