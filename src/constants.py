@@ -532,7 +532,7 @@ for k in ["4.1", "4.2", "4.3", "5.0", "5.1", "5.2"]:
     MAP_VERSION_TO_INSTALL_ASTROPY[k]["pre_install"] = [
         'sed -i \'s/requires = \\["setuptools",/requires = \\["setuptools==68.0.0",/\' pyproject.toml'
     ]
-TEST_ASTROPY_PYTEST = "pytest -rA -vv -o console_output_style=classic --tb=no"
+TEST_ASTROPY_PYTEST = "pytest -rA -vv --tb=no -o='console_output_style=classic'"
 MAP_VERSION_TO_INSTALL_ASTROPY.update(
     {
         k:  {
