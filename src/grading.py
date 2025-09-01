@@ -71,10 +71,14 @@ def get_logs_eval(
     with open(log_fp) as f:
         raw_content = f.read()
         # remove installation logs
-    # NOTE: does not work when not computing coverage
-    content = re.split(r"\n\+ python3 [^\n]*trace.py --count -C coverage.cover [^\n]*\n", raw_content, flags=re.MULTILINE)[1]
+    if "trace.py --count -C coverage.cover" in raw_content:
+        # NOTE: does not work when not computing coverage
+        content = re.split(r"\n\+ python3 [^\n]*trace.py --count -C coverage.cover [^\n]*\n", raw_content, flags=re.MULTILINE)[1]
+    else:
+        content = raw_content
     # remove coverage dumps
-    content = content.split("\n+ cat coverage.cover")[0]
+    if "+ cat coverage.cover" in content:
+        content = content.split("\n+ cat coverage.cover")[0]
     # TODO fix constant here
     if (
         any(
