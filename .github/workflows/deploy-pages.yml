@@ -1,6 +1,9 @@
 name: Generate and Deploy GitHub Pages
 
 on:
+  push:
+    branches:
+      - master
   # Allow manual triggering
   workflow_dispatch:
 
