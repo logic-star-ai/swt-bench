@@ -11,6 +11,22 @@ This directory contains the source files for the SWT-Bench leaderboard website t
 - `approaches.csv` - Approach/paper mapping data
 - `static/` - Static assets (CSS, JS, images)
 
+## Serving Locally
+
+To generate the site locally:
+
+```bash
+cd docs
+python generate_index.py
+```
+
+This will create/update the `index.html` file based on the current CSV data and template.
+
+You can serve this using the Python built-in HTTP library:
+```bash
+python -m http.server 8080
+```
+
 ## Automatic Deployment
 
 The site is automatically built and deployed to GitHub Pages via the `.github/workflows/deploy-pages.yml` workflow:
@@ -22,17 +38,6 @@ The site is automatically built and deployed to GitHub Pages via the `.github/wo
    - Runs `generate_index.py` to create the final HTML
    - Uploads the entire `docs/` directory as a Pages artifact
 3. **Deployment**: Deploys to GitHub Pages (only on pushes to `main`)
-
-## Manual Generation
-
-To generate the site locally:
-
-```bash
-cd docs
-python generate_index.py
-```
-
-This will create/update the `index.html` file based on the current CSV data and template.
 
 ## GitHub Pages Configuration
 
