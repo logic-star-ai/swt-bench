@@ -36,6 +36,7 @@ def run(
         run_id: str,
         patch_types: List[str],
         timeout: int,
+        filter_swt: bool,
         build_mode: "BuildMode" = "api",
         skip_eval: bool = False,
         exec_mode: "ExecMode" = "unit_test",
@@ -52,7 +53,7 @@ def run(
     # load predictions as map of instance_id to prediction
     if predictions_path == 'gold':
         print("Using gold tests - ignoring predictions_path")
-        predicted_tests = get_gold_predictions(dataset_name, split, is_swt)
+        predicted_tests = get_gold_predictions(dataset_name, split, is_swt, filter_swt)
     else:
         if predictions_path.endswith(".json"):
             with open(predictions_path, "r") as f:
@@ -65,8 +66,8 @@ def run(
     predicted_tests = {pred["instance_id"]: pred for pred in predicted_tests}
 
     # get dataset from predictions
-    dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, is_swt=is_swt)
-    full_dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, False, is_swt=is_swt)
+    dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, is_swt=is_swt, filter_swt=filter_swt)
+    full_dataset = get_dataset_from_preds(dataset_name, split, instance_ids, predicted_tests, run_id, False, is_swt=is_swt, filter_swt=filter_swt)
     existing_images = list_images(client)
     print(f"Running {len(dataset)} unevaluated instances...")
     if not dataset:
@@ -90,6 +91,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--is_swt", type=str2bool, default=False, help="Indicate that benchmark is extended with RAG, need to handle patches differently"
     )
+    parser.add_argument("--filter_swt", action="store_true", help="Filter the specified dataset to the official SWT-Subset")
     parser.add_argument("--split", type=str, default="test")
     parser.add_argument("--instance_ids", nargs="+", type=str, help="Instance IDs to run (space separated)")
     parser.add_argument("--predictions_path", type=str, help="Path to predictions file - if 'gold', uses gold predictions", required=True)
