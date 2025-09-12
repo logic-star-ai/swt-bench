@@ -174,9 +174,9 @@ def get_eval_report(
     results = {
         FAIL_TO_PASS: x2p + f2p,
         PASS_TO_PASS: p2p,
-        FAIL_TO_FAIL: f2f + x2x + x2f + f2x,
+        FAIL_TO_FAIL: f2f + x2f,
         PASS_TO_FAIL: p2f + p2x,
-        UNMATCHED: []
+        UNMATCHED: f2x + x2x
     }
     return results
 
