@@ -1,5 +1,6 @@
 import pathlib
 import base64
+import tempfile
 
 import docker
 import os
@@ -8,9 +9,12 @@ import gzip
 import threading
 import traceback
 from pathlib import Path
+import tarfile
+from typing import Literal
 
 from docker.models.containers import Container
 
+BuildMode = Literal["cli", "api"]
 
 HEREDOC_DELIMITER = "EOF_1399519320"  # different from dataset HEREDOC_DELIMITERs!
 
@@ -29,7 +33,7 @@ def checked_exec_run(container: Container, cmd: str, **kwargs):
     return result
 
 
-def copy_to_container(container: Container, src: Path, dst: Path):
+def copy_to_container(container: Container, src: Path, dst: Path, build_mode: BuildMode):
     """
     Copy a file from local to a docker container
 
@@ -43,28 +47,46 @@ def copy_to_container(container: Container, src: Path, dst: Path):
         raise ValueError(
             f"Destination path parent directory cannot be empty!, dst: {dst}"
         )
-
-    with open(src, "rb") as f:
-        compressed = gzip.compress(f.read())
-
-    compressed_obj_base64 = base64.b64encode(compressed).decode()
-
     # Make directory if necessary
     checked_exec_run(container, f"mkdir -p {dst.parent}")
 
-    # Send tar file to container and extract
-    write_to_container(container, compressed_obj_base64, pathlib.Path(f"{dst}.b64"))
-    checked_exec_run(container, f"/bin/bash -c \"base64 -d {dst}.b64 | gunzip -c - | tee {dst}\"")
-    checked_exec_run(container, f"rm {dst}.b64")
+    if build_mode == "cli":
+        with open(src, "rb") as f:
+            compressed = gzip.compress(f.read())
+
+        compressed_obj_base64 = base64.b64encode(compressed).decode()
+
+
+        # Send tar file to container and extract
+        write_to_container_cli(container, compressed_obj_base64, pathlib.Path(f"{dst}.b64"), build_mode)
+        checked_exec_run(container, f"/bin/bash -c \"base64 -d {dst}.b64 | gunzip -c - | tee {dst}\"")
+        checked_exec_run(container, f"rm {dst}.b64")
+    else:
+        # Use the docker API to copy the file
+        with tempfile.NamedTemporaryFile(suffix=".tar", delete=False) as f:
+            f.close()
+            with tarfile.open(f.name, 'w') as tar:
+                try:
+                    tar.add(src, arcname=dst)
+                finally:
+                    tar.close()
+
+            with open(f.name, 'rb') as fd:
+                ok = container.put_archive(path="/", data=fd)
+                if not ok:
+                    raise Exception('Put file failed')
+                else:
+                    pass
 
 
 
-def write_to_container(container: Container, data: str, dst: Path):
+def write_to_container_cli(container: Container, data: str, dst: Path):
     """
     Write a single line string to a file in a docker container
     """
     # echo with heredoc to file
     command = f"/bin/bash -c \"echo '{data}' | tee {dst}\""
+
     return checked_exec_run(container, command)
 
 

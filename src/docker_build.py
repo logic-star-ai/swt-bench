@@ -23,7 +23,8 @@ from src.test_spec import (
 from src.docker_utils import (
     cleanup_container,
     remove_image,
-    find_dependent_images
+    find_dependent_images,
+    BuildMode,
 )
 
 from src.exec_spec import (ExecSpec,
@@ -49,7 +50,6 @@ class BuildImageError(Exception):
             f"Check ({self.log_path}) for more information."
         )
 
-BuildMode = Literal["cli", "api"]
 ExecMode = Literal["unit_test", "reproduction_script"]
 
 def docker_build_cli(
