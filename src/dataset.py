@@ -10,11 +10,30 @@ from src.constants import (
 )
 from src.constants import SWEbenchInstance
 
-def get_gold_predictions(dataset_name: str, split: str, is_swt: bool):
+FILTER_FILE_LITE = "dataset/filter_cases_lite.txt"
+FILTER_FILE_FULL = "dataset/filter_cases_full.txt"
+FILTER_FILE_VERIFIED = "dataset/filter_cases_verified.txt"
+
+def _filter_cases(dataset="all"):
+    filter_cases = set()
+    if dataset == "lite":
+        files = [FILTER_FILE_LITE]
+    elif dataset == "full":
+        files = [FILTER_FILE_FULL]
+    elif dataset == "verified":
+        files = [FILTER_FILE_VERIFIED]
+    else:
+        raise ValueError(f"Unknown dataset: {dataset}")
+    for file in files:
+        with open(file) as f:
+            filter_cases.update(f.read().splitlines(keepends=False))
+    return frozenset(filter_cases)
+
+def get_gold_predictions(dataset_name: str, split: str, is_swt: bool, filter_swt: bool):
     """
     Get gold predictions for the given dataset and split.
     """
-    dataset = load_swebench_dataset(dataset_name, split, is_swt)
+    dataset = load_swebench_dataset(dataset_name, split, is_swt, filter_swt)
     return [
         {
             "instance_id": datum["instance_id"],
@@ -32,6 +51,7 @@ def get_dataset_from_preds(
         run_id: str = None,
         exclude_completed: bool = True,
         is_swt: bool = False,
+        filter_swt: bool = False,
 ):
     """
     Return only instances that have predictions and are in the dataset.
@@ -39,7 +59,7 @@ def get_dataset_from_preds(
     If exclude_completed is True, only return instances that have not been run yet.
     """
     # load dataset
-    dataset = load_swebench_dataset(dataset_name, split, is_swt)
+    dataset = load_swebench_dataset(dataset_name, split, is_swt, filter_swt)
     dataset_ids = {i["instance_id"] for i in dataset}
 
     # dataset = list(map(swe_to_swt_instance, dataset))
@@ -112,7 +132,7 @@ def swt_to_swt_instance(dataset_instance: Dict) -> Dict:
     dataset_instance["golden_test_patch"] = dataset_instance.pop("test_patch")
     return dataset_instance
 
-def load_swebench_dataset(name="princeton-nlp/SWE-bench", split="test", is_swt: bool=False) -> list[SWEbenchInstance]:
+def load_swebench_dataset(name="princeton-nlp/SWE-bench", split="test", is_swt: bool=False, filter_swt: bool =False) -> list[SWEbenchInstance]:
     """
     Load SWE-bench dataset from Hugging Face Datasets or local .json/.jsonl file
     """
@@ -125,15 +145,33 @@ def load_swebench_dataset(name="princeton-nlp/SWE-bench", split="test", is_swt: 
         ]
 
     # Load from Hugging Face Datasets
-    if name.lower() in {"swe-bench", "swebench", "swe_bench"}:
+    if name.lower() in {"swe-bench", "swebench", "swe_bench", "princeton-nlp/swe-bench"}:
         name = "princeton-nlp/SWE-bench"
-    elif name.lower() in {"swe-bench-lite", "swebench-lite", "swe_bench_lite", "swe-bench_lite", "lite"}:
+        instance_filter = _filter_cases(dataset="full")
+    elif name.lower() in {"swe-bench-lite", "swebench-lite", "swe_bench_lite", "swe-bench_lite", "lite", "princeton-nlp/swe-bench_lite"}:
         name = "princeton-nlp/SWE-bench_Lite"
+        instance_filter = _filter_cases(dataset="lite")
+    elif name.lower() in {
+        "swe-bench-verified",
+        "swebench-verified",
+        "swe_bench_verified",
+        "swe-bench_verified",
+        "verified",
+        "princeton-nlp/swe-bench_verified"
+    }:
+        name = "princeton-nlp/SWE-bench_Verified"
+        instance_filter = _filter_cases(dataset="verified")
+    else:
+        instance_filter = []
     if pathlib.Path(name).exists():
         dataset = load_from_disk(name)[split]
     else:
         dataset = cast(Dataset, load_dataset(name, split=split))
-    return [cast(SWEbenchInstance, transform(instance)) for instance in dataset]
+    instances = [cast(SWEbenchInstance, transform(instance)) for instance in dataset]
+    if filter_swt:
+        return [i for i in instances if i["instance_id"] not in instance_filter]
+    else:
+        instances
 
 
 ### MARK - Patch Correction

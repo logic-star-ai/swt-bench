@@ -59,6 +59,7 @@ Evaluate model predictions on SWT-Bench Lite using the evaluation harness with t
 python -m src.main \
     --dataset_name princeton-nlp/SWE-bench_Lite \
     --predictions_path <path_to_predictions> \
+    --filter_swt \
     --max_workers <num_workers> \
     --run_id <run_id>
     # use --predictions_path 'gold' to verify the gold patches
