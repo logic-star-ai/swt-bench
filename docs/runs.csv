@@ -1,8 +1,8 @@
 table_type,emojis,model_name,model_details,success_rate,coverage_increase,date,data_mode
 lite,,AEGIS,,47.8,26.0,2025-02-17,reproduction
-lite,new,e-Otter++,Claude 3.7 Sonnet,50.7,56.4,2025-08-11,unittest
-lite,,Amazon Q Developer Agent,v20250405-dev,37.7,52.7,2025-04-10,unittest
-lite,new,AssertFlip,GPT-4o,35.1,44.2,2025-07-28,unittest
+lite,new,e-Otter++,Claude 3.7 Sonnet,52.5,56.4,2025-08-11,unittest
+lite,,Amazon Q Developer Agent,v20250405-dev,39.9,52.7,2025-04-10,unittest
+lite,new,AssertFlip,GPT-4o,38.0,44.2,2025-07-28,unittest
 lite,,OpenHands,"Cl. Sonnet 3.5, CI setup",28.3,52.4,2025-02-18,unittest
 lite,,OpenHands,"Cl. Sonnet 3.5, vanilla",22.8,43.6,2025-02-18,unittest
 lite,,SWE-Agent+,GPT-4,18.5,27.6,2024-05-22,unittest
@@ -17,13 +17,13 @@ lite,,AutoCodeRover,GPT-4,9.1,17.9,2024-05-22,unittest
 lite,,LIBRO,GPT-4,14.1,23.8,2024-05-22,unittest
 lite,,Zero-Shot Plus,GPT-4 + BM25,9.4,21.5,2024-05-22,unittest
 lite,,Zero-Shot Base,GPT-4 + BM25,3.6,7.6,2024-05-22,unittest
-verified,new,OpenHands,GPT-5,75.8,66.3,2025-08-22,unittest
-verified,new,e-Otter++,Claude 3.7 Sonnet,60.7,62.3,2025-08-11,unittest
-verified,new,OpenHands,GPT-5-mini,56.8,60.4,2025-08-22,unittest
-verified,,Amazon Q Developer Agent,v20250405-dev,49.0,57.4,2025-04-10,unittest
-verified,new,AssertFlip,GPT-4o,43.4,47.4,2025-07-28,unittest
-verified,,Otter++,GPT-4o,37.0,42.8,2025-03-10,unittest
-verified,,Otter,GPT-4o,31.4,37.6,2025-03-10,unittest
+verified,new,OpenHands,GPT-5,79.8,66.3,2025-08-22,unittest
+verified,new,e-Otter++,Claude 3.7 Sonnet,62.1,62.3,2025-08-11,unittest
+verified,new,OpenHands,GPT-5-mini,62.4,60.6,2025-08-22,unittest
+verified,,Amazon Q Developer Agent,v20250405-dev,51.0,57.4,2025-04-10,unittest
+verified,new,AssertFlip,GPT-4o,45.5,47.4,2025-07-28,unittest
+verified,,Otter++,GPT-4o,37.4,42.8,2025-03-10,unittest
+verified,,Otter,GPT-4o,31.6,37.6,2025-03-10,unittest
 verified,,OpenHands,Cl. Sonnet 3.5,27.7,52.9,2025-02-28,unittest
 verified,,LIBRO,GPT-4o,17.8,38.0,2025-02-28,unittest
 verified,,Zero-Shot Plus,GPT-4o + BM25,14.3,34.0,2025-02-28,unittest
