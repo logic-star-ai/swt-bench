@@ -128,6 +128,7 @@ def apply_patch_in_container(log_dir: Path, patch_text: str, container: Containe
 
 
 def eval_in_container(log_dir: str, container: Container, logger: logging.Logger, eval_script: str, timeout: int, instance_id: str, compute_coverage: bool) -> str:
+    Path(log_dir).mkdir(parents=True, exist_ok=True)
     eval_file = Path(log_dir / "eval.sh")
     eval_file.write_text(eval_script)
     logger.info(
