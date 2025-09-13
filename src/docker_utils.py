@@ -1,5 +1,6 @@
 import pathlib
 import base64
+import tempfile
 
 import docker
 import os
@@ -8,6 +9,7 @@ import gzip
 import threading
 import traceback
 from pathlib import Path
+import tarfile
 
 from docker.models.containers import Container
 
@@ -59,14 +61,22 @@ def copy_to_container(container: Container, src: Path, dst: Path, build_mode: st
         checked_exec_run(container, f"rm {dst}.b64")
     else:
         # Use the docker API to copy the file
-        with open(src, "rb") as f:
-            data = f.read()
-        tar_stream = docker.utils.tar.make_tarfileobj(
-            fileobj=Path(src).name,
-            data=data,
-            arcname=dst.name
-        )
-        container.put_archive(path=dst.parent.as_posix(), data=tar_stream)
+        os.chdir(os.path.dirname(src))
+        srcname = os.path.basename(src)
+        with tempfile.NamedTemporaryFile(suffix=".tar", delete=False) as f:
+            f.close()
+            with tarfile.open(f.name, 'w') as tar:
+                try:
+                    tar.add(srcname, arcname=dst)
+                finally:
+                    tar.close()
+
+            with open(f.name, 'rb') as fd:
+                ok = container.put_archive(path="/", data=fd)
+                if not ok:
+                    raise Exception('Put file failed')
+                else:
+                    pass
 
 
 
