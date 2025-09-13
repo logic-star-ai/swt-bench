@@ -10,9 +10,11 @@ import threading
 import traceback
 from pathlib import Path
 import tarfile
+from typing import Literal
 
 from docker.models.containers import Container
 
+BuildMode = Literal["cli", "api"]
 
 HEREDOC_DELIMITER = "EOF_1399519320"  # different from dataset HEREDOC_DELIMITERs!
 
@@ -31,7 +33,7 @@ def checked_exec_run(container: Container, cmd: str, **kwargs):
     return result
 
 
-def copy_to_container(container: Container, src: Path, dst: Path, build_mode: str = "api"):
+def copy_to_container(container: Container, src: Path, dst: Path, build_mode: BuildMode):
     """
     Copy a file from local to a docker container
 

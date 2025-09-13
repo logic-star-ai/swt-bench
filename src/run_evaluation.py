@@ -67,13 +67,13 @@ def extract_model_patch(exec_spec: ExecSpec, raw_model_patch: str, patch_types: 
 
             with open(log_dir / "raw_model_patch.txt", "w") as f:
                 f.write(raw_model_patch)
-            copy_to_container(container, log_dir / "raw_model_patch.txt", Path("/root/raw_model_patch.txt"))
+            copy_to_container(container, log_dir / "raw_model_patch.txt", Path("/root/raw_model_patch.txt"), build_mode=build_mode)
 
             requirements_file = Path(os.path.join(os.path.dirname(__file__), "auxillary_src", "requirements_extraction.txt"))
-            copy_to_container(container, requirements_file, Path("/root/requirements_extraction.txt"))
+            copy_to_container(container, requirements_file, Path("/root/requirements_extraction.txt"), build_mode=build_mode)
 
             extraction_file = Path(os.path.join(os.path.dirname(__file__), "auxillary_src", "extract_patches.py"))
-            copy_to_container(container, extraction_file, Path("/root/extract_patches.py"))
+            copy_to_container(container, extraction_file, Path("/root/extract_patches.py"), build_mode=build_mode)
 
             checked_exec_run(container, "pip3 install -r /root/requirements_extraction.txt")
             res = container.exec_run(f"python3 /root/extract_patches.py --patch_type {' '.join(patch_types)} --reference_commit {exec_spec.base_commit}")
@@ -99,44 +99,16 @@ def extract_model_patch(exec_spec: ExecSpec, raw_model_patch: str, patch_types: 
     return extracted_patch
 
 
-def apply_patch_in_container(log_dir: Path, patch_text: str, container: Container, logger: logging.Logger, instance_id: str):
-    # Copy model prediction as patch file to container
-    diff_number = len([x for x in os.listdir(log_dir) if x.startswith("patch") and x.endswith(".diff")])
-    patch_file = f"patch_{diff_number}.diff"
-    patch_path = Path(log_dir / patch_file)
-    patch_path.write_text(patch_text)
-    logger.info(
-        f"Intermediate patch for {instance_id} written to {patch_path}, now applying to container..."
-    )
-    copy_to_container(container, patch_path, Path(f"/tmp/{patch_file}"))
-
-    # Attempt to apply patch to container
-    val = container.exec_run(
-        f"git apply -v /tmp/{patch_file}",
-        workdir="/testbed",
-        user="root",
-    )
-    if val.exit_code != 0:
-        logger.info(f"{APPLY_PATCH_FAIL}:\n{val.output.decode('utf-8')}")
-        raise EvaluationError(
-            instance_id,
-            f"{APPLY_PATCH_FAIL}:\n{val.output.decode('utf-8')}",
-            logger,
-        )
-    else:
-        logger.info(f"{APPLY_PATCH_PASS}:\n{val.output.decode('utf-8')}")
-
-
-def eval_in_container(log_dir: str, container: Container, logger: logging.Logger, eval_script: str, timeout: int, instance_id: str, compute_coverage: bool) -> str:
+def eval_in_container(log_dir: str, container: Container, logger: logging.Logger, eval_script: str, timeout: int, instance_id: str, compute_coverage: bool, build_mode: str) -> str:
     Path(log_dir).mkdir(parents=True, exist_ok=True)
     eval_file = Path(log_dir / "eval.sh")
     eval_file.write_text(eval_script)
     logger.info(
         f"Eval script for {instance_id} written to eval.sh, now applying to container..."
     )
-    copy_to_container(container, eval_file, Path("/eval.sh"))
+    copy_to_container(container, eval_file, Path("/eval.sh"), build_mode=build_mode)
     if compute_coverage:
-        copy_to_container(container, Path(os.path.join(os.path.dirname(__file__), "auxillary_src", "trace.py")), Path("/root/trace.py"))
+        copy_to_container(container, Path(os.path.join(os.path.dirname(__file__), "auxillary_src", "trace.py")), Path("/root/trace.py"), build_mode=build_mode)
 
     # Run eval script, write output to logs
     result = exec_run_with_timeout(container, "/bin/bash /eval.sh", timeout=timeout)
@@ -148,10 +120,10 @@ def eval_in_container(log_dir: str, container: Container, logger: logging.Logger
     return test_output_path
 
 
-def eval_in_container_with_diff(log_dir: Path, container: Container, logger: logging.Logger, eval_script: str, timeout: int, instance_id: str, compute_coverage: bool) -> str:
+def eval_in_container_with_diff(log_dir: Path, container: Container, logger: logging.Logger, eval_script: str, timeout: int, instance_id: str, compute_coverage: bool, build_mode: str) -> str:
     git_diff_output_before = log_git_diff(logger, container, "Git diff before:")
 
-    test_output_path = eval_in_container(log_dir, container, logger, eval_script, timeout, instance_id, compute_coverage)
+    test_output_path = eval_in_container(log_dir, container, logger, eval_script, timeout, instance_id, compute_coverage, build_mode=build_mode)
 
     git_diff_output_after = log_git_diff(logger, container, "Git diff after:")
 
@@ -250,7 +222,7 @@ def run_eval_exec_spec(exec_spec: ExecSpec, model_patch: str, log_dir: Optional[
     try:
         container = start_container(exec_spec, client, logger, build_mode=build_mode)
 
-        test_output_path = eval_in_container_with_diff(log_dir, container, logger, exec_spec.eval_script, exec_spec.timeout, instance_id, exec_spec.compute_coverage)
+        test_output_path = eval_in_container_with_diff(log_dir, container, logger, exec_spec.eval_script, exec_spec.timeout, instance_id, exec_spec.compute_coverage, build_mode=build_mode)
 
         return instance_id, test_output_path
     except EvaluationError as e:
