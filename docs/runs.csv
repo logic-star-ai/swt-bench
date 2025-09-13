@@ -27,4 +27,4 @@ verified,,Otter,GPT-4o,31.6,37.6,2025-03-10,unittest
 verified,,OpenHands,Cl. Sonnet 3.5,27.7,52.9,2025-02-28,unittest
 verified,,LIBRO,GPT-4o,17.8,38.0,2025-02-28,unittest
 verified,,Zero-Shot Plus,GPT-4o + BM25,14.3,34.0,2025-02-28,unittest
-verified,new,LogicStar AI,L*Agent v1, 79.9, 66.5,2025-09-12,unittest
+verified,new,LogicStar AI,L*Agent v1, 79.9, 66.5,2025-09-13,unittest
