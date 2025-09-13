@@ -171,7 +171,7 @@ def load_swebench_dataset(name="princeton-nlp/SWE-bench", split="test", is_swt: 
     if filter_swt:
         return [i for i in instances if i["instance_id"] not in instance_filter]
     else:
-        instances
+        return instances
 
 
 ### MARK - Patch Correction
