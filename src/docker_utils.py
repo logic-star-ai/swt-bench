@@ -61,13 +61,11 @@ def copy_to_container(container: Container, src: Path, dst: Path, build_mode: st
         checked_exec_run(container, f"rm {dst}.b64")
     else:
         # Use the docker API to copy the file
-        os.chdir(os.path.dirname(src))
-        srcname = os.path.basename(src)
         with tempfile.NamedTemporaryFile(suffix=".tar", delete=False) as f:
             f.close()
             with tarfile.open(f.name, 'w') as tar:
                 try:
-                    tar.add(srcname, arcname=dst)
+                    tar.add(src, arcname=dst)
                 finally:
                     tar.close()
 
