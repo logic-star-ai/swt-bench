@@ -2,9 +2,9 @@ name: Build & Test
 
 on:
   push:
-    branches: [ "*" ] # Runs on all branches when pushed
+    branches: [ "**" ] # Runs on all branches when pushed
   pull_request:
-    branches: [ "*" ] # Runs on all branches when a pull request is created or updated
+    branches: [ "**" ] # Runs on all branches when a pull request is created or updated
 
 permissions:
   contents: read
