@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="30px"
+   height="30px"
+   viewBox="0 0 30 30"
+   xml:space="preserve"
+   id="svg1"
+   sodipodi:docname="play-logo.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs1" /><sodipodi:namedview
+   id="namedview1"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   inkscape:zoom="16.2"
+   inkscape:cx="15"
+   inkscape:cy="14.969136"
+   inkscape:window-width="1392"
+   inkscape:window-height="1212"
+   inkscape:window-x="2240"
+   inkscape:window-y="31"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="svg1" />
+
+  <!-- Button -->
+  <circle
+   cx="15"
+   cy="15"
+   r="10.8"
+   fill="#D0CFCE"
+   stroke="#221E1B"
+   stroke-width="0.9"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   id="circle1"
+   style="stroke-width:0.9;stroke-dasharray:none" />
+
+  <!-- Play icon -->
+  <path
+   d="m 12.117895,10.379619 8.226952,4.46606 -8.226952,4.466061 z"
+   fill="#221E1B"
+   stroke="#221e1b"
+   stroke-width="0.9"
+   stroke-linecap="round"
+   stroke-linejoin="round"
+   id="path1"
+   style="fill:#ffffff;fill-opacity:1;stroke-width:0.9;stroke-dasharray:none" />
+</svg>
