@@ -132,21 +132,20 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener('DOMContentLoaded', function () {
   const reproductionCheckbox = document.getElementById('reproduction-mode-checkbox');
   const nonReproductionCheckbox = document.getElementById('unittest-mode-checkbox');
-  const rows = document.querySelectorAll('#leaderboard-table tbody tr');
+  const tableSelectors = [
+    '#leaderboard-table tbody tr',
+    '#verified-leaderboard-table tbody tr',
+  ];
 
   function updateRowVisibility() {
-    rows.forEach(row => {
-      const mode = row.getAttribute('data-mode');
-      if (
-        (mode === 'reproduction' && !reproductionCheckbox.checked) ||
-        (mode !== 'reproduction' && !nonReproductionCheckbox.checked)
-      ) {
-        // Hide the row
-        row.style.display = 'none';
-      } else {
-        // Show the row
-        row.style.display = '';
-      }
+    tableSelectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(row => {
+        const mode = row.getAttribute('data-mode');
+        const shouldShow =
+          (mode === 'reproduction' && reproductionCheckbox.checked) ||
+          (mode !== 'reproduction' && nonReproductionCheckbox.checked);
+        row.style.display = shouldShow ? '' : 'none';
+      });
     });
   }
 

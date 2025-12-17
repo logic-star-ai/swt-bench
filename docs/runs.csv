@@ -28,3 +28,4 @@ verified,,OpenHands,Cl. Sonnet 3.5,27.7,52.9,2025-02-28,unittest
 verified,,LIBRO,GPT-4o,17.8,38.0,2025-02-28,unittest
 verified,,Zero-Shot Plus,GPT-4o + BM25,14.3,34.0,2025-02-28,unittest
 verified,new,LogicStar AI,L*Agent v1, 84.0, 67.7,2025-09-13,unittest
+verified,new,TEX-T,Claude 4 Sonnet,87.0,69.8,2025-12-17,reproduction
