@@ -14,4 +14,4 @@ LIBRO,https://arxiv.org/abs/2209.11515,kaist,https://github.com/logic-star-ai/sw
 Otter++,https://arxiv.org/abs/2502.05368v1,ibm,https://files.sri.inf.ethz.ch/swt-bench/otter/
 Otter,https://arxiv.org/abs/2502.05368v1,ibm,https://files.sri.inf.ethz.ch/swt-bench/otter/
 LogicStar AI,https://logicstar.ai/,logicstar,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
-TEX-T,https://akashgokul.github.io/TEX/,salesforce,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+TEX-T,https://www.salesforce.com/blog/tex-test-time-scaling/,salesforce,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
