@@ -1,4 +1,5 @@
 org_key,org_name,org_url,logo_path
+mistral,Mistral AI,https://mistral.ai/,./static/images/logos/mistral.svg
 bytedance,Bytedance (SE Lab),https://se-research.bytedance.com/,./static/images/logos/bytedance-seeklogo.svg
 ibm,IBM,https://www.ibm.com/,./static/images/logos/IBM.svg
 aws,Amazon Web Services,https://aws.amazon.com/q/,./static/images/logos/Amazon_Web_Services_Logo.svg

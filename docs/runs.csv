@@ -1,4 +1,5 @@
 table_type,emojis,model_name,model_details,success_rate,coverage_increase,date,data_mode
+lite,new,DevstralTestGen,Devstral 2,89.1,57.6,2026-03-13,reproduction
 lite,,AEGIS,,47.8,26.0,2025-02-17,reproduction
 lite,,e-Otter++,Claude 3.7 Sonnet,52.5,56.4,2025-08-11,unittest
 lite,,Amazon Q Developer Agent,v20250405-dev,39.9,52.7,2025-04-10,unittest

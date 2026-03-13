@@ -1,4 +1,5 @@
 model_name,paper_url,org_key,trajectory_link
+DevstralTestGen,https://docs.mistral.ai/models/devstral-2-25-12,mistral,https://github.com/jie-m-zhang/Devstral-testgen
 AEGIS,https://arxiv.org/pdf/2411.18015,bytedance,https://files.sri.inf.ethz.ch/swt-bench/aegis/
 e-Otter++,https://arxiv.org/abs/2508.06365,ibm,https://files.sri.inf.ethz.ch/swt-bench/e-otter/
 Amazon Q Developer Agent,https://aws.amazon.com/q/,aws,https://files.sri.inf.ethz.ch/swt-bench/amazon_q_developer_agent/
