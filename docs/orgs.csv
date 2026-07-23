@@ -1,16 +1,17 @@
 org_key,org_name,org_url,logo_path
-mistral,Mistral AI,https://mistral.ai/,./static/images/logos/mistral.svg
-bytedance,Bytedance (SE Lab),https://se-research.bytedance.com/,./static/images/logos/bytedance-seeklogo.svg
-ibm,IBM,https://www.ibm.com/,./static/images/logos/IBM.svg
-aws,Amazon Web Services,https://aws.amazon.com/q/,./static/images/logos/Amazon_Web_Services_Logo.svg
-uw,University of Waterloo (SWAG Lab),https://github.com/uw-swag/AssertFlip,./static/images/logos/uw.svg
-allhands,All Hands AI,https://all-hands.dev/,./static/images/logos/allhands.svg
-logicstar,LogicStar,https://logicstar.ai/,./static/images/logos/logicstar_symbol_navy.svg
-swe-agent,SWE-agent,https://swe-agent.com/,./static/images/logos/swe-agent.svg
-aider,Aider,https://aider.chat/,./static/images/logos/aider.png
-autocoderover,AutoCodeRover,https://autocoderover.net,./static/images/logos/autocoderover.svg
-kaist,KAIST,https://github.com/coinse/libro,./static/images/logos/KAIST.svg
-openai,OpenAI,https://openai.com,./static/images/logos/openai.svg
-salesforce,Salesforce,https://www.salesforce.com/,./static/images/logos/Salesforce.com_logo.png
-nju,Nanjing University,https://github.com/iSEngLab/ReProAgent,./static/images/logos/nju.png
+mistral,Mistral AI,https://mistral.ai/,mistral.svg
+bytedance,Bytedance (SE Lab),https://se-research.bytedance.com/,bytedance-seeklogo.svg
+ibm,IBM,https://www.ibm.com/,IBM.svg
+aws,Amazon Web Services,https://aws.amazon.com/q/,Amazon_Web_Services_Logo.svg
+uw,University of Waterloo (SWAG Lab),https://github.com/uw-swag/AssertFlip,uw.svg
+allhands,All Hands AI,https://all-hands.dev/,allhands.svg
+logicstar,LogicStar,https://logicstar.ai/,logicstar_symbol_navy.svg
+swe-agent,SWE-agent,https://swe-agent.com/,swe-agent.svg
+aider,Aider,https://aider.chat/,aider.png
+autocoderover,AutoCodeRover,https://autocoderover.net,autocoderover.svg
+kaist,KAIST,https://github.com/coinse/libro,KAIST.svg
+openai,OpenAI,https://openai.com,openai.svg
+salesforce,Salesforce,https://www.salesforce.com/,Salesforce.com_logo.png
+nju,Nanjing University,https://github.com/iSEngLab/ReProAgent,nju.png
+patchtwin,PatchTwin,https://github.com/lbaf23/PatchTwin,patchtwin.png
 

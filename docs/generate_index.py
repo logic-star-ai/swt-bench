@@ -97,7 +97,7 @@ def create_model_row(model, providers, approaches, rank):
         model_cell += '<sup>&Dagger;</sup>'
     
     # Build organization cell
-    org_cell = f'<a href="{org_url}"><img alt="{org_name}" title="{org_name}" src="{logo_path}" class="org-icon"></a>'
+    org_cell = f'<a href="{org_url}"><img alt="{org_name}" title="{org_name}" src="./static/images/logos/{logo_path}" class="org-icon"></a>'
     
     # Build trajectory cell
     traj_cell = f'<a href="{trajectory_link}">🔗</a>'
