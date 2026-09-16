@@ -65,10 +65,16 @@ django_suffixes = {
     "ok": TestStatus.PASSED.value,
     "OK": TestStatus.PASSED.value,
     "skipped": TestStatus.SKIPPED.value,
+    "FAIL": TestStatus.FAILED.value,
     "FAILED": TestStatus.FAILED.value,
     "ERROR": TestStatus.ERROR.value,
 }
-django_pattern = re.compile(rf"(?P<testname>\b(test|app_unmigrated)([^\s]*)\s+\([^)]*\))((.|\n)(?!\.\.\.))*\s*\.\.\.((.|\n)(?!\b(test_|app_unmigrated|OK|ok|FAILED|ERROR|skipped)\b))*\s*\b(?P<status>OK|ok|FAILED|ERROR|skipped)\b", flags=re.MULTILINE)
+# start of a test result: "test_name (module.Class) ... ", optionally with the first line of the
+# test docstring between the name and the "..."
+django_anchor_pattern = re.compile(r"(?P<testname>\b(test|app_unmigrated)\S*\s+\([^)]*\))(?:\n[^\n]*)?\s+\.\.\.")
+# the result token: directly after the "..." or first thing on a later line (so that e.g.
+# "Applying admin.0001_initial... OK" emitted while the test runs does not count)
+django_status_pattern = re.compile(r"(?:\A|^)\s*(?P<status>ok|OK|FAIL|FAILED|ERROR|skipped)\b", flags=re.MULTILINE)
 django_fail_error_pattern = re.compile(rf"(?P<testname>\b(test_|app_unmigrated)([^\s]*)\s+\([^)]*\))")
 
 def parse_log_django(log: str) -> dict[str, str]:
@@ -82,17 +88,22 @@ def parse_log_django(log: str) -> dict[str, str]:
     """
     test_status_map = {}
 
-    # first try to extract normal run
-    for match in django_pattern.finditer(log):
-        test_name = match.group("testname")
-        status = match.group("status")
-        test_status_map[test_name] = django_suffixes[status]
+    # first try to extract normal run: each test owns the log up to the next test, and its
+    # status is the first result token in that segment (none, e.g. for a test whose only
+    # failures are subTest failures, means the summary block below has to provide it)
+    anchors = list(django_anchor_pattern.finditer(log))
+    for anchor, next_anchor in zip(anchors, anchors[1:] + [None]):
+        segment = log[anchor.end():next_anchor.start() if next_anchor else len(log)]
+        match = django_status_pattern.search(segment)
+        if match is None:
+            continue
+        test_status_map[anchor.group("testname")] = django_suffixes[match.group("status")]
 
     # error and fail reports take precedence (this will overwrite any previous status)
     for line in log.split("\n"):
         for key, status in [("ERROR", TestStatus.ERROR), ("FAIL", TestStatus.FAILED)]:
             if line.startswith(f"{key}:"):
-                tests = list(django_fail_error_pattern.finditer(line.split(key)[1]))
+                tests = list(django_fail_error_pattern.finditer(line.split(f"{key}:", 1)[1]))
                 if len(tests) != 1:
                     continue
                 test_name = tests[0].group("testname")

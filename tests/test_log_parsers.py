@@ -531,6 +531,132 @@ OK
             res,
         )
 
+    def test_django_log_parser_8(self):
+        log = """\
+test_negative (utils_tests.test_dateparse.DurationParseTests) ... test_parse_postgresql_format (utils_tests.test_dateparse.DurationParseTests) ... ok
+test_parse_python_format (utils_tests.test_dateparse.DurationParseTests) ... ok
+
+======================================================================
+FAIL: test_negative (utils_tests.test_dateparse.DurationParseTests) (source='-15:30')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "./tests/utils_tests/test_dateparse.py", line 125, in test_negative
+    self.assertEqual(parse_duration(source), expected)
+AssertionError: datetime.timedelta(-1, 85530) != datetime.timedelta(-1, 85470)
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.004s
+
+FAILED (failures=1)
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+                "test_negative (utils_tests.test_dateparse.DurationParseTests)": "FAILED",
+                "test_parse_postgresql_format (utils_tests.test_dateparse.DurationParseTests)": "PASSED",
+                "test_parse_python_format (utils_tests.test_dateparse.DurationParseTests)": "PASSED",
+            },
+            res,
+        )
+
+    def test_django_log_parser_9(self):
+        log = """\
+test_options_non_deprecated_keys_preferred (dbshell.test_mysql.MySqlDbshellCommandTestCase) ... FAIL
+test_options_password (dbshell.test_mysql.MySqlDbshellCommandTestCase) ... ok
+test_parameters (dbshell.test_mysql.MySqlDbshellCommandTestCase) ... ok
+
+======================================================================
+FAIL: test_options_non_deprecated_keys_preferred (dbshell.test_mysql.MySqlDbshellCommandTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/testbed/tests/dbshell/test_mysql.py", line 62, in test_options_non_deprecated_keys_preferred
+    self.assertEqual(
+AssertionError: Lists differ: ['mysql', '--user=optionuser', '--password=optionpassword', '--host=optionhost', '--port=optionport', 'optiondbname'] != ['mysql', '--user=optionuser', '--password=optionpassword', '--host=optionhost', '--port=optionport', 'optiondbname', '--ssl-ca=/opt/ca.pem']
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.003s
+
+FAILED (failures=1)
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+                "test_options_non_deprecated_keys_preferred (dbshell.test_mysql.MySqlDbshellCommandTestCase)": "FAILED",
+                "test_options_password (dbshell.test_mysql.MySqlDbshellCommandTestCase)": "PASSED",
+                "test_parameters (dbshell.test_mysql.MySqlDbshellCommandTestCase)": "PASSED",
+            },
+            res,
+        )
+
+    def test_django_log_parser_10(self):
+        log = """\
+test_prepopulated_fields (admin_views.tests.SeleniumTests) ... ['--count', '-C', 'coverage.cover', '--include-pattern', '/testbed/(django/contrib/admin/utils\\\\.py)']
+Testing against Django installed in '/testbed/django'
+Importing application admin_views
+Skipping setup of unused database(s): other.
+Operations to perform:
+  Synchronize unmigrated apps: admin_views, auth, contenttypes, messages, sessions, staticfiles
+  Apply all migrations: admin, sites
+Synchronizing apps without migrations:
+  Creating tables...
+    Creating table django_content_type
+    Creating table auth_permission
+    Creating table auth_group
+    Creating table auth_user
+    Creating table django_session
+    Running deferred SQL...
+Running migrations:
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying sites.0001_initial... OK
+  Applying sites.0002_alter_domain_unique... OK
+System check identified no issues (0 silenced).
+skipped 'No browsers specified.'
+test_populate_existing_object (admin_views.tests.SeleniumTests) ... skipped 'No browsers specified.'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+OK (skipped=2)
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+                "test_prepopulated_fields (admin_views.tests.SeleniumTests)": "SKIPPED",
+                "test_populate_existing_object (admin_views.tests.SeleniumTests)": "SKIPPED",
+            },
+            res,
+        )
+
+    def test_django_log_parser_11(self):
+        log = """\
+test_CSRF_FAILURE_VIEW (csrf_tests.tests.CsrfViewMiddlewareTests) ... test_csrf_cookie_bad_or_missing_token (csrf_tests.tests.CsrfViewMiddlewareTests) ... ok
+test_csrf_cookie_bad_token_characters (csrf_tests.tests.CsrfViewMiddlewareTests) ... ok
+
+======================================================================
+FAIL: test_CSRF_FAILURE_VIEW (csrf_tests.tests.CsrfViewMiddlewareTests) (view='csrf_tests.views.csrf_failure_view')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/testbed/tests/csrf_tests/tests.py", line 447, in test_CSRF_FAILURE_VIEW
+    self.assertEqual(resp.status_code, 403)
+AssertionError: 200 != 403
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.012s
+
+FAILED (failures=1)
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+                "test_CSRF_FAILURE_VIEW (csrf_tests.tests.CsrfViewMiddlewareTests)": "FAILED",
+                "test_csrf_cookie_bad_or_missing_token (csrf_tests.tests.CsrfViewMiddlewareTests)": "PASSED",
+                "test_csrf_cookie_bad_token_characters (csrf_tests.tests.CsrfViewMiddlewareTests)": "PASSED",
+            },
+            res,
+        )
+
 class ParseSympyLogTest(unittest.TestCase):
     def test_parse_sympy_log(self):
         log = """\
