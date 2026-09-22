@@ -657,6 +657,38 @@ FAILED (failures=1)
             res,
         )
 
+    def test_django_log_parser_12(self):
+        log = """\
+test_default_name (backends.base.test_creation.TestDbSignatureTests) ... ok
+test_circular_reference (backends.base.test_creation.TestDeserializeDbFromString) ...
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.107s
+
+OK
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+                "test_default_name (backends.base.test_creation.TestDbSignatureTests)": "PASSED",
+            },
+            res,
+        )
+
+    def test_django_log_parser_13(self):
+        log = """\
+test_negative (utils_tests.test_dateparse.DurationParseTests) ... test_parse_postgresql_format (utils_tests.test_dateparse.DurationParseTests) ... ok
+test_parse_python_format (utils_tests.test_dateparse.DurationParseTests) ... ok
+"""
+        res = parse_log_django(log)
+        self.assertDictEqual(
+            {
+                "test_parse_postgresql_format (utils_tests.test_dateparse.DurationParseTests)": "PASSED",
+                "test_parse_python_format (utils_tests.test_dateparse.DurationParseTests)": "PASSED",
+            },
+            res,
+        )
+
 class ParseSympyLogTest(unittest.TestCase):
     def test_parse_sympy_log(self):
         log = """\

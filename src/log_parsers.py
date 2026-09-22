@@ -75,6 +75,9 @@ django_anchor_pattern = re.compile(r"(?P<testname>\b(test|app_unmigrated)\S*\s+\
 # the result token: directly after the "..." or first thing on a later line (so that e.g.
 # "Applying admin.0001_initial... OK" emitted while the test runs does not count)
 django_status_pattern = re.compile(r"(?:\A|^)\s*(?P<status>ok|OK|FAIL|FAILED|ERROR|skipped)\b", flags=re.MULTILINE)
+# the run summary and the failure reports that follow it belong to the run, not to the test whose
+# output they follow: a status token below this line is never that test's own result
+django_summary_pattern = re.compile(r"^(?:=|-){20,}\s*$", flags=re.MULTILINE)
 django_fail_error_pattern = re.compile(rf"(?P<testname>\b(test_|app_unmigrated)([^\s]*)\s+\([^)]*\))")
 
 def parse_log_django(log: str) -> dict[str, str]:
@@ -94,6 +97,9 @@ def parse_log_django(log: str) -> dict[str, str]:
     anchors = list(django_anchor_pattern.finditer(log))
     for anchor, next_anchor in zip(anchors, anchors[1:] + [None]):
         segment = log[anchor.end():next_anchor.start() if next_anchor else len(log)]
+        summary = django_summary_pattern.search(segment)
+        if summary is not None:
+            segment = segment[:summary.start()]
         match = django_status_pattern.search(segment)
         if match is None:
             continue
