@@ -34,7 +34,7 @@ verified,,TEX-T,Claude 4 Sonnet,87.0,69.8,2025-12-17,reproduction
 verified,new,ReProAgent,GPT-5-mini,69.7,64.7,2026-04-20,unittest
 verified,new,PatchTwin+Guard,GPT-5-mini,75.8,77.7,2026-07-08,unittest
 verified,new,PatchTwin+Guard,GPT-5,82.9,78.7,2026-07-08,unittest
-verified,new,DPIAgent,GPT-5 Mini (no test selection),78.1,71.3,2026-10-23,unittest
-verified,new,DPIAgent,GPT-5 (no test selection),81.5,68.5,2026-10-23,unittest
-verified,new,DPIAgent,Claude Opus 4.5 (no test selection),78.8,65.6,2026-10-23,unittest
+verified,new,DPIAgent,GPT-5 Mini,78.1,71.3,2026-10-23,unittest
+verified,new,DPIAgent,GPT-5,81.5,68.5,2026-10-23,unittest
+verified,new,DPIAgent,Claude Opus 4.5,78.8,65.6,2026-10-23,unittest
 verified,new,DPIAgent,GPT-5 (with test selection),87.5,71.6,2026-10-23,unittest
