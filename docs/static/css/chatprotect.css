@@ -1647,6 +1647,10 @@ td.line-height {
 .org-icon {
     width: 20px !important;
 }
+.org-icon[src$="/microsoft.png"] {
+    width: 94px !important;
+    min-width: 94px;
+}
 .center-image {
     text-align: center;
 }
