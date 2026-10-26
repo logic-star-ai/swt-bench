@@ -1,5 +1,5 @@
 table_type,emojis,model_name,model_details,success_rate,coverage_increase,date,data_mode
-lite,new,DevstralTestGen,Devstral 2,89.1,57.6,2026-03-13,reproduction
+lite,,DevstralTestGen,Devstral 2,89.1,57.6,2026-03-13,reproduction
 lite,,AEGIS,,47.8,26.0,2025-02-17,reproduction
 lite,,e-Otter++,Claude 3.7 Sonnet,52.5,56.4,2025-08-11,unittest
 lite,,Amazon Q Developer Agent,v20250405-dev,39.9,52.7,2025-04-10,unittest
@@ -18,7 +18,7 @@ lite,,AutoCodeRover,GPT-4,9.1,17.9,2024-05-22,unittest
 lite,,LIBRO,GPT-4,14.1,23.8,2024-05-22,unittest
 lite,,Zero-Shot Plus,GPT-4 + BM25,9.4,21.5,2024-05-22,unittest
 lite,,Zero-Shot Base,GPT-4 + BM25,3.6,7.6,2024-05-22,unittest
-lite,new,ReProAgent,GPT-5-mini,56.2,64.8,2026-04-20,unittest
+lite,,ReProAgent,GPT-5-mini,56.2,64.8,2026-04-20,unittest
 verified,,OpenHands,GPT-5,79.8,66.3,2025-08-22,unittest
 verified,,e-Otter++,Claude 3.7 Sonnet,62.1,62.3,2025-08-11,unittest
 verified,,OpenHands,GPT-5-mini,62.4,60.6,2025-08-22,unittest
@@ -31,9 +31,9 @@ verified,,LIBRO,GPT-4o,17.8,38.0,2025-02-28,unittest
 verified,,Zero-Shot Plus,GPT-4o + BM25,14.3,34.0,2025-02-28,unittest
 verified,,LogicStar AI,L*Agent v1, 84.0, 67.7,2025-09-13,unittest
 verified,,TEX-T,Claude 4 Sonnet,87.0,69.8,2025-12-17,reproduction
-verified,new,ReProAgent,GPT-5-mini,69.7,64.7,2026-04-20,unittest
-verified,new,PatchTwin+Guard,GPT-5-mini,75.8,77.7,2026-07-08,unittest
-verified,new,PatchTwin+Guard,GPT-5,82.9,78.7,2026-07-08,unittest
+verified,,ReProAgent,GPT-5-mini,69.7,64.7,2026-04-20,unittest
+verified,,PatchTwin+Guard,GPT-5-mini,75.8,77.7,2026-07-08,unittest
+verified,,PatchTwin+Guard,GPT-5,82.9,78.7,2026-07-08,unittest
 verified,new,DPIAgent,GPT-5 Mini,78.1,71.3,2026-10-23,unittest
 verified,new,DPIAgent,GPT-5,81.5,68.5,2026-10-23,unittest
 verified,new,DPIAgent,Claude Opus 4.5,78.8,65.6,2026-10-23,unittest
