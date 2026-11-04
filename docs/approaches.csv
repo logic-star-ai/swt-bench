@@ -20,3 +20,4 @@ ReProAgent,https://github.com/iSEngLab/ReProAgent,nju,https://github.com/iSEngLa
 PatchTwin,https://github.com/lbaf23/PatchTwin,patchtwin,https://files.sri.inf.ethz.ch/swt-bench/patchtwin/
 DPIAgent,https://neverwinhao.github.io/DPIAgent/,microsoft,https://files.sri.inf.ethz.ch/swt-bench/dpiagent/
 Claude Code,https://www.anthropic.com/claude-code,anthropic,https://github.com/logic-star-ai/swt-bench?tab=readme-ov-file#evaluation-results
+Bugstack,https://bugstack.ai,bugstack,https://files.sri.inf.ethz.ch/swt-bench/bugstack/
